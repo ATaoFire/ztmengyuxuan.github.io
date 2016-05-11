@@ -2,7 +2,7 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: http://ztmengyuxuan.github.io
+url: git@github.com:ztmegnyuxuan/ztmengyuxuan.github.io.git
 date_format: "ordinal"
 title: 刘华健
 subtitle: "好风凭借力"
@@ -11,7 +11,7 @@ keywords: 刘华健, Liu Hua Jian, lhjzzu
 favicon: /favicon.ico
 timezone: Asia/Shanghai
 encoding: "utf-8"
-source_code: https://github.com/ztmengyuxuan/ztmengyuxuan.github.io
+source_code: git@github.com:ztmegnyuxuan/ztmengyuxuan.github.io.git
 
 # ---------------- #
 #      Author      #
