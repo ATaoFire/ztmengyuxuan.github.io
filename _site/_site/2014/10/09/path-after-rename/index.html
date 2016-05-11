@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" prefix="og: http://ogp.me/ns#" class="han-init">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>获取运行过程中改名的文件的路径 &mdash; 刘华健</title>
+    <link rel="stylesheet" href="/assets/vendor/primer-css/css/primer.css">
+    <link rel="stylesheet" href="/assets/vendor/primer-markdown/dist/user-content.min.css">
+    <link rel="stylesheet" href="/assets/vendor/octicons/octicons/octicons.css">
+    <link rel="stylesheet" href="/assets/css/components/collection.css">
+    <link rel="stylesheet" href="/assets/css/components/repo-card.css">
+    <link rel="stylesheet" href="/assets/css/sections/repo-list.css">
+    <link rel="stylesheet" href="/assets/css/sections/mini-repo-list.css">
+    <link rel="stylesheet" href="/assets/css/components/boxed-group.css">
+    <link rel="stylesheet" href="/assets/css/globals/common.css">
+    <link rel="stylesheet" href="/assets/vendor/share.js/dist/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/globals/responsive.css">
+    <link rel="stylesheet" href="/assets/css/posts/index.css">
+    <!-- Latest compiled and minified CSS -->
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="刘华健" href="/feed.xml">
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+    <meta property="og:title" content="获取运行过程中改名的文件的路径">
+      
+    <meta name="keywords" content="Windows">
+    <meta name="og:keywords" content="Windows">
+      
+    <meta name="description" content="需求">
+    <meta name="og:description" content="需求">
+      
+    
+    
+        
+    
+    <meta property="og:url" content="http://www.lhjzzu.com/2014/10/09/path-after-rename/">
+    <meta property="og:site_name" content="刘华健">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="zh_CN" />
+    
+    <meta property="article:published_time" content="2014-10-09">
+    
+    <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.js"></script>
+</head>
+<body class="" data-mz="">
+    <header class="site-header">
+        <div class="container">
+            <h1><a href="/" title="刘华健"><span class="octicon octicon-mark-github"></span> 刘华健</a></h1>
+            <nav class="site-header-nav" role="navigation">
+                
+                <a href="/" class=" site-header-nav-item" target="" title="首页">首页</a>
+                
+                <a href="/categories/" class=" site-header-nav-item" target="" title="分类">分类</a>
+                
+                <a href="/links/" class=" site-header-nav-item" target="" title="链接">链接</a>
+                
+                <a href="/about/" class=" site-header-nav-item" target="" title="关于">关于</a>
+                
+            </nav>
+        </div>
+    </header>
+    <!-- / header -->
+
+    <section class="collection-head small geopattern" data-pattern-id="获取运行过程中改名的文件的路径">
+<div class="container">
+  <div class="columns">
+    <div class="column three-fourths">
+      <div class="collection-title">
+        <h1 class="collection-header">获取运行过程中改名的文件的路径</h1>
+        <div class="collection-info">
+          
+          <span class="meta-info">
+            <span class="octicon octicon-calendar"></span> 2014/10/09
+          </span>
+          
+          
+          <span class="meta-info">
+            <span class="octicon octicon-file-directory"></span>
+            <a href="/categories/#Windows" title="Windows">Windows</a>
+          </span>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- / .banner -->
+<section class="container content">
+<div class="columns">
+  <div class="column three-fourths" >
+    <article class="article-content markdown-body">
+    <h3 id="section">需求</h3>
+
+<p>一个 EXE 在运行过程中（被）改名了，需要准确地获取它的文件名。</p>
+
+<h3 id="section-1">尝试</h3>
+
+<p>原本以为这是一个非常简单的 CASE，直接用 GetModuleFileName 不就行了吗？结果还真不如我所想。无论程序运行过程中被改名成什么样子，GetModuleFileName 返回的都是 EXE 开始运行时的名字。然后又尝试了 GetProcessImageFileName，也是如此，直到最后找到了 QueryFullProcessImageName。</p>
+
+<h3 id="section-2">示例代码</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include &lt;Windows.h&gt;
+#include &lt;Psapi.h&gt;
+#include &lt;stdio.h&gt;
+</span>
+<span class="cp">#pragma comment(lib, "Psapi.lib")
+</span>
+<span class="kt">void</span> <span class="nf">OutputSelfpath</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="kt">char</span> <span class="n">szFile</span><span class="p">[</span><span class="n">MAX_PATH</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+	<span class="n">GetModuleFileName</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">szFile</span><span class="p">,</span> <span class="n">MAX_PATH</span><span class="p">);</span>
+	<span class="n">printf</span><span class="p">(</span><span class="s">"GetModuleFileName:</span><span class="se">\n\r</span><span class="s">%s</span><span class="se">\n\n</span><span class="s">"</span><span class="p">,</span> <span class="n">szFile</span><span class="p">);</span>
+
+	<span class="n">memset</span><span class="p">(</span><span class="n">szFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">MAX_PATH</span><span class="p">);</span>
+
+	<span class="n">HANDLE</span> <span class="n">hProcess</span> <span class="o">=</span> <span class="n">OpenProcess</span><span class="p">(</span><span class="n">PROCESS_ALL_ACCESS</span><span class="p">,</span> <span class="n">FALSE</span><span class="p">,</span> <span class="n">GetCurrentProcessId</span><span class="p">());</span>
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">hProcess</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">printf</span><span class="p">(</span><span class="s">"OpenProcess failed!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">else</span>
+	<span class="p">{</span>
+		<span class="n">DWORD</span> <span class="n">dwRet</span> <span class="o">=</span> <span class="n">GetProcessImageFileName</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">szFile</span><span class="p">,</span> <span class="n">MAX_PATH</span><span class="p">);</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">dwRet</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">printf</span><span class="p">(</span><span class="s">"GetProcessImageFileName:</span><span class="se">\n\r</span><span class="s">%s</span><span class="se">\n\n</span><span class="s">"</span><span class="p">,</span> <span class="n">szFile</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">else</span>
+		<span class="p">{</span>
+			<span class="n">printf</span><span class="p">(</span><span class="s">"GetProcessImageFileName failed!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+		<span class="p">}</span>
+
+        <span class="n">memset</span><span class="p">(</span><span class="n">szFile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">MAX_PATH</span><span class="p">);</span>
+		<span class="n">DWORD</span> <span class="n">dwSize</span> <span class="o">=</span> <span class="n">MAX_PATH</span><span class="p">;</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">QueryFullProcessImageName</span><span class="p">(</span><span class="n">hProcess</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">szFile</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">dwSize</span><span class="p">))</span>
+		<span class="p">{</span>
+			<span class="n">printf</span><span class="p">(</span><span class="s">"QueryFullProcessImageName:</span><span class="se">\n\r</span><span class="s">%s</span><span class="se">\n\n</span><span class="s">"</span><span class="p">,</span> <span class="n">szFile</span><span class="p">);</span>
+		<span class="p">}</span>
+		<span class="k">else</span>
+		<span class="p">{</span>
+			<span class="n">printf</span><span class="p">(</span><span class="s">"QueryFullProcessImageName failed</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">szFile</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">pszFile</span> <span class="o">=</span> <span class="s">"ConsoleTest.exe"</span><span class="p">;</span>
+	<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">pszNewFile</span> <span class="o">=</span> <span class="s">"ConsoleTest_bak.exe"</span><span class="p">;</span>
+	<span class="n">remove</span><span class="p">(</span><span class="n">pszNewFile</span><span class="p">);</span>
+
+	<span class="n">OutputSelfpath</span><span class="p">();</span>
+
+	<span class="kt">int</span> <span class="n">nRet</span> <span class="o">=</span> <span class="n">rename</span><span class="p">(</span><span class="n">pszFile</span><span class="p">,</span> <span class="n">pszNewFile</span><span class="p">);</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">!=</span> <span class="n">nRet</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">printf</span><span class="p">(</span><span class="s">"rename file failed!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">else</span>
+	<span class="p">{</span>
+		<span class="n">printf</span><span class="p">(</span><span class="s">"################### after rename ###################</span><span class="se">\n\n</span><span class="s">"</span><span class="p">);</span>
+		<span class="n">OutputSelfpath</span><span class="p">();</span>
+	<span class="p">}</span>
+
+	<span class="n">system</span><span class="p">(</span><span class="s">"pause"</span><span class="p">);</span>
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<h3 id="section-3">运行结果</h3>
+
+<p><img src="/images/posts/windows/queryfullprocessimagename.png" alt="QueryFullProcessImageName" /></p>
+
+<h3 id="section-4">思考</h3>
+
+<p>现象上讲就是如此了，这几个 API 的本质区别是什么呢？待续。</p>
+
+    </article>
+    <div class="share">
+      <div class="share-component"></div>
+    </div>
+    <div class="comment">
+      
+  
+      
+      <!-- Duoshuo Comment BEGIN -->
+      <!-- 多说评论框 BEGIN -->
+      <div class="ds-thread" data-thread-key="/2014/10/09/path-after-rename/" data-title="获取运行过程中改名的文件的路径" data-url="http://www.lhjzzu.com/2014/10/09/path-after-rename/"></div>
+      <!-- 多说评论框 END -->
+      <!-- 多说公共JS代码 BEGIN (一个网页只需插入一次) -->
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"abc19911991"};
+        (function() {
+          var ds = document.createElement('script');
+          ds.type = 'text/javascript';ds.async = true;
+          ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+          ds.charset = 'UTF-8';
+          (document.getElementsByTagName('head')[0]
+           || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+      <!-- 多说公共JS代码 END -->
+      <!-- Duoshuo Comment END -->
+      
+    
+
+
+    </div>
+  </div>
+  <div class="column one-fourth">
+    
+<h3>Search</h3>
+<form action="get" id="site_search">
+    <input type="text" id="search_box" placeholder="Search">
+    <button class="btn btn-default" type="submit"><span class="octicon octicon-search"></span></button>
+</form>
+
+<ul id="search_results"></ul>
+
+<link rel="stylesheet" type="text/css" href="/assets/css/modules/sidebar-search.css">
+<script src="/assets/js/lunr.min.js"></script>
+<script src="/assets/js/search.js"></script>
+
+
+    
+<h3>Post Directory</h3>
+<div id="post-directory-module" class="mobile-hidden">
+  <section class="post-directory">
+  <!-- Links that trigger the jumping -->
+  <!-- Added by javascript below -->
+  <dl></dl>
+  </section>
+</div>
+
+<script src="/assets/js/jquery.toc.js"></script>
+
+  </div>
+</div>
+</section>
+<!-- /section.content -->
+
+    <footer class="container">
+        <div class="site-footer" role="contentinfo">
+            <div class="copyright left mobile-block">
+                    © 2015
+                    <span title="Liu Hua Jian">Liu Hua Jian</span>
+                    <a href="javascript:window.scrollTo(0,0)" class="right mobile-visible">TOP</a>
+            </div>
+
+            <ul class="site-footer-links right mobile-hidden">
+                <li>
+                    <a href="javascript:window.scrollTo(0,0)" >TOP</a>
+                </li>
+            </ul>
+            <a href="https://github.com/lhjzzu/lhjzzu.github.io" target="_blank" aria-label="view source code">
+                <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+            </a>
+            <ul class="site-footer-links mobile-hidden">
+                
+                <li>
+                    <a href="/" title="首页" target="">首页</a>
+                </li>
+                
+                <li>
+                    <a href="/categories/" title="分类" target="">分类</a>
+                </li>
+                
+                <li>
+                    <a href="/links/" title="链接" target="">链接</a>
+                </li>
+                
+                <li>
+                    <a href="/about/" title="关于" target="">关于</a>
+                </li>
+                
+                <li><a href="/feed.xml"><span class="octicon octicon-rss" style="color:orange;"></span></a></li>
+            </ul>
+        </div>
+    </footer>
+    <!-- / footer -->
+    <script src="/assets/vendor/s.js/dist/js/share.min.js"></script>
+    <script src="/assets/js/geopattern.js"></script>
+    <script src="/assets/js/prism.js"></script>
+    <link rel="stylesheet" href="/assets/css/globals/prism.css">
+    <script>
+      jQuery(document).ready(function($) {
+        // geopattern
+        $('.geopattern').each(function(){
+          $(this).geopattern($(this).data('pattern-id'));
+        });
+       // hljs.initHighlightingOnLoad();
+      });
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" prefix="og: http://ogp.me/ns#" class="han-init">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>Cocoapods系列:安装与使用(一) &mdash; 刘华健</title>
+    <link rel="stylesheet" href="/assets/vendor/primer-css/css/primer.css">
+    <link rel="stylesheet" href="/assets/vendor/primer-markdown/dist/user-content.min.css">
+    <link rel="stylesheet" href="/assets/vendor/octicons/octicons/octicons.css">
+    <link rel="stylesheet" href="/assets/css/components/collection.css">
+    <link rel="stylesheet" href="/assets/css/components/repo-card.css">
+    <link rel="stylesheet" href="/assets/css/sections/repo-list.css">
+    <link rel="stylesheet" href="/assets/css/sections/mini-repo-list.css">
+    <link rel="stylesheet" href="/assets/css/components/boxed-group.css">
+    <link rel="stylesheet" href="/assets/css/globals/common.css">
+    <link rel="stylesheet" href="/assets/vendor/share.js/dist/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/globals/responsive.css">
+    <link rel="stylesheet" href="/assets/css/posts/index.css">
+    <!-- Latest compiled and minified CSS -->
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="刘华健" href="/feed.xml">
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+    <meta property="og:title" content="Cocoapods系列:安装与使用(一)">
+      
+    <meta name="keywords" content="刘华健, Liu Hua Jian, lhjzzu">
+    <meta name="og:keywords" content="刘华健, Liu Hua Jian, lhjzzu">
+      
+    <meta name="description" content="什么是Cocoapods？">
+    <meta name="og:description" content="什么是Cocoapods？">
+      
+    
+    
+        
+    
+    <meta property="og:url" content="http://www.lhjzzu.com/2016/05/09/Cocoapods-install/">
+    <meta property="og:site_name" content="刘华健">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="zh_CN" />
+    
+    <meta property="article:published_time" content="2016-05-09">
+    
+    <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.js"></script>
+</head>
+<body class="" data-mz="">
+    <header class="site-header">
+        <div class="container">
+            <h1><a href="/" title="刘华健"><span class="octicon octicon-mark-github"></span> 刘华健</a></h1>
+            <nav class="site-header-nav" role="navigation">
+                
+                <a href="/" class=" site-header-nav-item" target="" title="首页">首页</a>
+                
+                <a href="/categories/" class=" site-header-nav-item" target="" title="分类">分类</a>
+                
+                <a href="/links/" class=" site-header-nav-item" target="" title="链接">链接</a>
+                
+                <a href="/about/" class=" site-header-nav-item" target="" title="关于">关于</a>
+                
+            </nav>
+        </div>
+    </header>
+    <!-- / header -->
+
+    <section class="collection-head small geopattern" data-pattern-id="Cocoapods系列:安装与">
+<div class="container">
+  <div class="columns">
+    <div class="column three-fourths">
+      <div class="collection-title">
+        <h1 class="collection-header">Cocoapods系列:安装与使用(一)</h1>
+        <div class="collection-info">
+          
+          <span class="meta-info">
+            <span class="octicon octicon-calendar"></span> 2016/05/09
+          </span>
+          
+          
+          <span class="meta-info">
+            <span class="octicon octicon-file-directory"></span>
+            <a href="/categories/#IOS" title="IOS">IOS</a>
+          </span>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- / .banner -->
+<section class="container content">
+<div class="columns">
+  <div class="column three-fourths" >
+    <article class="article-content markdown-body">
+    <h2 id="cocoapods">什么是Cocoapods？</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">Cocoapods</code>是用来管理<code class="highlighter-rouge">xcode</code>项目依赖库的。</li>
+  <li>你的工程的依赖在一个名字是<code class="highlighter-rouge">Podfile</code>的文本文件中被指定.<code class="highlighter-rouge">CocoaPods</code>将解决不同库之间依赖的问题。获取源码并把这些库一起链接到一个<code class="highlighter-rouge">.xcworkspace</code>文件中去创建你的项目。</li>
+  <li><code class="highlighter-rouge">Cocoapods</code>最终的目标是创建一个更集中化的生态系统去提高第三方开源库的可发现性，可使用性。</li>
+</ul>
+
+<h2 id="cocopods">Cocopods安装</h2>
+
+<p><code class="highlighter-rouge">Cocoapods</code>是用<code class="highlighter-rouge">ruby</code>来创建的，我们使用<code class="highlighter-rouge">OS X </code>默认的可用的<code class="highlighter-rouge">ruby</code>来安装<code class="highlighter-rouge">Cocoapods</code>.你也可以使用<code class="highlighter-rouge">ruby</code>的版本管理，来更改<code class="highlighter-rouge">ruby</code>版本进行安装，但是官方还是建议使用<code class="highlighter-rouge">OS X </code>默认的<code class="highlighter-rouge">ruby</code>来安装。</p>
+
+<p>唯一的问题是:当我们使用默认的ruby来进行安装<code class="highlighter-rouge">gems</code>的时候，需要使用<code class="highlighter-rouge">sudo</code>。</p>
+
+<p>1 <code class="highlighter-rouge">$ sudo gem install -n /usr/local/bin cocoapods</code></p>
+
+<p>2 由于某些原因，执行时会出现下面的错误提示：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ERROR:  Could not find a valid gem 'cocoapods' (&gt;= 0), here is why:
+Unable to download data from https://rubygems.org/ - Errno::EPIPE: Broken pipe - SSL_connect (https://rubygems.org/latest_specs.4.8.gz)
+</code></pre>
+</div>
+
+<p>3 这是因为默认所需的下载路径 <code class="highlighter-rouge">https://rubygems.org</code> 在国内的访问会有问题，解决上面的问题，可以用淘宝的<code class="highlighter-rouge">RubyGems</code>镜像来代替官方版本，执行以下命令</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ gem sources -l
+$ gem sources --remove https://rubygems.org/
+$ gem sources -a https://ruby.taobao.org/
+$ gem sources -l
+</code></pre>
+</div>
+
+<p>4 接着再执行 <code class="highlighter-rouge">sudo gem install -n /usr/local/bin cocoapods</code></p>
+
+<p>5 安装<code class="highlighter-rouge">cocoapods</code>库</p>
+
+<p><code class="highlighter-rouge">$ pod setup</code></p>
+
+<p>第一个执行会非常慢，可以到<code class="highlighter-rouge">/.cocoapods</code>文件夹下看安装进度</p>
+
+<h2 id="cocoapods-1">更新Cocoapods</h2>
+
+<p>只需再次执行<code class="highlighter-rouge">$sudo gem install -n /usr/local/bin cocoapods</code>即可</p>
+
+<h2 id="cocoapods-2">Cocoapods使用</h2>
+
+<ol>
+  <li>建立一个工程<code class="highlighter-rouge">CocoapodsTest</code></li>
+  <li>cd 进入这个工程文件夹</li>
+  <li>
+    <p>输入<code class="highlighter-rouge">$ vi Pofile</code>建立并打开<code class="highlighter-rouge">Podfile</code>文件。点击i，进入输入模式，输入下列内容后，按<code class="highlighter-rouge">esc</code>,<code class="highlighter-rouge">shift+:</code>,<code class="highlighter-rouge">wq</code>保存并退出</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code> target 'CocoapodsTest' do
+ pod 'AFNetworking', '~&gt; 3.1.0'
+ end
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>执行<code class="highlighter-rouge">$ pod install --verbose --no-repo-update</code>即可</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code> Analyzing dependencies
+ Inspecting targets to integrate
+   Using `ARCHS` setting to build architectures of target `Pods`: (``)
+   Using `ARCHS` setting to build architectures of target `Pods-CocoapodsTest`:
+   (``)
+ Resolving dependencies of `Podfile`
+ Comparing resolved specification to the sandbox manifest
+   A AFNetworking
+ Downloading dependencies
+ -&gt; Installing AFNetworking (3.1.0)
+ .......
+</code></pre>
+    </div>
+  </li>
+  <li>执行成功生成<code class="highlighter-rouge">.xworkspace</code>文件，<code class="highlighter-rouge">Podfile.lock</code>文件，<code class="highlighter-rouge">Pods</code>文件夹。以后，项目操作就在<code class="highlighter-rouge">.xworkspace</code>文件中。</li>
+</ol>
+
+<p>可以使用<code class="highlighter-rouge">$ pod search AFNetworking</code>来查看<code class="highlighter-rouge">AFNetworking</code>的版本信息</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>-&gt; AFNetworking (3.1.0)
+   A delightful iOS and OS X networking framework.
+   pod 'AFNetworking', '~&gt; 3.1.0'
+   - Homepage: https://github.com/AFNetworking/AFNetworking
+   - Source:   https://github.com/AFNetworking/AFNetworking.git
+   - Versions: 3.1.0, 3.0.4, 3.0.3, 3.0.2, 3.0.1, 3.0.0, 3.0.0-beta.3,
+   3.0.0-beta.2, 3.0.0-beta.1, 2.6.3, 2.6.2, 2.6.1, 2.6.0, 2.5.4, 2.5.3, 2.5.2,
+   2.5.1, 2.5.0, 2.4.1, 2.4.0, 2.3.1, 2.3.0, 2.2.4, 2.2.3, 2.2.2, 2.2.1, 2.2.0,
+   2.1.0, 2.0.3, 2.0.2, 2.0.1, 2.0.0, 2.0.0-RC3, 2.0.0-RC2, 2.0.0-RC1, 1.3.4,
+   1.3.3, 1.3.2, 1.3.1, 1.3.0, 1.2.1, 1.2.0, 1.1.0, 1.0.1, 1.0, 1.0RC3, 1.0RC2,
+   1.0RC1, 0.10.1, 0.10.0, 0.9.2, 0.9.1, 0.9.0, 0.7.0, 0.5.1 [master repo]
+   - Subspecs:
+     - AFNetworking/Serialization (3.1.0)
+     - AFNetworking/Security (3.1.0)
+     - AFNetworking/Reachability (3.1.0)
+     - AFNetworking/NSURLSession (3.1.0)
+     - AFNetworking/UIKit (3.1.0)
+</code></pre>
+</div>
+
+<h2 id="podfilepodfilelock">Podfile和Podfile.lock</h2>
+
+<h3 id="podfile">什么是Podfile？</h3>
+
+<p><code class="highlighter-rouge">Podfile</code>是描述一个或多个<code class="highlighter-rouge">xcode</code>程的的目标依赖的一个说明书。这个文件必须被命名为<code class="highlighter-rouge">Podfile</code>。</p>
+
+<h3 id="podfile-1">Podfile文件所在的位置</h3>
+
+<ul>
+  <li>推荐把<code class="highlighter-rouge">Podfile</code>文件存在工程根目录下</li>
+  <li>
+    <p>如果把<code class="highlighter-rouge">Podfile</code>文件存在工程其他目录下，需要在<code class="highlighter-rouge">Podfile</code>中指定<code class="highlighter-rouge">xx.xcodeproj</code>文件的路径</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>  xcodeproj "/Users/chiyou/Desktop/CocoaPodsTest/CocoaPodsTest.xcodeproj" 
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+<h3 id="section">版本指定</h3>
+
+<ul>
+  <li><code class="highlighter-rouge">pod 'AFNetworking'</code>              不显式指定依赖库版本，表示每次都获取最新版本</li>
+  <li><code class="highlighter-rouge">pod 'AFNetworking', '2.0'</code>       只使用2.0版本</li>
+  <li><code class="highlighter-rouge">pod 'AFNetworking', '&gt; 2.0'</code>     使用高于2.0的版本</li>
+  <li><code class="highlighter-rouge">pod 'AFNetworking', '&gt;= 2.0'</code>    使用大于或等于2.0的版本</li>
+  <li><code class="highlighter-rouge">pod 'AFNetworking', '&lt; 2.0'</code>     使用小于2.0的版本</li>
+  <li><code class="highlighter-rouge">pod 'AFNetworking', '&lt;= 2.0'</code>    使用小于或等于2.0的版本</li>
+  <li><code class="highlighter-rouge">pod 'AFNetworking', '~&gt; 0.1.2'</code>  使用大于等于0.1.2但小于0.2的版本</li>
+  <li><code class="highlighter-rouge">pod 'AFNetworking', '~&gt;0.1'</code>     使用大于等于0.1但小于1.0的版本</li>
+  <li><code class="highlighter-rouge">pod 'AFNetworking', '~&gt;0'</code>       高于0的版本，写这个限制和什么都不写是一个效果，都表示使用最新版本</li>
+</ul>
+
+<h3 id="podfiletarget">Podfile与target</h3>
+
+<p><code class="highlighter-rouge">Podfile</code>与一个<code class="highlighter-rouge">target</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>target 'target1' do
+ pod 'AFNetworking'
+ end
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">Podfile</code>与多个<code class="highlighter-rouge">target</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> target 'target1' do
+ pod 'AFNetworking'
+ end
+ 
+ target 'target2' do
+ pod 'AFNetworking'
+ end
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">Podfile</code>默认的<code class="highlighter-rouge">target</code>为第一个<code class="highlighter-rouge">target</code>，我们可以这样写</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> pod 'AFNetworking'
+</code></pre>
+</div>
+
+<h3 id="podfilelock">Podfile.lock</h3>
+
+<ul>
+  <li>在开始使用<code class="highlighter-rouge">CocoaPods</code>，执行完<code class="highlighter-rouge">pod install</code>之后，会生成一个<code class="highlighter-rouge">Podfile.lock</code>文件</li>
+  <li>该文件用于保存已经安装的Pods依赖库的版本</li>
+  <li>在<code class="highlighter-rouge">Podfile</code>文件中不指定库的版本(<code class="highlighter-rouge">pod 'AFNetworking', '= 2.6.3'</code>指定版本)，那么团队协作开发时，别人<code class="highlighter-rouge">check</code>下来的工程，如果有这个<code class="highlighter-rouge">Podfile.lock</code>文件，那么在执行<code class="highlighter-rouge">pod install </code>获取的库的版本与最开始用户获取的版本相同</li>
+  <li>如果缺少<code class="highlighter-rouge">Podfile.lock</code>文件,那么在执行<code class="highlighter-rouge">pod install</code> 就会获取最新的版本，会造成团队使用的库版本不一致，这是很严重的问题</li>
+  <li>这种情况下，如果团队想要使用最新版的<code class="highlighter-rouge">AFNetworking</code>，那么可以使用<code class="highlighter-rouge">pod update</code> 或者 <code class="highlighter-rouge">Podfile</code>中直接指定最新的版本号</li>
+  <li>综上所述，<code class="highlighter-rouge">Podfile.lock</code>一定要纳入版本管理中去</li>
+</ul>
+
+<h2 id="pod-install--pod-update">pod install 和 pod update</h2>
+
+<h3 id="pod-install">pod install</h3>
+
+<p><code class="highlighter-rouge">Podfile</code>版本写死的情况:</p>
+
+<p>1 直接等于某个版本</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Pod 'AFNetworking', '2.6.3' 
+</code></pre>
+</div>
+
+<p>2 相当于直接等于某个版本</p>
+
+<p>因为2.6.x的版本中2.6.3就是最高版本了,我们写2.6.x获取的版本肯定是2.6.3</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Pod 'AFNetworking', '&gt; 2.6.x' 
+Pod 'AFNetworking', '&gt;= 2.6.x' 
+</code></pre>
+</div>
+
+<ul>
+  <li>如果版本写死，有没有<code class="highlighter-rouge">Podfile.lock</code>文件都没有影响，执行<code class="highlighter-rouge">Pod install</code>，不会更改库的版本</li>
+  <li>如果版本未写死，有<code class="highlighter-rouge">Podfile.lock</code>文件，执行<code class="highlighter-rouge">Pod install</code>，不会更改库的版本</li>
+  <li>如果版本未写死，没有<code class="highlighter-rouge">Podfile.lock</code>文件，且库版本未更新，执行<code class="highlighter-rouge">Pod install</code>，不会更改库的版本</li>
+  <li>如果版本未写死，没有<code class="highlighter-rouge">Podfile.lock</code>文件，且库版本更新，执行<code class="highlighter-rouge">Pod install</code>，<strong>会更改库的版本</strong></li>
+  <li>如果用<code class="highlighter-rouge">pod install --verbose --no-repo-update</code> 意思是只安装，不更新<code class="highlighter-rouge">pods</code>库中的资源。如果经常执行<code class="highlighter-rouge">pod install --verbose --no-repo-update</code>会导致我们的库版本会低很多。一些新的库或者某些库的新的版本通过<code class="highlighter-rouge">pod search xxx</code> 会搜索不到</li>
+  <li>如果更改<code class="highlighter-rouge">Podfile</code>文件，且更改后应该安装的版本与原来的不一样，无论是否有<code class="highlighter-rouge">Podfile.lock</code>文件，执行<code class="highlighter-rouge">Pod install</code>，<strong>会更改库的版本</strong>。</li>
+</ul>
+
+<h3 id="pod-update">pod update</h3>
+
+<ul>
+  <li>如果<code class="highlighter-rouge">Podfile</code>中指定的依赖库版本不是写死的（<code class="highlighter-rouge">pod 'AFNetworking'</code>），当对应的依赖库有了更新，无论有没有<code class="highlighter-rouge">Podfile.lock</code>文件都会去获取<code class="highlighter-rouge">Podfile</code>文件描述的允许获取到的最新依赖库版本。</li>
+  <li>如果<code class="highlighter-rouge">Podfile</code>中指定的依赖库版本是写死的（<code class="highlighter-rouge">pod 'AFNetworking', '2.3.1'</code>），那么执行<code class="highlighter-rouge">pod update</code>根本没有作用。</li>
+</ul>
+
+<h2 id="faq">FAQ</h2>
+
+<h3 id="pods">工程中Pods无效?</h3>
+
+<p>可能我们拉取别人的代码，或者下载网上的代码是会出现Pods失效报错的情况</p>
+
+<p>由于工程中依旧存在<code class="highlighter-rouge">Podfile</code>和<code class="highlighter-rouge">Podfile.lock</code>文件,所以我们只需要进入工程文件然后执行<code class="highlighter-rouge">pod install --verbose --no-repo-update</code> 即可</p>
+
+<p>但是有时它并不起作用，依旧没有把对应的库导入进来，这个时候我们最终极的解决方案是删除<code class="highlighter-rouge">Pods</code>文件夹，删除<code class="highlighter-rouge">.xcworkspec</code>文件，然后再次执行<code class="highlighter-rouge">pod install --verbose --no-repo-update</code>即可</p>
+
+<h2 id="section-1">参考</h2>
+<ul>
+  <li><a href="https://guides.cocoapods.org">Cocoapods Guides</a></li>
+  <li><a href="http://blog.csdn.net/wzzvictory/article/details/19178709">CocoaPods详解之—-进阶篇</a></li>
+  <li><a href="http://blog.csdn.net/wzzvictory/article/details/19178709">Podspec Syntax Reference</a></li>
+</ul>
+
+
+    </article>
+    <div class="share">
+      <div class="share-component"></div>
+    </div>
+    <div class="comment">
+      
+  
+      
+      <!-- Duoshuo Comment BEGIN -->
+      <!-- 多说评论框 BEGIN -->
+      <div class="ds-thread" data-thread-key="/2016/05/09/Cocoapods-install/" data-title="Cocoapods系列:安装与使用(一)" data-url="http://www.lhjzzu.com/2016/05/09/Cocoapods-install/"></div>
+      <!-- 多说评论框 END -->
+      <!-- 多说公共JS代码 BEGIN (一个网页只需插入一次) -->
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"abc19911991"};
+        (function() {
+          var ds = document.createElement('script');
+          ds.type = 'text/javascript';ds.async = true;
+          ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+          ds.charset = 'UTF-8';
+          (document.getElementsByTagName('head')[0]
+           || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+      <!-- 多说公共JS代码 END -->
+      <!-- Duoshuo Comment END -->
+      
+    
+
+
+    </div>
+  </div>
+  <div class="column one-fourth">
+    
+<h3>Search</h3>
+<form action="get" id="site_search">
+    <input type="text" id="search_box" placeholder="Search">
+    <button class="btn btn-default" type="submit"><span class="octicon octicon-search"></span></button>
+</form>
+
+<ul id="search_results"></ul>
+
+<link rel="stylesheet" type="text/css" href="/assets/css/modules/sidebar-search.css">
+<script src="/assets/js/lunr.min.js"></script>
+<script src="/assets/js/search.js"></script>
+
+
+    
+<h3>Post Directory</h3>
+<div id="post-directory-module" class="mobile-hidden">
+  <section class="post-directory">
+  <!-- Links that trigger the jumping -->
+  <!-- Added by javascript below -->
+  <dl></dl>
+  </section>
+</div>
+
+<script src="/assets/js/jquery.toc.js"></script>
+
+  </div>
+</div>
+</section>
+<!-- /section.content -->
+
+    <footer class="container">
+        <div class="site-footer" role="contentinfo">
+            <div class="copyright left mobile-block">
+                    © 2015
+                    <span title="Liu Hua Jian">Liu Hua Jian</span>
+                    <a href="javascript:window.scrollTo(0,0)" class="right mobile-visible">TOP</a>
+            </div>
+
+            <ul class="site-footer-links right mobile-hidden">
+                <li>
+                    <a href="javascript:window.scrollTo(0,0)" >TOP</a>
+                </li>
+            </ul>
+            <a href="https://github.com/lhjzzu/lhjzzu.github.io" target="_blank" aria-label="view source code">
+                <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+            </a>
+            <ul class="site-footer-links mobile-hidden">
+                
+                <li>
+                    <a href="/" title="首页" target="">首页</a>
+                </li>
+                
+                <li>
+                    <a href="/categories/" title="分类" target="">分类</a>
+                </li>
+                
+                <li>
+                    <a href="/links/" title="链接" target="">链接</a>
+                </li>
+                
+                <li>
+                    <a href="/about/" title="关于" target="">关于</a>
+                </li>
+                
+                <li><a href="/feed.xml"><span class="octicon octicon-rss" style="color:orange;"></span></a></li>
+            </ul>
+        </div>
+    </footer>
+    <!-- / footer -->
+    <script src="/assets/vendor/s.js/dist/js/share.min.js"></script>
+    <script src="/assets/js/geopattern.js"></script>
+    <script src="/assets/js/prism.js"></script>
+    <link rel="stylesheet" href="/assets/css/globals/prism.css">
+    <script>
+      jQuery(document).ready(function($) {
+        // geopattern
+        $('.geopattern').each(function(){
+          $(this).geopattern($(this).data('pattern-id'));
+        });
+       // hljs.initHighlightingOnLoad();
+      });
+    </script>
+    
+</body>
+</html>

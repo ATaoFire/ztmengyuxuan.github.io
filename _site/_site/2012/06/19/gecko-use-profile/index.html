@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" prefix="og: http://ogp.me/ns#" class="han-init">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>为基于 xulrunner 的内嵌 Gecko 程序启用 Profile &mdash; 刘华健</title>
+    <link rel="stylesheet" href="/assets/vendor/primer-css/css/primer.css">
+    <link rel="stylesheet" href="/assets/vendor/primer-markdown/dist/user-content.min.css">
+    <link rel="stylesheet" href="/assets/vendor/octicons/octicons/octicons.css">
+    <link rel="stylesheet" href="/assets/css/components/collection.css">
+    <link rel="stylesheet" href="/assets/css/components/repo-card.css">
+    <link rel="stylesheet" href="/assets/css/sections/repo-list.css">
+    <link rel="stylesheet" href="/assets/css/sections/mini-repo-list.css">
+    <link rel="stylesheet" href="/assets/css/components/boxed-group.css">
+    <link rel="stylesheet" href="/assets/css/globals/common.css">
+    <link rel="stylesheet" href="/assets/vendor/share.js/dist/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/globals/responsive.css">
+    <link rel="stylesheet" href="/assets/css/posts/index.css">
+    <!-- Latest compiled and minified CSS -->
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="刘华健" href="/feed.xml">
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+    <meta property="og:title" content="为基于 xulrunner 的内嵌 Gecko 程序启用 Profile">
+      
+    <meta name="keywords" content="Gecko, Profile">
+    <meta name="og:keywords" content="Gecko, Profile">
+      
+    <meta name="description" content="Mozilla 自带的 Profile 支持实际上是非常给力的，看看 %appdata%/Mozilla/Firefox 下的文件就能知道，这里存放着许多的信息，它们提供了很多东西，例如：">
+    <meta name="og:description" content="Mozilla 自带的 Profile 支持实际上是非常给力的，看看 %appdata%/Mozilla/Firefox 下的文件就能知道，这里存放着许多的信息，它们提供了很多东西，例如：">
+      
+    
+    
+        
+    
+    <meta property="og:url" content="http://www.lhjzzu.com/2012/06/19/gecko-use-profile/">
+    <meta property="og:site_name" content="刘华健">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="zh_CN" />
+    
+    <meta property="article:published_time" content="2012-06-19">
+    
+    <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.js"></script>
+</head>
+<body class="" data-mz="">
+    <header class="site-header">
+        <div class="container">
+            <h1><a href="/" title="刘华健"><span class="octicon octicon-mark-github"></span> 刘华健</a></h1>
+            <nav class="site-header-nav" role="navigation">
+                
+                <a href="/" class=" site-header-nav-item" target="" title="首页">首页</a>
+                
+                <a href="/categories/" class=" site-header-nav-item" target="" title="分类">分类</a>
+                
+                <a href="/links/" class=" site-header-nav-item" target="" title="链接">链接</a>
+                
+                <a href="/about/" class=" site-header-nav-item" target="" title="关于">关于</a>
+                
+            </nav>
+        </div>
+    </header>
+    <!-- / header -->
+
+    <section class="collection-head small geopattern" data-pattern-id="为基于 xulrunner 的">
+<div class="container">
+  <div class="columns">
+    <div class="column three-fourths">
+      <div class="collection-title">
+        <h1 class="collection-header">为基于 xulrunner 的内嵌 Gecko 程序启用 Profile</h1>
+        <div class="collection-info">
+          
+          <span class="meta-info">
+            <span class="octicon octicon-calendar"></span> 2012/06/19
+          </span>
+          
+          
+          <span class="meta-info">
+            <span class="octicon octicon-file-directory"></span>
+            <a href="/categories/#Gecko" title="Gecko">Gecko</a>
+          </span>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- / .banner -->
+<section class="container content">
+<div class="columns">
+  <div class="column three-fourths" >
+    <article class="article-content markdown-body">
+    <p>Mozilla 自带的 Profile 支持实际上是非常给力的，看看 %appdata%/Mozilla/Firefox 下的文件就能知道，这里存放着许多的信息，它们提供了很多东西，例如：</p>
+
+<ol>
+  <li>
+    <p>可以通过 Profiles/…default/chrome 下的 userchrome.css 文件来定制自己的 firefox 外观，比如用 #appmenu-button { display:none !important;} 这样一句就可以去掉 firefox 左上角难看的按钮菜单</p>
+  </li>
+  <li>
+    <p>安装的 extensions，Addon 放在这里</p>
+  </li>
+  <li>
+    <p>证书相关、组件列表、cookie、插件列表等等都可以在这里找到</p>
+  </li>
+</ol>
+
+<p>等等等等。</p>
+
+<p>合理利用这些文件和信息我们可以在自己内嵌 Gecko 的程序里方便地做一些事情而不用自己去操作和维护一些配置项和数据。</p>
+
+<p>在自己编译完 xulrunner-1.9.2 后尚能找到编译好的 profdirserviceprovidersa_s.lib 来用于 WinEmbed 工程的移植，最近编译了 xulrunner-10.0.2 后发现就没这么幸运了，没有生成这个东东。在头疼了一番后决定自己做一个工程来生成它。根据 xulrunner 源码 mozilla-release/profile/dirserviceprovider 下的几个 makefile 来做就可以了。</p>
+
+<p>直接讲过程吧。</p>
+
+<p>一、编译出需要的 Lib 文件</p>
+
+<p>新建一个 Win32 静态 Lib 空工程，将 mozilla-release/profile/dirserviceprovider 目录下的几个 .h 和 .cpp 文件都添加进工程，将 path/to/xulrunner-10.0.2-sdk/include 添加到工程的附加包含目录，为工程添加预处理器定义 XP_WIN 和 XPCOM_GLUE 这两项。如果一切顺利的话这时候你已经可以顺利地编译出这个 lib 文件了。在 <a href="http://download.csdn.net/detail/mzlogin/4382847">http://download.csdn.net/detail/mzlogin/4382847</a> 可以下载到我的 Demo 工程，如果想编译，需要将上面所讲的 path/to/xulrunner-10.0.2-sdk/include 修改成你本机上 xulrunner sdk 的相应路径。</p>
+
+<p>二、将 Lib 链接进自己内嵌 Gecko 的程序</p>
+
+<p>自写一个启用 profile 的函数，我这里直接使用 WinEmbed 例子里提供的 StartupProfile 函数：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">nsresult</span> <span class="nf">StartupProfile</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">nsCOMPtr</span><span class="o">&lt;</span><span class="n">nsIFile</span><span class="o">&gt;</span> <span class="n">appDataDir</span><span class="p">;</span>
+    <span class="n">nsresult</span> <span class="n">rv</span> <span class="o">=</span> <span class="n">NS_GetSpecialDirectory</span><span class="p">(</span><span class="n">NS_APP_APPLICATION_REGISTRY_DIR</span><span class="p">,</span> <span class="n">getter_AddRefs</span><span class="p">(</span><span class="n">appDataDir</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">NS_FAILED</span><span class="p">(</span><span class="n">rv</span><span class="p">))</span>
+      <span class="k">return</span> <span class="n">rv</span><span class="p">;</span>
+
+    <span class="n">appDataDir</span><span class="o">-&gt;</span><span class="n">AppendNative</span><span class="p">(</span><span class="n">nsCString</span><span class="p">(</span><span class="s">"MozillaDemo"</span><span class="p">));</span>
+    <span class="n">nsCOMPtr</span><span class="o">&lt;</span><span class="n">nsILocalFile</span><span class="o">&gt;</span> <span class="n">localAppDataDir</span><span class="p">(</span><span class="n">do_QueryInterface</span><span class="p">(</span><span class="n">appDataDir</span><span class="p">));</span>
+
+    <span class="n">nsCOMPtr</span><span class="o">&lt;</span><span class="n">nsProfileDirServiceProvider</span><span class="o">&gt;</span> <span class="n">locProvider</span><span class="p">;</span>
+    <span class="n">NS_NewProfileDirServiceProvider</span><span class="p">(</span><span class="n">PR_TRUE</span><span class="p">,</span> <span class="n">getter_AddRefs</span><span class="p">(</span><span class="n">locProvider</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">locProvider</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">NS_ERROR_FAILURE</span><span class="p">;</span>
+
+    <span class="n">rv</span> <span class="o">=</span> <span class="n">locProvider</span><span class="o">-&gt;</span><span class="n">Register</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">NS_FAILED</span><span class="p">(</span><span class="n">rv</span><span class="p">))</span>
+      <span class="k">return</span> <span class="n">rv</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">locProvider</span><span class="o">-&gt;</span><span class="n">SetProfileDir</span><span class="p">(</span><span class="n">localAppDataDir</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>其中的”MozillaDemo”即是你的 profile 文件夹的名字，可以根据你的喜好改动，在这里会是 %appdata%/Mozilla/MozillaDemo</p>
+
+<p>在初始化 Gecko 运行环境的过程里调用完 XRE_InitEmbedding2 之后，添加</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">NS_FAILED</span><span class="p">(</span><span class="n">StartupProfile</span><span class="p">()))</span> <span class="p">{</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="p">{</span>
+</code></pre>
+</div>
+
+<p>在此文件开始添加</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#include "nsAppDirectoryServiceDefs.h"
+#include "nsDirectoryServiceDefs.h"
+#include "nsProfileDirServiceProvider.h"
+</span></code></pre>
+</div>
+
+<p>在合适的地方添加</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">#pragma comment(lib, "编译出的 lib")
+</span></code></pre>
+</div>
+
+<p>顺利的话，就大功告成了，运行一个你的内嵌 Gecko 程序然后去 %appdata%/Mozilla/MozillaDemo 看看吧~有图有真相哦。</p>
+
+<p><img src="/images/posts/gecko/geckouseprofile.png" width="80%" alt="Gecko Embed Program Use Profile" /></p>
+
+    </article>
+    <div class="share">
+      <div class="share-component"></div>
+    </div>
+    <div class="comment">
+      
+  
+      
+      <!-- Duoshuo Comment BEGIN -->
+      <!-- 多说评论框 BEGIN -->
+      <div class="ds-thread" data-thread-key="/2012/06/19/gecko-use-profile/" data-title="为基于 xulrunner 的内嵌 Gecko 程序启用 Profile" data-url="http://www.lhjzzu.com/2012/06/19/gecko-use-profile/"></div>
+      <!-- 多说评论框 END -->
+      <!-- 多说公共JS代码 BEGIN (一个网页只需插入一次) -->
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"abc19911991"};
+        (function() {
+          var ds = document.createElement('script');
+          ds.type = 'text/javascript';ds.async = true;
+          ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+          ds.charset = 'UTF-8';
+          (document.getElementsByTagName('head')[0]
+           || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+      <!-- 多说公共JS代码 END -->
+      <!-- Duoshuo Comment END -->
+      
+    
+
+
+    </div>
+  </div>
+  <div class="column one-fourth">
+    
+<h3>Search</h3>
+<form action="get" id="site_search">
+    <input type="text" id="search_box" placeholder="Search">
+    <button class="btn btn-default" type="submit"><span class="octicon octicon-search"></span></button>
+</form>
+
+<ul id="search_results"></ul>
+
+<link rel="stylesheet" type="text/css" href="/assets/css/modules/sidebar-search.css">
+<script src="/assets/js/lunr.min.js"></script>
+<script src="/assets/js/search.js"></script>
+
+
+    
+<h3>Post Directory</h3>
+<div id="post-directory-module" class="mobile-hidden">
+  <section class="post-directory">
+  <!-- Links that trigger the jumping -->
+  <!-- Added by javascript below -->
+  <dl></dl>
+  </section>
+</div>
+
+<script src="/assets/js/jquery.toc.js"></script>
+
+  </div>
+</div>
+</section>
+<!-- /section.content -->
+
+    <footer class="container">
+        <div class="site-footer" role="contentinfo">
+            <div class="copyright left mobile-block">
+                    © 2015
+                    <span title="Liu Hua Jian">Liu Hua Jian</span>
+                    <a href="javascript:window.scrollTo(0,0)" class="right mobile-visible">TOP</a>
+            </div>
+
+            <ul class="site-footer-links right mobile-hidden">
+                <li>
+                    <a href="javascript:window.scrollTo(0,0)" >TOP</a>
+                </li>
+            </ul>
+            <a href="https://github.com/lhjzzu/lhjzzu.github.io" target="_blank" aria-label="view source code">
+                <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+            </a>
+            <ul class="site-footer-links mobile-hidden">
+                
+                <li>
+                    <a href="/" title="首页" target="">首页</a>
+                </li>
+                
+                <li>
+                    <a href="/categories/" title="分类" target="">分类</a>
+                </li>
+                
+                <li>
+                    <a href="/links/" title="链接" target="">链接</a>
+                </li>
+                
+                <li>
+                    <a href="/about/" title="关于" target="">关于</a>
+                </li>
+                
+                <li><a href="/feed.xml"><span class="octicon octicon-rss" style="color:orange;"></span></a></li>
+            </ul>
+        </div>
+    </footer>
+    <!-- / footer -->
+    <script src="/assets/vendor/s.js/dist/js/share.min.js"></script>
+    <script src="/assets/js/geopattern.js"></script>
+    <script src="/assets/js/prism.js"></script>
+    <link rel="stylesheet" href="/assets/css/globals/prism.css">
+    <script>
+      jQuery(document).ready(function($) {
+        // geopattern
+        $('.geopattern').each(function(){
+          $(this).geopattern($(this).data('pattern-id'));
+        });
+       // hljs.initHighlightingOnLoad();
+      });
+    </script>
+    
+</body>
+</html>

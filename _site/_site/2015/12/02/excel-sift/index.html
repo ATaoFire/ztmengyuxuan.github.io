@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" prefix="og: http://ogp.me/ns#" class="han-init">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>Excel 保留行号的去重 &mdash; 刘华健</title>
+    <link rel="stylesheet" href="/assets/vendor/primer-css/css/primer.css">
+    <link rel="stylesheet" href="/assets/vendor/primer-markdown/dist/user-content.min.css">
+    <link rel="stylesheet" href="/assets/vendor/octicons/octicons/octicons.css">
+    <link rel="stylesheet" href="/assets/css/components/collection.css">
+    <link rel="stylesheet" href="/assets/css/components/repo-card.css">
+    <link rel="stylesheet" href="/assets/css/sections/repo-list.css">
+    <link rel="stylesheet" href="/assets/css/sections/mini-repo-list.css">
+    <link rel="stylesheet" href="/assets/css/components/boxed-group.css">
+    <link rel="stylesheet" href="/assets/css/globals/common.css">
+    <link rel="stylesheet" href="/assets/vendor/share.js/dist/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/globals/responsive.css">
+    <link rel="stylesheet" href="/assets/css/posts/index.css">
+    <!-- Latest compiled and minified CSS -->
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="刘华健" href="/feed.xml">
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+    <meta property="og:title" content="Excel 保留行号的去重">
+      
+    <meta name="keywords" content="Excel, Numbers">
+    <meta name="og:keywords" content="Excel, Numbers">
+      
+    <meta name="description" content="注：本文方法同时适用于 Excel 和 Numbers。">
+    <meta name="og:description" content="注：本文方法同时适用于 Excel 和 Numbers。">
+      
+    
+    
+        
+    
+    <meta property="og:url" content="http://www.lhjzzu.com/2015/12/02/excel-sift/">
+    <meta property="og:site_name" content="刘华健">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="zh_CN" />
+    
+    <meta property="article:published_time" content="2015-12-02">
+    
+    <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.js"></script>
+</head>
+<body class="" data-mz="">
+    <header class="site-header">
+        <div class="container">
+            <h1><a href="/" title="刘华健"><span class="octicon octicon-mark-github"></span> 刘华健</a></h1>
+            <nav class="site-header-nav" role="navigation">
+                
+                <a href="/" class=" site-header-nav-item" target="" title="首页">首页</a>
+                
+                <a href="/categories/" class=" site-header-nav-item" target="" title="分类">分类</a>
+                
+                <a href="/links/" class=" site-header-nav-item" target="" title="链接">链接</a>
+                
+                <a href="/about/" class=" site-header-nav-item" target="" title="关于">关于</a>
+                
+            </nav>
+        </div>
+    </header>
+    <!-- / header -->
+
+    <section class="collection-head small geopattern" data-pattern-id="Excel 保留行号的去重">
+<div class="container">
+  <div class="columns">
+    <div class="column three-fourths">
+      <div class="collection-title">
+        <h1 class="collection-header">Excel 保留行号的去重</h1>
+        <div class="collection-info">
+          
+          <span class="meta-info">
+            <span class="octicon octicon-calendar"></span> 2015/12/02
+          </span>
+          
+          
+          <span class="meta-info">
+            <span class="octicon octicon-file-directory"></span>
+            <a href="/categories/#Excel" title="Excel">Excel</a>
+          </span>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- / .banner -->
+<section class="container content">
+<div class="columns">
+  <div class="column three-fourths" >
+    <article class="article-content markdown-body">
+    <p><em>注：本文方法同时适用于 Excel 和 Numbers。</em></p>
+
+<h3 id="section">问题</h3>
+
+<p>对 Excel 中一列已经排序的数据，如何去重，且保留最终留下的值的行号？</p>
+
+<p>例如：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>110
+110
+151
+163
+163
+163
+888
+888
+999
+</code></pre>
+</div>
+
+<p>这样一列数据，进行普通的去重之后结果为：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>110
+151
+163
+888
+999
+</code></pre>
+</div>
+
+<p>而现在想要的效果是：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>110
+
+151
+163
+
+
+888
+
+999
+</code></pre>
+</div>
+
+<h3 id="section-1">分析</h3>
+
+<p>遇到这个问题第一个念头是用脚本来做，虽然 VBA 编辑很方便，也肯定能解决，但是总觉得还是不如 Excel 本身提供的操作方便。</p>
+
+<p>第二个念头是使用公式，数据已经排序，需要保留第一次出现该值的那一行，那么可以比对本行值与上一行的值，如果相等则说明不是第一次出现，应删除，如果不等则说明是第一次出现，应保留。沿这个思路很简单地用一个 IF 就解决了问题：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>=IF(A2&lt;&gt;A1,A2,"")
+</code></pre>
+</div>
+
+<h3 id="section-2">效果</h3>
+
+<p><img src="/images/posts/excel/remove-duplicate.png" alt="" /></p>
+
+<h3 id="section-3">总结</h3>
+
+<p>自从几年前学了点 VBA，遇到一些利用 Excel 进行数据处理的问题首先就想到使用脚本去做。可以想见步骤：</p>
+
+<ol>
+  <li>Alt+F11 打开脚本编辑器。</li>
+  <li>查并不熟悉的 API 然后写出逻辑。</li>
+  <li>执行之后拿到结果。</li>
+  <li>保存的时候可能还得复制到另一份纯净的 Excel 文档里去，免得带脚本的 xls 文件在别人的机子上打开会报安全隐患之类的。</li>
+</ol>
+
+<p>略繁琐，而像本问题则很合适就由 Excel 自带的公式来做，一行公式干净利落。</p>
+
+<h3 id="section-4">题外话</h3>
+
+<p>前面都是浮云，重点其实在这里，说这么多其实想说的是这样一句话：</p>
+
+<blockquote>
+  <p>做事情选对方法和工具很重要。</p>
+</blockquote>
+
+<p>比如我周末看了优酷排行第一的蛙泳教学视频，然后有意识地调整了一下呼吸节奏与动作，前后对比如下：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>调整前</th>
+      <th>调整后</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>最远距离</td>
+      <td>1km</td>
+      <td>2km</td>
+    </tr>
+    <tr>
+      <td>50m 划水次数</td>
+      <td>33</td>
+      <td>26</td>
+    </tr>
+    <tr>
+      <td>呼吸</td>
+      <td>急促难持久</td>
+      <td>平稳易坚持</td>
+    </tr>
+    <tr>
+      <td>个人感觉</td>
+      <td>速度慢，累</td>
+      <td>速度一般，不怎么累</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>由此可见一斑。</p>
+
+    </article>
+    <div class="share">
+      <div class="share-component"></div>
+    </div>
+    <div class="comment">
+      
+  
+      
+      <!-- Duoshuo Comment BEGIN -->
+      <!-- 多说评论框 BEGIN -->
+      <div class="ds-thread" data-thread-key="/2015/12/02/excel-sift/" data-title="Excel 保留行号的去重" data-url="http://www.lhjzzu.com/2015/12/02/excel-sift/"></div>
+      <!-- 多说评论框 END -->
+      <!-- 多说公共JS代码 BEGIN (一个网页只需插入一次) -->
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"abc19911991"};
+        (function() {
+          var ds = document.createElement('script');
+          ds.type = 'text/javascript';ds.async = true;
+          ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+          ds.charset = 'UTF-8';
+          (document.getElementsByTagName('head')[0]
+           || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+      <!-- 多说公共JS代码 END -->
+      <!-- Duoshuo Comment END -->
+      
+    
+
+
+    </div>
+  </div>
+  <div class="column one-fourth">
+    
+<h3>Search</h3>
+<form action="get" id="site_search">
+    <input type="text" id="search_box" placeholder="Search">
+    <button class="btn btn-default" type="submit"><span class="octicon octicon-search"></span></button>
+</form>
+
+<ul id="search_results"></ul>
+
+<link rel="stylesheet" type="text/css" href="/assets/css/modules/sidebar-search.css">
+<script src="/assets/js/lunr.min.js"></script>
+<script src="/assets/js/search.js"></script>
+
+
+    
+<h3>Post Directory</h3>
+<div id="post-directory-module" class="mobile-hidden">
+  <section class="post-directory">
+  <!-- Links that trigger the jumping -->
+  <!-- Added by javascript below -->
+  <dl></dl>
+  </section>
+</div>
+
+<script src="/assets/js/jquery.toc.js"></script>
+
+  </div>
+</div>
+</section>
+<!-- /section.content -->
+
+    <footer class="container">
+        <div class="site-footer" role="contentinfo">
+            <div class="copyright left mobile-block">
+                    © 2015
+                    <span title="Liu Hua Jian">Liu Hua Jian</span>
+                    <a href="javascript:window.scrollTo(0,0)" class="right mobile-visible">TOP</a>
+            </div>
+
+            <ul class="site-footer-links right mobile-hidden">
+                <li>
+                    <a href="javascript:window.scrollTo(0,0)" >TOP</a>
+                </li>
+            </ul>
+            <a href="https://github.com/lhjzzu/lhjzzu.github.io" target="_blank" aria-label="view source code">
+                <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+            </a>
+            <ul class="site-footer-links mobile-hidden">
+                
+                <li>
+                    <a href="/" title="首页" target="">首页</a>
+                </li>
+                
+                <li>
+                    <a href="/categories/" title="分类" target="">分类</a>
+                </li>
+                
+                <li>
+                    <a href="/links/" title="链接" target="">链接</a>
+                </li>
+                
+                <li>
+                    <a href="/about/" title="关于" target="">关于</a>
+                </li>
+                
+                <li><a href="/feed.xml"><span class="octicon octicon-rss" style="color:orange;"></span></a></li>
+            </ul>
+        </div>
+    </footer>
+    <!-- / footer -->
+    <script src="/assets/vendor/s.js/dist/js/share.min.js"></script>
+    <script src="/assets/js/geopattern.js"></script>
+    <script src="/assets/js/prism.js"></script>
+    <link rel="stylesheet" href="/assets/css/globals/prism.css">
+    <script>
+      jQuery(document).ready(function($) {
+        // geopattern
+        $('.geopattern').each(function(){
+          $(this).geopattern($(this).data('pattern-id'));
+        });
+       // hljs.initHighlightingOnLoad();
+      });
+    </script>
+    
+</body>
+</html>

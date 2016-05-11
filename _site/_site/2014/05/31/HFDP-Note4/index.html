@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" prefix="og: http://ogp.me/ns#" class="han-init">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>设计模式学习之单件模式 &mdash; 刘华健</title>
+    <link rel="stylesheet" href="/assets/vendor/primer-css/css/primer.css">
+    <link rel="stylesheet" href="/assets/vendor/primer-markdown/dist/user-content.min.css">
+    <link rel="stylesheet" href="/assets/vendor/octicons/octicons/octicons.css">
+    <link rel="stylesheet" href="/assets/css/components/collection.css">
+    <link rel="stylesheet" href="/assets/css/components/repo-card.css">
+    <link rel="stylesheet" href="/assets/css/sections/repo-list.css">
+    <link rel="stylesheet" href="/assets/css/sections/mini-repo-list.css">
+    <link rel="stylesheet" href="/assets/css/components/boxed-group.css">
+    <link rel="stylesheet" href="/assets/css/globals/common.css">
+    <link rel="stylesheet" href="/assets/vendor/share.js/dist/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/globals/responsive.css">
+    <link rel="stylesheet" href="/assets/css/posts/index.css">
+    <!-- Latest compiled and minified CSS -->
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="刘华健" href="/feed.xml">
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+    <meta property="og:title" content="设计模式学习之单件模式">
+      
+    <meta name="keywords" content="设计模式">
+    <meta name="og:keywords" content="设计模式">
+      
+    <meta name="description" content="如下内容是学习《Head First 设计模式》第五部分《单件模式》所得，主要就是一些原文摘抄和少量自己的总结。">
+    <meta name="og:description" content="如下内容是学习《Head First 设计模式》第五部分《单件模式》所得，主要就是一些原文摘抄和少量自己的总结。">
+      
+    
+    
+        
+    
+    <meta property="og:url" content="http://www.lhjzzu.com/2014/05/31/HFDP-Note4/">
+    <meta property="og:site_name" content="刘华健">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="zh_CN" />
+    
+    <meta property="article:published_time" content="2014-05-31">
+    
+    <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.js"></script>
+</head>
+<body class="" data-mz="">
+    <header class="site-header">
+        <div class="container">
+            <h1><a href="/" title="刘华健"><span class="octicon octicon-mark-github"></span> 刘华健</a></h1>
+            <nav class="site-header-nav" role="navigation">
+                
+                <a href="/" class=" site-header-nav-item" target="" title="首页">首页</a>
+                
+                <a href="/categories/" class=" site-header-nav-item" target="" title="分类">分类</a>
+                
+                <a href="/links/" class=" site-header-nav-item" target="" title="链接">链接</a>
+                
+                <a href="/about/" class=" site-header-nav-item" target="" title="关于">关于</a>
+                
+            </nav>
+        </div>
+    </header>
+    <!-- / header -->
+
+    <section class="collection-head small geopattern" data-pattern-id="设计模式学习之单件模式">
+<div class="container">
+  <div class="columns">
+    <div class="column three-fourths">
+      <div class="collection-title">
+        <h1 class="collection-header">设计模式学习之单件模式</h1>
+        <div class="collection-info">
+          
+          <span class="meta-info">
+            <span class="octicon octicon-calendar"></span> 2014/05/31
+          </span>
+          
+          
+          <span class="meta-info">
+            <span class="octicon octicon-file-directory"></span>
+            <a href="/categories/#DesignPattern" title="DesignPattern">DesignPattern</a>
+          </span>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- / .banner -->
+<section class="container content">
+<div class="columns">
+  <div class="column three-fourths" >
+    <article class="article-content markdown-body">
+    <p><strong>如下内容是学习《Head First 设计模式》第五部分《单件模式》所得，主要就是一些原文摘抄和少量自己的总结。</strong></p>
+
+<h3 id="section">单件模式定义</h3>
+
+<blockquote>
+  <p>单件模式确保类只有一个实例，并提供一个全局访问点。</p>
+</blockquote>
+
+<h3 id="c-">书中示例的 C++ 实现版源码</h3>
+
+<p><a href="https://github.com/mzlogin/DesignPatternDemos" target="_blank">这个 Solution 的 SingletonPattern 工程里</a>。</p>
+
+<h3 id="section-1">书中示例的类图</h3>
+
+<p>Visio 原图见<a href="https://github.com/mzlogin/DesignPatternDemos/blob/master/DesignPatternDemos.vsd" target="_blank">这里</a>:</p>
+
+<p><img src="/images/posts/designpattern/SingletonPattern.png" alt="Singleton Pattern UML Class Diagram" /></p>
+
+<h3 id="section-2">关键代码片断</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CSingleton</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">static</span> <span class="n">CSingleton</span><span class="o">*</span> <span class="n">GetInstance</span><span class="p">();</span>
+
+    <span class="cm">/**
+    释放单例，应仅限于所有对单例对象的使用完成后调用
+    */</span>
+    <span class="k">static</span> <span class="kt">void</span> <span class="n">ReleaseInstance</span><span class="p">();</span>
+
+    <span class="kt">void</span> <span class="n">DoSomething</span><span class="p">();</span>
+
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">CSingleton</span><span class="p">();</span>
+	<span class="n">CSingleton</span><span class="p">(</span><span class="k">const</span> <span class="n">CSingleton</span><span class="o">&amp;</span><span class="p">);</span>  <span class="c1">// private and not implemented copy constructor
+</span>	<span class="n">CSingleton</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">CSingleton</span><span class="o">&amp;</span><span class="p">);</span> <span class="c1">// private and not implemented = operator
+</span>
+    <span class="k">volatile</span> <span class="k">static</span> <span class="n">CSingleton</span><span class="o">*</span> <span class="n">m_sUniqueInstance</span><span class="p">;</span>
+    <span class="k">static</span> <span class="n">HANDLE</span> <span class="n">m_hSync</span><span class="p">;</span>
+<span class="p">};</span>
+
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">volatile</span> <span class="n">CSingleton</span><span class="o">*</span> <span class="n">CSingleton</span><span class="o">::</span><span class="n">m_sUniqueInstance</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="n">HANDLE</span> <span class="n">CSingleton</span><span class="o">::</span><span class="n">m_hSync</span> <span class="o">=</span> <span class="o">::</span><span class="n">CreateEvent</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="n">FALSE</span><span class="p">,</span> <span class="n">TRUE</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+
+<span class="n">CSingleton</span><span class="o">*</span> <span class="n">CSingleton</span><span class="o">::</span><span class="n">GetInstance</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">NULL</span> <span class="o">==</span> <span class="n">m_sUniqueInstance</span><span class="p">)</span>
+	<span class="p">{</span>
+        <span class="n">WaitForSingleObject</span><span class="p">(</span><span class="n">m_hSync</span><span class="p">,</span> <span class="n">INFINITE</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">NULL</span> <span class="o">==</span> <span class="n">m_sUniqueInstance</span><span class="p">)</span>
+		<span class="p">{</span>
+            <span class="n">m_sUniqueInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CSingleton</span><span class="p">();</span>
+		<span class="p">}</span>
+        <span class="n">SetEvent</span><span class="p">(</span><span class="n">m_hSync</span><span class="p">);</span>
+	<span class="p">}</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">CSingleton</span><span class="o">*</span><span class="p">)</span><span class="n">m_sUniqueInstance</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">CSingleton</span><span class="o">::</span><span class="n">ReleaseInstance</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">!=</span> <span class="n">m_sUniqueInstance</span><span class="p">)</span>
+	<span class="p">{</span>
+        <span class="k">delete</span> <span class="n">m_sUniqueInstance</span><span class="p">;</span>
+        <span class="n">m_sUniqueInstance</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+	<span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nb">NULL</span> <span class="o">!=</span> <span class="n">m_hSync</span><span class="p">)</span>
+	<span class="p">{</span>
+        <span class="n">CloseHandle</span><span class="p">(</span><span class="n">m_hSync</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre>
+</div>
+
+<h3 id="section-3">小结</h3>
+
+<ol>
+  <li>单件模式的精华是通过设计来限制一个类产生多个实例的可能性，从而满足有且仅能有一个实例的类的设计需求。</li>
+  <li>为了实现上述目标，采用了私有化构造函数和提供一个公开的获取唯一实例的接口。</li>
+  <li>要记得将复制构造函数和重载赋值运算符也声明为私有，不然类的用户仍然可以使用<code class="highlighter-rouge">CSingleton ObjA(*CSingleton::GetInstance())</code>和<code class="highlighter-rouge">CSingleton ObjB = *CSingleton::GetInstance())</code>的写法来得到第二、第三甚至更多的实例对象。</li>
+  <li>为了实现多线程安全，在创建唯一实例的时候会采用多线程同步设施如临界区、事件等来保证，声明实例指针使用 volatile 关键字。</li>
+  <li>在 Java 等语言中有「同步方法」和「急切」创建实例等方式来解决多线程的问题，C++ 中貌似都不太适用，使用 volatile 加双重检查加锁相对靠谱。</li>
+  <li>记得在合适的地方释放单例以及时和正确地回收资源。</li>
+</ol>
+
+    </article>
+    <div class="share">
+      <div class="share-component"></div>
+    </div>
+    <div class="comment">
+      
+  
+      
+      <!-- Duoshuo Comment BEGIN -->
+      <!-- 多说评论框 BEGIN -->
+      <div class="ds-thread" data-thread-key="/2014/05/31/HFDP-Note4/" data-title="设计模式学习之单件模式" data-url="http://www.lhjzzu.com/2014/05/31/HFDP-Note4/"></div>
+      <!-- 多说评论框 END -->
+      <!-- 多说公共JS代码 BEGIN (一个网页只需插入一次) -->
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"abc19911991"};
+        (function() {
+          var ds = document.createElement('script');
+          ds.type = 'text/javascript';ds.async = true;
+          ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+          ds.charset = 'UTF-8';
+          (document.getElementsByTagName('head')[0]
+           || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+      <!-- 多说公共JS代码 END -->
+      <!-- Duoshuo Comment END -->
+      
+    
+
+
+    </div>
+  </div>
+  <div class="column one-fourth">
+    
+<h3>Search</h3>
+<form action="get" id="site_search">
+    <input type="text" id="search_box" placeholder="Search">
+    <button class="btn btn-default" type="submit"><span class="octicon octicon-search"></span></button>
+</form>
+
+<ul id="search_results"></ul>
+
+<link rel="stylesheet" type="text/css" href="/assets/css/modules/sidebar-search.css">
+<script src="/assets/js/lunr.min.js"></script>
+<script src="/assets/js/search.js"></script>
+
+
+    
+<h3>Post Directory</h3>
+<div id="post-directory-module" class="mobile-hidden">
+  <section class="post-directory">
+  <!-- Links that trigger the jumping -->
+  <!-- Added by javascript below -->
+  <dl></dl>
+  </section>
+</div>
+
+<script src="/assets/js/jquery.toc.js"></script>
+
+  </div>
+</div>
+</section>
+<!-- /section.content -->
+
+    <footer class="container">
+        <div class="site-footer" role="contentinfo">
+            <div class="copyright left mobile-block">
+                    © 2015
+                    <span title="Liu Hua Jian">Liu Hua Jian</span>
+                    <a href="javascript:window.scrollTo(0,0)" class="right mobile-visible">TOP</a>
+            </div>
+
+            <ul class="site-footer-links right mobile-hidden">
+                <li>
+                    <a href="javascript:window.scrollTo(0,0)" >TOP</a>
+                </li>
+            </ul>
+            <a href="https://github.com/lhjzzu/lhjzzu.github.io" target="_blank" aria-label="view source code">
+                <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+            </a>
+            <ul class="site-footer-links mobile-hidden">
+                
+                <li>
+                    <a href="/" title="首页" target="">首页</a>
+                </li>
+                
+                <li>
+                    <a href="/categories/" title="分类" target="">分类</a>
+                </li>
+                
+                <li>
+                    <a href="/links/" title="链接" target="">链接</a>
+                </li>
+                
+                <li>
+                    <a href="/about/" title="关于" target="">关于</a>
+                </li>
+                
+                <li><a href="/feed.xml"><span class="octicon octicon-rss" style="color:orange;"></span></a></li>
+            </ul>
+        </div>
+    </footer>
+    <!-- / footer -->
+    <script src="/assets/vendor/s.js/dist/js/share.min.js"></script>
+    <script src="/assets/js/geopattern.js"></script>
+    <script src="/assets/js/prism.js"></script>
+    <link rel="stylesheet" href="/assets/css/globals/prism.css">
+    <script>
+      jQuery(document).ready(function($) {
+        // geopattern
+        $('.geopattern').each(function(){
+          $(this).geopattern($(this).data('pattern-id'));
+        });
+       // hljs.initHighlightingOnLoad();
+      });
+    </script>
+    
+</body>
+</html>

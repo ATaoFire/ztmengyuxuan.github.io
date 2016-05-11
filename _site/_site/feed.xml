@@ -1,0 +1,2593 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.0.5">Jekyll</generator><link href="http://www.lhjzzu.com/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.lhjzzu.com/" rel="alternate" type="text/html" /><updated>2016-05-11T14:38:25+08:00</updated><id>http://www.lhjzzu.com/</id><title>刘华健</title><subtitle>刘华健的个人博客</subtitle><author><name>Liu Hua Jian</name></author><entry><title>Cocoapods系列:使用Cocoapods制作静态库(三)</title><link href="http://www.lhjzzu.com/2016/05/10/make-lib-with-Cocoapods/" rel="alternate" type="text/html" title="Cocoapods系列:使用Cocoapods制作静态库(三)" /><published>2016-05-10T00:00:00+08:00</published><updated>2016-05-10T00:00:00+08:00</updated><id>http://www.lhjzzu.com/2016/05/10/make-lib-with-Cocoapods</id><content type="html" xml:base="http://www.lhjzzu.com/2016/05/10/make-lib-with-Cocoapods/">&lt;h2 id=&quot;cocoapods&quot;&gt;为什么要用Cocoapods制作静态库呢？&lt;/h2&gt;
+
+&lt;p&gt;我们本来就可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;xcode&lt;/code&gt;来进行静态库，&lt;code class=&quot;highlighter-rouge&quot;&gt;Cocoapods&lt;/code&gt;制作静态库主要是解决第三方冲突的问题。&lt;/p&gt;
+
+&lt;p&gt;当我们开发&lt;code class=&quot;highlighter-rouge&quot;&gt;sdk&lt;/code&gt;的时候，假如我们的静态库中需要使用一个第三方库，我们把这个第三方库打包进我们的&lt;code class=&quot;highlighter-rouge&quot;&gt;lib&lt;/code&gt;中，当别人在使用我们的&lt;code class=&quot;highlighter-rouge&quot;&gt;lib&lt;/code&gt;，如果他的工程中也已经使用可这个第三方库，那么就会造成冲突。&lt;/p&gt;
+
+&lt;p&gt;假设现在有一个需求，我要开发一个&lt;code class=&quot;highlighter-rouge&quot;&gt;sdk&lt;/code&gt;，其中的下载图片我想用&lt;code class=&quot;highlighter-rouge&quot;&gt;SDWebImage&lt;/code&gt;。但是众所周知&lt;code class=&quot;highlighter-rouge&quot;&gt;SDWebImage&lt;/code&gt;是一个非常常用的库，基本上大部分的App都会使用到。那么当我的&lt;code class=&quot;highlighter-rouge&quot;&gt;sdk&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;lib&lt;/code&gt;中使用了&lt;code class=&quot;highlighter-rouge&quot;&gt;SDWebImage&lt;/code&gt;后，如何保证它不和别人工程中的&lt;code class=&quot;highlighter-rouge&quot;&gt;SDWebImage&lt;/code&gt;冲突?&lt;code class=&quot;highlighter-rouge&quot;&gt;重命名&lt;/code&gt;这个第三方库的所有文件–这是唯一的解决方法。但是假如让我们一个一个文件的重命名这基本是一个不可能完成的任务，更何况还有库之间的依赖。&lt;code class=&quot;highlighter-rouge&quot;&gt;Cocoapods&lt;/code&gt;给我们提供了解决方案，通过&lt;code class=&quot;highlighter-rouge&quot;&gt;Cocoapods&lt;/code&gt;我们可能很方便的制作我们的静态库并且对第三方库进行重新命名。&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.cnblogs.com/brycezhang/p/4117180.html&quot;&gt;使用CocoaPods开发并打包静态库&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Liu Hua Jian</name></author><summary>为什么要用Cocoapods制作静态库呢？</summary></entry><entry><title>Cocoapods系列:制作自己的pods(二)</title><link href="http://www.lhjzzu.com/2016/05/10/make-Cocoapods/" rel="alternate" type="text/html" title="Cocoapods系列:制作自己的pods(二)" /><published>2016-05-10T00:00:00+08:00</published><updated>2016-05-10T00:00:00+08:00</updated><id>http://www.lhjzzu.com/2016/05/10/make-Cocoapods</id><content type="html" xml:base="http://www.lhjzzu.com/2016/05/10/make-Cocoapods/">&lt;h2 id=&quot;git&quot;&gt;建立git仓库&lt;/h2&gt;
+
+&lt;h3 id=&quot;githubmakecocoapods&quot;&gt;1 在github上建立MakeCocoapods的仓库,如下图&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xqijx.com1.z0.glb.clouddn.com/MakeCocoapods.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;2 把工程克隆到桌面上&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git ~/desktop
+$ git clone https://github.com/lhjzzu/MakeCocoapods
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;demomakecocoapods&quot;&gt;3 创建我们的工程demo放到MakeCocoapods文件夹中&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xqijx.com1.z0.glb.clouddn.com/cocoapodsDemo.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;我在demo工程中建立了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;MakeCocoapods&lt;/code&gt;类，创建了一个下载图片的方法，并且依赖了&lt;code class=&quot;highlighter-rouge&quot;&gt;SDWebImage&lt;/code&gt;&lt;br /&gt;
+ 可以直接&lt;a href=&quot;https://github.com/lhjzzu/MakeCocoapods&quot;&gt;fork&lt;/a&gt;我的工程查看源代码&lt;/p&gt;
+
+&lt;h3 id=&quot;classes&quot;&gt;4创建Classes文件夹&lt;/h3&gt;
+
+&lt;p&gt;Classes文件夹与MakeCocoapods文件夹同级，并且把&lt;code class=&quot;highlighter-rouge&quot;&gt;MakeCocoapods.h&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;MakeCocoapods.m&lt;/code&gt;文件放进去&lt;br /&gt;
+ &lt;img src=&quot;http://7xqijx.com1.z0.glb.clouddn.com/cocoapodsclass.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;5 打标签&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cd 进入工程文件
+$ git add .
+$ git commit -m &#39;0.0.1&#39;
+$ git push origin master
+$ git tag 0.0.1
+$ git push --tag
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;trunk&quot;&gt;trunk&lt;/h2&gt;
+
+&lt;h3 id=&quot;trunk-1&quot;&gt;注册trunk&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1 $ pod trunk register 1822657131@qq.com lhjzzu  --verbose&#39;
+    
+ [!] Please verify the session by clicking the link in the verification email that has been sent to 1822657131@qq.com
+ 
+ 打开这个邮件直接打开邮件中的链接即可，如果链接打不开的话，直接复制到浏览器中打开
+ 
+2 $ pod trunk me 查看信息
+ 
+   - Name:       lhjzzu
+   - Email:    1822657131@qq.com
+   - Since:    September 14th, 2015 01:09
+   - Pods:
+     - LHJTestes
+     - LHJView
+     - LHJButton
+     - LHJLast
+     - HJExtension
+   - Sessions:
+     - September 14th, 2015 01:09 -      March 8th, 20:46. IP:
+     115.236.11.98
+     - November 1st, 2015 23:43   -     March 23rd, 00:21. IP: 115.236.11.98
+     Description: macbook air
+     - May 9th, 00:44             - September 14th, 00:45. IP: 60.191.70.18
+     - May 9th, 01:09             - September 14th, 01:15. IP: 60.191.70.18 
+     Description: register trunk
+
+Pods就是你拥有的库，我的这些库都没有实际的内容
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;podspec&quot;&gt;.podspec文件&lt;/h2&gt;
+
+&lt;h3 id=&quot;podspec-1&quot;&gt;创建.podspec文件&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cd进入MakeCocoapods文件夹
+$ pod spec create MakeCocoapods
+  
+Specification created at MakeCocoapods.podspec
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;podspec-2&quot;&gt;打开并分析.podspec文件&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#
+#  Be sure to run `pod spec lint MakeCocoapods.podspec&#39; to ensure this is a
+#  valid spec and to remove all comments including this before submitting the spec.
+#
+#  To learn more about Podspec attributes see http://docs.cocoapods.org/specification.html
+#  To see working Podspecs in the CocoaPods repo see https://github.com/CocoaPods/Specs/
+#
+#  一定要运行 &#39;pod spec lint xx.podspec&#39;来确保.podspec文件是有效的。
+# 并且最后在提交.podspec之前要移除所有注释.
+#  可以了解更过关于Podspec，通过http://docs.cocoapods.org/specification.html
+#  see https://github.com/CocoaPods/Specs/
+
+Pod::Spec.new do |s|
+
+  # ―――  Spec Metadata  ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  These will help people to find your library, and whilst it
+  #  can feel like a chore to fill in it&#39;s definitely to your advantage. The
+  #  summary should be tweet-length, and the description more in depth.
+  #
+  
+  # ―――  Spec 元数据  ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  # 这些将帮助人们找到你的库，同时在成为你的优势之前可能感觉是麻烦的。(原谅我渣一样的翻译)
+  # 概要的长度限制与推特的一样（140），并且这个描述更加深入
+  # s.summary最好不要与s.description一样，会报警告(多写两字不会死)
+
+  s.name         = &quot;MakeCocoapods&quot;
+  s.version      = &quot;0.0.1&quot;
+  s.summary      = &quot;A short description of MakeCocoapods.&quot;
+
+  # This description is used to generate tags and improve search results.
+  #   * Think: What does it do? Why did you write it? What is the focus?
+  #   * Try to keep it short, snappy and to the point.
+  #   * Write the description between the DESC delimiters below.
+  #   * Finally, don&#39;t worry about the indent, CocoaPods strips it!
+  
+  # 这个描述用来生成标签和改善搜索结果
+  #   思考:它做了什么？你为什么要写它？重点是什么？
+  #   尽力保持它简短，精炼
+  #   在DESC之间写这个描述
+  #   最后不要担心缩进。cocoapods将做它。
+  
+  s.description  = &amp;lt;&amp;lt;-DESC
+               DESC
+               
+  # 主页地址，直接填写我们的仓库地址即可
+  s.homepage     = &quot;http://EXAMPLE/MakeCocoapods&quot;
+  #屏幕截图(不需要关心，直接删除即可)
+  # s.screenshots  = &quot;www.example.com/screenshots_1.gif&quot;, &quot;www.example.com/screenshots_2.gif&quot;
+
+  # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  Licensing your code is important. See http://choosealicense.com for more info.
+  #  CocoaPods will detect a license file if there is a named LICENSE*
+  #  Popular ones are &#39;MIT&#39;, &#39;BSD&#39; and &#39;Apache License, Version 2.0&#39;.
+  #
+  # ―――  Spec 授权  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  授权你的代码是很重要的。查看http://choosealicense.com得到更多的信息
+  #  CocoaPods 如果这里有一个命名为LICENSE*的文件，那么Cocoapods将检测这个授权文件
+  #  主要的授权为:&#39;MIT&#39;, &#39;BSD&#39; and &#39;Apache License, Version 2.0&#39;
+  #
+
+  s.license      = &quot;MIT (example)&quot;
+  # s.license      = { :type =&amp;gt; &quot;MIT&quot;, :file =&amp;gt; &quot;FILE_LICENSE&quot; }
+
+  # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  Specify the authors of the library, with email addresses. Email addresses
+  #  of the authors are extracted from the SCM log. E.g. $ git log. CocoaPods also
+  #  accepts just a name if you&#39;d rather not provide an email address.
+  #
+  #  Specify a social_media_url where others can refer to, for example a twitter
+  #  profile URL.
+  #
+  
+  # ――― 作者 元数据  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  指定这个库的作者和email地址。
+  #  作者的email地址也可以通过 $ git log来提取。
+  #  如果你不愿意提供邮箱，CocoaPods也接受仅仅一个名字
+  #  指定一个别人可以访问的社交账号，例如推特
+  # s.social_media_url这一项最好不要指定了，因为推特国内无法访问，验证.podsec时，不通过。
+
+  #填写用户名以及自己的github邮箱
+  s.author             = { &quot;lhjzzu&quot; =&amp;gt; &quot;1822657131@qq.com&quot; }
+  # Or just: s.author    = &quot;lhjzzu&quot;
+  # s.authors            = { &quot;lhjzzu&quot; =&amp;gt; &quot;1822657131@qq.com&quot; }
+  # s.social_media_url   = &quot;http://twitter.com/lhjzzu&quot;
+
+  # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  If this Pod runs only on iOS or OS X, then specify the platform and
+  #  the deployment target. You can optionally include the target after the platform.
+  #
+  
+  # ――― 平台的指定 ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  如果你的Pod仅仅运行在iOS或者OS X上，那么要指定platform以及deployment target。
+  # 一般而言，我们直选择
+  # s.platform = :ios和s.ios.deployment_target = &quot;5.0&quot;
+  # s.platform     = :ios, &quot;5.0&quot;与上面两句话相等
+  
+  
+  # s.platform     = :ios
+   s.platform     = :ios, &quot;5.0&quot;
+ 
+
+  #  When using multiple platforms
+  # s.ios.deployment_target = &quot;5.0&quot;
+  # s.osx.deployment_target = &quot;10.7&quot;
+  # s.watchos.deployment_target = &quot;2.0&quot;
+  # s.tvos.deployment_target = &quot;9.0&quot;
+
+
+  # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  Specify the location from where the source should be retrieved.
+  #  Supports git, hg, bzr, svn and HTTP.
+  #
+  
+  # ――― 资源的位置 ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  指定将被拉取的资源的位置
+  #  支持 git, hg, bzr, svn and HTTP.
+  # http://EXAMPLE/MakeCocoapods.git 就是我们仓库的地址(一定不要忘了.git)
+  # tag =&amp;gt; &quot;0.0.1&quot; 就是我们打的标签
+  
+
+  s.source       = { :git =&amp;gt; &quot;http://EXAMPLE/MakeCocoapods.git&quot;, :tag =&amp;gt; &quot;0.0.1&quot; }
+
+  # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  CocoaPods is smart about how it includes source code. For source files
+  #  giving a folder will include any swift, h, m, mm, c &amp;amp; cpp files.
+  #  For header files it will include any header in the folder.
+  #  Not including the public_header_files will make all headers public.
+  #
+  
+  # ――― 源码 ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  对于怎样去包含源码，cocoapods是很聪明的。
+  #  s.source_files将包含所有的源文件（swift, h, m, mm, c &amp;amp; cpp）
+  #  s.exclude_files要排除的文件（一般直接删除即可）
+  #  s.public_header_files 指定我们想公开的头文件
+  #  如果不含有s.public_header_files，那么我们的.h文件是默认全部公开的。
+  
+  s.source_files  = &quot;Classes&quot;, &quot;Classes/**/*.{h,m}&quot;
+  s.exclude_files = &quot;Classes/Exclude&quot;
+
+  # s.public_header_files = &quot;Classes/**/*.h&quot;
+
+
+  # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  A list of resources included with the Pod. These are copied into the
+  #  target bundle with a build phase script. Anything else will be cleaned.
+  #  You can preserve files from being cleaned, please don&#39;t preserve
+  #  non-essential files like tests, examples and documentation.
+  #
+   
+  # ――― 资源 ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  这个Pod包含的一系列的资源。在编译脚本的阶段，它们被复制到这个目标bundle中。
+  #  其它的任何资源将被清理。你可以保护文件免于被清理，但是请不要保存不必要的文件
+  #  例如tests，examples，documentation
+
+  # s.resource  = &quot;icon.png&quot;
+  # s.resources = &quot;Resources/*.png&quot;
+  # s.preserve_paths = &quot;FilesToSave&quot;, &quot;MoreFilesToSave&quot;
+
+  # ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  Link your library with frameworks, or libraries. Libraries do not include
+  #  the lib prefix of their name.
+  #
+  
+  # ――― 项目 链接 ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  链接你的Framework和library（系统的Framework，library）. 
+  # librarys的指定不包含lib的前缀，例如libxml2.tbd
+  
+
+  # s.framework  = &quot;SomeFramework&quot;
+  # s.frameworks = &quot;SomeFramework&quot;, &quot;AnotherFramework&quot;
+
+  # s.library   = &quot;iconv&quot;
+  # s.libraries = &quot;iconv&quot;, &quot;xml2&quot;
+
+ 
+  # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  #
+  #  If your library depends on compiler flags you can set them in the xcconfig hash
+  #  where they will only apply to your library. If you depend on other Podspecs
+  #  you can include multiple dependencies to ensure it works.
+
+  # ――― 项目 设置 ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
+  # 如果你的library依赖一个compiler flags。你能设置他们在xcconfig，它们将应用于你的lib中。
+  #  如果你的pods依赖其他的Podspecs，你能够包含多个依赖来确保它工作。
+  # s.requires_arc指定是否为ARC
+  # s.xcconfig做一些配置
+  # s.dependency指定依赖
+  
+  # s.requires_arc = true
+  # s.xcconfig = { &quot;HEADER_SEARCH_PATHS&quot; =&amp;gt; &quot;$(SDKROOT)/usr/include/libxml2&quot; }
+  # s.dependency &quot;JSONKit&quot;, &quot;~&amp;gt; 1.4&quot;
+
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;podspec-3&quot;&gt;最终的.podspec文件&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Pod::Spec.new do |s|
+
+  s.name         = &quot;MakeCocoapods&quot;
+  s.version      = &quot;0.0.1&quot;
+  s.summary      = &quot;this is demo of  Cocoapods.&quot;
+  s.description  = &amp;lt;&amp;lt;-DESC
+               this is a demo of  Cocoapods.
+               DESC
+  s.homepage     = &quot;https://github.com/lhjzzu/MakeCocoapods&quot;
+  s.license      = &quot;MIT&quot;
+  s.author             = { &quot;lhjzzu&quot; =&amp;gt; &quot;1822657131@qq.com&quot; }
+  s.platform     = :ios
+  s.ios.deployment_target = &quot;5.0&quot;
+  s.source       = { :git =&amp;gt; &quot;https://github.com/lhjzzu/MakeCocoapods.git&quot;, :tag =&amp;gt; &quot;0.0.1&quot; }
+  s.source_files  = &quot;Classes&quot;, &quot;Classes/*.{h,m}&quot;
+  #s.exclude_files = &quot;Classes/Exclude&quot;
+  #s.public_header_files = &quot;Classes/*.h&quot;
+  s.requires_arc = true
+  s.dependency &quot;SDWebImage&quot;
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;podspec-4&quot;&gt;验证.podspec文件&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ pod spec lint MakeCocoapods.podspec --verbose
+ 如果出现下面的信息，表示验证通过
+ MakeCocoapods.podspec passed validation.
+ 
+ --vebose:打印细节，可以把执行过程中具体的信息打印出来
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;验证时可能遇到的问题&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;如果&lt;code class=&quot;highlighter-rouge&quot;&gt;s.summary&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;s.description&lt;/code&gt;完全一样的话，验证时会出现警告&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  -&amp;gt; MakeCocoapods (0.0.1)
+       - WARN  | description: The description is equal to the summary.
+
+    Analyzed 1 podspec.
+
+    [!] The spec did not pass validation, due to 1 warning (but you can use `--allow-warnings`     to ignore it).
+
+    它提示我们可能通过加--allow-warnings去忽略警告，虽然我们可以通过忽略警告来使podspec文件通过验证，但是我们不应该这么做，因为这会导致我们在发布pod给trunk服务器时，验证失败。
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;指定我们的platform和deployment_target&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  s.platform = :ios, &quot;5.0&quot;相当于s.platform= :ios
+  和s.ios. s.ios.deployment_target = &quot;5.0&quot;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;s.version&lt;/code&gt;要与&lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt;保持一致否则验证时会报警告&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  - WARN  | source: The version should be included in the Git tag.
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt;一定要是已经提交过的&lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt;，例如我们现在打了&lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;0.01&lt;/code&gt;的标签，那么如果把tag改为0.02,那么验证时会告诉我们找不到&lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;0.0.2&lt;/code&gt;的分支&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   - ERROR | [iOS] unknown: Encountered an unknown error ([!] /usr/local/bin/git clone https://github.com/lhjzzu/MakeCocoapods.git /var/folders/fk/l6j6lbss3jn84g7xvsb2l4mw0000gn/T/d20160510-20861-1tcybky --single-branch --depth 1 --branch 0.0.2
+
+   Cloning into &#39;/var/folders/fk/l6j6lbss3jn84g7xvsb2l4mw0000gn/T/d20160510-20861-1tcybky&#39;...
+   warning: Could not find remote branch 0.0.2 to clone.
+   fatal: Remote branch 0.0.2 not found in upstream origin
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;s.license&lt;/code&gt;要把&lt;code class=&quot;highlighter-rouge&quot;&gt;(example)&lt;/code&gt;删除掉，否则验证时，会报下面的错误(在以前时并没有影响,现在要删掉)&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  -&amp;gt; MakeCocoapods (0.0.1)
+      - ERROR | license: Sample license type.
+
+  Analyzed 1 podspec.
+
+  [!] The spec did not pass validation, due to 1 error 
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;trunk-2&quot;&gt;发布到trunk上&lt;/h2&gt;
+
+&lt;h3 id=&quot;podspectrunk&quot;&gt;把我们的.podspec文件发布到trunk服务器&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ pod trunk push MakeCocoapods.podspec --verbose 
+  
+ 如果有下面的信息显示，表明push成功
+  - Data URL: https://raw.githubusercontent.com/CocoaPods/Specs/335c1455963cf88460632a956bd2f5ffdc5bc155/Specs/LHJButton/0.0.1/MakeCocoapods.podspec.json
+  - Log messages:
+- May 9th, 23:29: Push for `MakeCocoapods 0.0.1&#39; initiated.
+- May 9th, 23:29: Push for `MakeCocoapods 0.0.1&#39; has been pushed (3.41790716 s).
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;注意:我们不能重复发布我们的pods，会报下面的错误&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    Unable to accept duplicate entry for: MakeCocoapods (0.0.1)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;这个时候直接搜索我们的pod&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ pod search MakeCocoapods&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-&amp;gt; MakeCocoapods (0.0.1)
+this is demo of  Cocoapods.
+pod &#39;MakeCocoapods&#39;, &#39;~&amp;gt; 0.0.1&#39;
+- Homepage: https://github.com/lhjzzu/MakeCocoapods
+- Source:   https://github.com/lhjzzu/MakeCocoapods.git
+- Versions: 0.0.1 [master repo]
+
+表明我们的pod已经建立成功
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;使用初始化&lt;code class=&quot;highlighter-rouge&quot;&gt;$Pod setup&lt;/code&gt;或者更新&lt;code class=&quot;highlighter-rouge&quot;&gt;$ Pod repo  update&lt;/code&gt;我们的仓库&lt;/p&gt;
+
+&lt;h3 id=&quot;pod&quot;&gt;使用我们的pod&lt;/h3&gt;
+
+&lt;p&gt;再建立一个测试工程在Podfile中，输入&lt;code class=&quot;highlighter-rouge&quot;&gt;pod &#39;MakeCocoapods&#39;, &#39;~ 0.0.1&#39;&lt;/code&gt;，然后安装我们的pod，就可以正常使用我们的pod了。&lt;/p&gt;
+
+&lt;h2 id=&quot;faq&quot;&gt;FAQ&lt;/h2&gt;
+
+&lt;h3 id=&quot;pod-spec-lint-makecocoapodspodspec---verbosepodspec&quot;&gt;执行&lt;code class=&quot;highlighter-rouge&quot;&gt;$ pod spec lint MakeCocoapods.podspec --verbose&lt;/code&gt;，这条命令到底干了什么，它仅仅是验证我们的.podspec本身吗？它是如何保证我们工程的有效性了？&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    我们可以大致分析一下终端中执行的大致过程
+        
+    MakeCocoapods (0.0.1) - Analyzing on iOS 5.0 platform.
+      Preparing
+    Analyzing dependencies
+    Fetching external sources
+    -&amp;gt; Fetching podspec for `MakeCocoapods` from `/Users/chiyou/Desktop/MakeCocoapods/        MakeCocoapods.podspec`
+    Resolving dependencies of 
+
+    Comparing resolved specification to the sandbox manifest
+      A MakeCocoapods
+      A SDWebImage
+
+    Downloading dependencies
+    -&amp;gt; Installing MakeCocoapods (0.0.1)
+    -&amp;gt; Installing SDWebImage (3.7.6)
+    
+    Generating Pods project
+    Building with xcodebuild. 
+    ** BUILD SUCCEEDED **
+    
+    Analyzed 1 podspec.
+    MakeCocoapods.podspec passed validation.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;在iOS 5.0上解析&lt;code class=&quot;highlighter-rouge&quot;&gt;MakeCocoapods&lt;/code&gt;，进行准备工作去获取外部资源–&lt;code class=&quot;highlighter-rouge&quot;&gt;MakeCocoapods.podspec&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;解决依赖，添加&lt;code class=&quot;highlighter-rouge&quot;&gt;MakeCocoapods&lt;/code&gt;，和&lt;code class=&quot;highlighter-rouge&quot;&gt;SDWebImage&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;MakeCocoapods&lt;/code&gt;库实际上并没有，&lt;br /&gt;
+  相当于根据我们&lt;code class=&quot;highlighter-rouge&quot;&gt;.podspec&lt;/code&gt;中在配置的文件的配置暂时生成一个库) ，并安装。&lt;/li&gt;
+  &lt;li&gt;然后生成&lt;code class=&quot;highlighter-rouge&quot;&gt;Pods&lt;/code&gt;工程文件&lt;/li&gt;
+  &lt;li&gt;利用&lt;code class=&quot;highlighter-rouge&quot;&gt;xcodebuild&lt;/code&gt;来编译我们的Pods工程,出现&lt;code class=&quot;highlighter-rouge&quot;&gt;**BUILD SUCCEEDED**&lt;/code&gt;代表编译成功，编译的过程可以具体参考&lt;a href=&quot;http://www.lhjzzu.com/2016/04/29/ios-xcodebuild/&quot;&gt;这篇文章&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;然后验证 &lt;code class=&quot;highlighter-rouge&quot;&gt;MakeCocoapods.podspec&lt;/code&gt;的其他选项，看&lt;code class=&quot;highlighter-rouge&quot;&gt;.podspec&lt;/code&gt;是否通过验证&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;pod-trunk-push-makecocoapodspodspec---verbose&quot;&gt;对&lt;code class=&quot;highlighter-rouge&quot;&gt;$ pod trunk push MakeCocoapods.podspec --verbose&lt;/code&gt;进行分析？&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    Updating spec repo `master`
+    CocoaPods 1.0.0.rc.2 is available.
+    To update use: `gem install cocoapods --pre`
+    [!] This is a test version we&#39;d love you to try.
+
+
+     MakeCocoapods (0.0.1) - Analyzing on iOS 5.0 platform.
+      Preparing
+    Analyzing dependencies
+    Fetching external sources
+    -&amp;gt; Fetching podspec for `MakeCocoapods` from `/Users/chiyou/Desktop/MakeCocoapods/        MakeCocoapods.podspec`
+    Resolving dependencies of 
+
+    Comparing resolved specification to the sandbox manifest
+      A MakeCocoapods
+      A SDWebImage
+
+    Downloading dependencies
+    -&amp;gt; Installing MakeCocoapods (0.0.1)
+    -&amp;gt; Installing SDWebImage (3.7.6)
+    
+    Generating Pods project
+    Building with xcodebuild. 
+    ** BUILD SUCCEEDED **
+    
+    Analyzed 1 podspec.
+    MakeCocoapods.podspec passed validation.
+    
+    
+    Updating spec repo `master`
+
+    CocoaPods 1.0.0.rc.2 is available.
+    To update use: `gem install cocoapods --pre`
+    [!] This is a test version we&#39;d love you to try.
+    
+    - Data URL: https://raw.githubusercontent.com/CocoaPods/Specs/335c1455963cf88460632a956bd2f5ffdc5bc155/Specs/LHJButton/0.0.1/MakeCocoapods.podspec.json
+     - Log messages:
+     - May 9th, 23:29: Push for `MakeCocoapods 0.0.1&#39; initiated.
+     - May 9th, 23:29: Push for `MakeCocoapods 0.0.1&#39; has been pushed (3.41790716 s).
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;首先是更新我们的库，然后告诉我们有了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;1.0.0.rc.2&lt;/code&gt;版本的&lt;code class=&quot;highlighter-rouge&quot;&gt;Cocoapods&lt;/code&gt;(测试版)&lt;/li&gt;
+  &lt;li&gt;然后就是验证我们&lt;code class=&quot;highlighter-rouge&quot;&gt;.podspec&lt;/code&gt;文件，之所以在上面说不要在验证&lt;code class=&quot;highlighter-rouge&quot;&gt;.podspec&lt;/code&gt;文件时使用&lt;code class=&quot;highlighter-rouge&quot;&gt;--allow-warnings&lt;/code&gt;就是因为，这里会再次进行验证。&lt;/li&gt;
+  &lt;li&gt;再次更新我们的pod，这时我们的&lt;code class=&quot;highlighter-rouge&quot;&gt;.podspec&lt;/code&gt;已经push成功了，接下来打印出了相应的信息。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;什么情况下表明已经通过创建成功了呢？&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;当你能用&lt;code class=&quot;highlighter-rouge&quot;&gt;$ pod search xxx&lt;/code&gt; 搜索到自己的库的时候，那么已经创建成功了，别人搜索不到是因为他们的库没有更新，执行&lt;code class=&quot;highlighter-rouge&quot;&gt;$ pod setup&lt;/code&gt;操作即可&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;为什么在其他人电脑上有的人搜得到，有的人搜不到呢？&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;因为有的人在&lt;code class=&quot;highlighter-rouge&quot;&gt;$ pod install&lt;/code&gt;或者&lt;code class=&quot;highlighter-rouge&quot;&gt;$ pod update&lt;/code&gt;时常常会这么写：&lt;code class=&quot;highlighter-rouge&quot;&gt;$ pod update --no-repo-update&lt;/code&gt;，加了后面那一串就表示“只更新我指定的库到我的电脑，而不是cocoaPods成千上万个库一起更新”。&lt;/li&gt;
+  &lt;li&gt;如果你单单使用&lt;code class=&quot;highlighter-rouge&quot;&gt;$ pod install&lt;/code&gt;或者&lt;code class=&quot;highlighter-rouge&quot;&gt;$ pod update&lt;/code&gt;，那应该就可以搜得到你的库。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;为什么随便写的代码也能通过审核，审核的机制是什么？&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;我们从问题1以及问题2可以看出，&lt;code class=&quot;highlighter-rouge&quot;&gt;Cocoapods&lt;/code&gt;仅仅上保证我们工程编译能够成功，仅仅是验证&lt;code class=&quot;highlighter-rouge&quot;&gt;.podspec&lt;/code&gt;文件的有效性&lt;/li&gt;
+  &lt;li&gt;总结来说它校验的是格式，而不是检验我们代码的质量。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-5&quot;&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://blog.csdn.net/wzzvictory/article/details/20067595&quot;&gt;CocoaPods详解之—-制作篇&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.cnblogs.com/wengzilin/p/4742530.html&quot;&gt;手把手教你发布代码到CocoaPods(Trunk方式)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://guides.cocoapods.org/syntax/podspec.html&quot;&gt;Podspec Syntax Reference&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Liu Hua Jian</name></author><summary>建立git仓库</summary></entry><entry><title>Cocoapods系列:安装与使用(一)</title><link href="http://www.lhjzzu.com/2016/05/09/Cocoapods-install/" rel="alternate" type="text/html" title="Cocoapods系列:安装与使用(一)" /><published>2016-05-09T00:00:00+08:00</published><updated>2016-05-09T00:00:00+08:00</updated><id>http://www.lhjzzu.com/2016/05/09/Cocoapods-install</id><content type="html" xml:base="http://www.lhjzzu.com/2016/05/09/Cocoapods-install/">&lt;h2 id=&quot;cocoapods&quot;&gt;什么是Cocoapods？&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Cocoapods&lt;/code&gt;是用来管理&lt;code class=&quot;highlighter-rouge&quot;&gt;xcode&lt;/code&gt;项目依赖库的。&lt;/li&gt;
+  &lt;li&gt;你的工程的依赖在一个名字是&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;的文本文件中被指定.&lt;code class=&quot;highlighter-rouge&quot;&gt;CocoaPods&lt;/code&gt;将解决不同库之间依赖的问题。获取源码并把这些库一起链接到一个&lt;code class=&quot;highlighter-rouge&quot;&gt;.xcworkspace&lt;/code&gt;文件中去创建你的项目。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Cocoapods&lt;/code&gt;最终的目标是创建一个更集中化的生态系统去提高第三方开源库的可发现性，可使用性。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;cocopods&quot;&gt;Cocopods安装&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Cocoapods&lt;/code&gt;是用&lt;code class=&quot;highlighter-rouge&quot;&gt;ruby&lt;/code&gt;来创建的，我们使用&lt;code class=&quot;highlighter-rouge&quot;&gt;OS X &lt;/code&gt;默认的可用的&lt;code class=&quot;highlighter-rouge&quot;&gt;ruby&lt;/code&gt;来安装&lt;code class=&quot;highlighter-rouge&quot;&gt;Cocoapods&lt;/code&gt;.你也可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;ruby&lt;/code&gt;的版本管理，来更改&lt;code class=&quot;highlighter-rouge&quot;&gt;ruby&lt;/code&gt;版本进行安装，但是官方还是建议使用&lt;code class=&quot;highlighter-rouge&quot;&gt;OS X &lt;/code&gt;默认的&lt;code class=&quot;highlighter-rouge&quot;&gt;ruby&lt;/code&gt;来安装。&lt;/p&gt;
+
+&lt;p&gt;唯一的问题是:当我们使用默认的ruby来进行安装&lt;code class=&quot;highlighter-rouge&quot;&gt;gems&lt;/code&gt;的时候，需要使用&lt;code class=&quot;highlighter-rouge&quot;&gt;sudo&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;1 &lt;code class=&quot;highlighter-rouge&quot;&gt;$ sudo gem install -n /usr/local/bin cocoapods&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;2 由于某些原因，执行时会出现下面的错误提示：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ERROR:  Could not find a valid gem &#39;cocoapods&#39; (&amp;gt;= 0), here is why:
+Unable to download data from https://rubygems.org/ - Errno::EPIPE: Broken pipe - SSL_connect (https://rubygems.org/latest_specs.4.8.gz)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;3 这是因为默认所需的下载路径 &lt;code class=&quot;highlighter-rouge&quot;&gt;https://rubygems.org&lt;/code&gt; 在国内的访问会有问题，解决上面的问题，可以用淘宝的&lt;code class=&quot;highlighter-rouge&quot;&gt;RubyGems&lt;/code&gt;镜像来代替官方版本，执行以下命令&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ gem sources -l
+$ gem sources --remove https://rubygems.org/
+$ gem sources -a https://ruby.taobao.org/
+$ gem sources -l
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;4 接着再执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;sudo gem install -n /usr/local/bin cocoapods&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;5 安装&lt;code class=&quot;highlighter-rouge&quot;&gt;cocoapods&lt;/code&gt;库&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ pod setup&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;第一个执行会非常慢，可以到&lt;code class=&quot;highlighter-rouge&quot;&gt;/.cocoapods&lt;/code&gt;文件夹下看安装进度&lt;/p&gt;
+
+&lt;h2 id=&quot;cocoapods-1&quot;&gt;更新Cocoapods&lt;/h2&gt;
+
+&lt;p&gt;只需再次执行&lt;code class=&quot;highlighter-rouge&quot;&gt;$sudo gem install -n /usr/local/bin cocoapods&lt;/code&gt;即可&lt;/p&gt;
+
+&lt;h2 id=&quot;cocoapods-2&quot;&gt;Cocoapods使用&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;建立一个工程&lt;code class=&quot;highlighter-rouge&quot;&gt;CocoapodsTest&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;cd 进入这个工程文件夹&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;输入&lt;code class=&quot;highlighter-rouge&quot;&gt;$ vi Pofile&lt;/code&gt;建立并打开&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;文件。点击i，进入输入模式，输入下列内容后，按&lt;code class=&quot;highlighter-rouge&quot;&gt;esc&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt;shift+:&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt;wq&lt;/code&gt;保存并退出&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; target &#39;CocoapodsTest&#39; do
+ pod &#39;AFNetworking&#39;, &#39;~&amp;gt; 3.1.0&#39;
+ end
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;执行&lt;code class=&quot;highlighter-rouge&quot;&gt;$ pod install --verbose --no-repo-update&lt;/code&gt;即可&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; Analyzing dependencies
+ Inspecting targets to integrate
+   Using `ARCHS` setting to build architectures of target `Pods`: (``)
+   Using `ARCHS` setting to build architectures of target `Pods-CocoapodsTest`:
+   (``)
+ Resolving dependencies of `Podfile`
+ Comparing resolved specification to the sandbox manifest
+   A AFNetworking
+ Downloading dependencies
+ -&amp;gt; Installing AFNetworking (3.1.0)
+ .......
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;执行成功生成&lt;code class=&quot;highlighter-rouge&quot;&gt;.xworkspace&lt;/code&gt;文件，&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile.lock&lt;/code&gt;文件，&lt;code class=&quot;highlighter-rouge&quot;&gt;Pods&lt;/code&gt;文件夹。以后，项目操作就在&lt;code class=&quot;highlighter-rouge&quot;&gt;.xworkspace&lt;/code&gt;文件中。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;$ pod search AFNetworking&lt;/code&gt;来查看&lt;code class=&quot;highlighter-rouge&quot;&gt;AFNetworking&lt;/code&gt;的版本信息&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-&amp;gt; AFNetworking (3.1.0)
+   A delightful iOS and OS X networking framework.
+   pod &#39;AFNetworking&#39;, &#39;~&amp;gt; 3.1.0&#39;
+   - Homepage: https://github.com/AFNetworking/AFNetworking
+   - Source:   https://github.com/AFNetworking/AFNetworking.git
+   - Versions: 3.1.0, 3.0.4, 3.0.3, 3.0.2, 3.0.1, 3.0.0, 3.0.0-beta.3,
+   3.0.0-beta.2, 3.0.0-beta.1, 2.6.3, 2.6.2, 2.6.1, 2.6.0, 2.5.4, 2.5.3, 2.5.2,
+   2.5.1, 2.5.0, 2.4.1, 2.4.0, 2.3.1, 2.3.0, 2.2.4, 2.2.3, 2.2.2, 2.2.1, 2.2.0,
+   2.1.0, 2.0.3, 2.0.2, 2.0.1, 2.0.0, 2.0.0-RC3, 2.0.0-RC2, 2.0.0-RC1, 1.3.4,
+   1.3.3, 1.3.2, 1.3.1, 1.3.0, 1.2.1, 1.2.0, 1.1.0, 1.0.1, 1.0, 1.0RC3, 1.0RC2,
+   1.0RC1, 0.10.1, 0.10.0, 0.9.2, 0.9.1, 0.9.0, 0.7.0, 0.5.1 [master repo]
+   - Subspecs:
+     - AFNetworking/Serialization (3.1.0)
+     - AFNetworking/Security (3.1.0)
+     - AFNetworking/Reachability (3.1.0)
+     - AFNetworking/NSURLSession (3.1.0)
+     - AFNetworking/UIKit (3.1.0)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;podfilepodfilelock&quot;&gt;Podfile和Podfile.lock&lt;/h2&gt;
+
+&lt;h3 id=&quot;podfile&quot;&gt;什么是Podfile？&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;是描述一个或多个&lt;code class=&quot;highlighter-rouge&quot;&gt;xcode&lt;/code&gt;程的的目标依赖的一个说明书。这个文件必须被命名为&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h3 id=&quot;podfile-1&quot;&gt;Podfile文件所在的位置&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;推荐把&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;文件存在工程根目录下&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;如果把&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;文件存在工程其他目录下，需要在&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;中指定&lt;code class=&quot;highlighter-rouge&quot;&gt;xx.xcodeproj&lt;/code&gt;文件的路径&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  xcodeproj &quot;/Users/chiyou/Desktop/CocoaPodsTest/CocoaPodsTest.xcodeproj&quot; 
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;版本指定&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pod &#39;AFNetworking&#39;&lt;/code&gt;              不显式指定依赖库版本，表示每次都获取最新版本&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pod &#39;AFNetworking&#39;, &#39;2.0&#39;&lt;/code&gt;       只使用2.0版本&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pod &#39;AFNetworking&#39;, &#39;&amp;gt; 2.0&#39;&lt;/code&gt;     使用高于2.0的版本&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pod &#39;AFNetworking&#39;, &#39;&amp;gt;= 2.0&#39;&lt;/code&gt;    使用大于或等于2.0的版本&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pod &#39;AFNetworking&#39;, &#39;&amp;lt; 2.0&#39;&lt;/code&gt;     使用小于2.0的版本&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pod &#39;AFNetworking&#39;, &#39;&amp;lt;= 2.0&#39;&lt;/code&gt;    使用小于或等于2.0的版本&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pod &#39;AFNetworking&#39;, &#39;~&amp;gt; 0.1.2&#39;&lt;/code&gt;  使用大于等于0.1.2但小于0.2的版本&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pod &#39;AFNetworking&#39;, &#39;~&amp;gt;0.1&#39;&lt;/code&gt;     使用大于等于0.1但小于1.0的版本&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pod &#39;AFNetworking&#39;, &#39;~&amp;gt;0&#39;&lt;/code&gt;       高于0的版本，写这个限制和什么都不写是一个效果，都表示使用最新版本&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;podfiletarget&quot;&gt;Podfile与target&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;与一个&lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;target &#39;target1&#39; do
+ pod &#39;AFNetworking&#39;
+ end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;与多个&lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; target &#39;target1&#39; do
+ pod &#39;AFNetworking&#39;
+ end
+ 
+ target &#39;target2&#39; do
+ pod &#39;AFNetworking&#39;
+ end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;默认的&lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt;为第一个&lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt;，我们可以这样写&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; pod &#39;AFNetworking&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;podfilelock&quot;&gt;Podfile.lock&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;在开始使用&lt;code class=&quot;highlighter-rouge&quot;&gt;CocoaPods&lt;/code&gt;，执行完&lt;code class=&quot;highlighter-rouge&quot;&gt;pod install&lt;/code&gt;之后，会生成一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile.lock&lt;/code&gt;文件&lt;/li&gt;
+  &lt;li&gt;该文件用于保存已经安装的Pods依赖库的版本&lt;/li&gt;
+  &lt;li&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;文件中不指定库的版本(&lt;code class=&quot;highlighter-rouge&quot;&gt;pod &#39;AFNetworking&#39;, &#39;= 2.6.3&#39;&lt;/code&gt;指定版本)，那么团队协作开发时，别人&lt;code class=&quot;highlighter-rouge&quot;&gt;check&lt;/code&gt;下来的工程，如果有这个&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile.lock&lt;/code&gt;文件，那么在执行&lt;code class=&quot;highlighter-rouge&quot;&gt;pod install &lt;/code&gt;获取的库的版本与最开始用户获取的版本相同&lt;/li&gt;
+  &lt;li&gt;如果缺少&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile.lock&lt;/code&gt;文件,那么在执行&lt;code class=&quot;highlighter-rouge&quot;&gt;pod install&lt;/code&gt; 就会获取最新的版本，会造成团队使用的库版本不一致，这是很严重的问题&lt;/li&gt;
+  &lt;li&gt;这种情况下，如果团队想要使用最新版的&lt;code class=&quot;highlighter-rouge&quot;&gt;AFNetworking&lt;/code&gt;，那么可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;pod update&lt;/code&gt; 或者 &lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;中直接指定最新的版本号&lt;/li&gt;
+  &lt;li&gt;综上所述，&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile.lock&lt;/code&gt;一定要纳入版本管理中去&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;pod-install--pod-update&quot;&gt;pod install 和 pod update&lt;/h2&gt;
+
+&lt;h3 id=&quot;pod-install&quot;&gt;pod install&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;版本写死的情况:&lt;/p&gt;
+
+&lt;p&gt;1 直接等于某个版本&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Pod &#39;AFNetworking&#39;, &#39;2.6.3&#39; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;2 相当于直接等于某个版本&lt;/p&gt;
+
+&lt;p&gt;因为2.6.x的版本中2.6.3就是最高版本了,我们写2.6.x获取的版本肯定是2.6.3&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Pod &#39;AFNetworking&#39;, &#39;&amp;gt; 2.6.x&#39; 
+Pod &#39;AFNetworking&#39;, &#39;&amp;gt;= 2.6.x&#39; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;如果版本写死，有没有&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile.lock&lt;/code&gt;文件都没有影响，执行&lt;code class=&quot;highlighter-rouge&quot;&gt;Pod install&lt;/code&gt;，不会更改库的版本&lt;/li&gt;
+  &lt;li&gt;如果版本未写死，有&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile.lock&lt;/code&gt;文件，执行&lt;code class=&quot;highlighter-rouge&quot;&gt;Pod install&lt;/code&gt;，不会更改库的版本&lt;/li&gt;
+  &lt;li&gt;如果版本未写死，没有&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile.lock&lt;/code&gt;文件，且库版本未更新，执行&lt;code class=&quot;highlighter-rouge&quot;&gt;Pod install&lt;/code&gt;，不会更改库的版本&lt;/li&gt;
+  &lt;li&gt;如果版本未写死，没有&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile.lock&lt;/code&gt;文件，且库版本更新，执行&lt;code class=&quot;highlighter-rouge&quot;&gt;Pod install&lt;/code&gt;，&lt;strong&gt;会更改库的版本&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;如果用&lt;code class=&quot;highlighter-rouge&quot;&gt;pod install --verbose --no-repo-update&lt;/code&gt; 意思是只安装，不更新&lt;code class=&quot;highlighter-rouge&quot;&gt;pods&lt;/code&gt;库中的资源。如果经常执行&lt;code class=&quot;highlighter-rouge&quot;&gt;pod install --verbose --no-repo-update&lt;/code&gt;会导致我们的库版本会低很多。一些新的库或者某些库的新的版本通过&lt;code class=&quot;highlighter-rouge&quot;&gt;pod search xxx&lt;/code&gt; 会搜索不到&lt;/li&gt;
+  &lt;li&gt;如果更改&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;文件，且更改后应该安装的版本与原来的不一样，无论是否有&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile.lock&lt;/code&gt;文件，执行&lt;code class=&quot;highlighter-rouge&quot;&gt;Pod install&lt;/code&gt;，&lt;strong&gt;会更改库的版本&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;pod-update&quot;&gt;pod update&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;如果&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;中指定的依赖库版本不是写死的（&lt;code class=&quot;highlighter-rouge&quot;&gt;pod &#39;AFNetworking&#39;&lt;/code&gt;），当对应的依赖库有了更新，无论有没有&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile.lock&lt;/code&gt;文件都会去获取&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;文件描述的允许获取到的最新依赖库版本。&lt;/li&gt;
+  &lt;li&gt;如果&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;中指定的依赖库版本是写死的（&lt;code class=&quot;highlighter-rouge&quot;&gt;pod &#39;AFNetworking&#39;, &#39;2.3.1&#39;&lt;/code&gt;），那么执行&lt;code class=&quot;highlighter-rouge&quot;&gt;pod update&lt;/code&gt;根本没有作用。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;faq&quot;&gt;FAQ&lt;/h2&gt;
+
+&lt;h3 id=&quot;pods&quot;&gt;工程中Pods无效?&lt;/h3&gt;
+
+&lt;p&gt;可能我们拉取别人的代码，或者下载网上的代码是会出现Pods失效报错的情况&lt;/p&gt;
+
+&lt;p&gt;由于工程中依旧存在&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;Podfile.lock&lt;/code&gt;文件,所以我们只需要进入工程文件然后执行&lt;code class=&quot;highlighter-rouge&quot;&gt;pod install --verbose --no-repo-update&lt;/code&gt; 即可&lt;/p&gt;
+
+&lt;p&gt;但是有时它并不起作用，依旧没有把对应的库导入进来，这个时候我们最终极的解决方案是删除&lt;code class=&quot;highlighter-rouge&quot;&gt;Pods&lt;/code&gt;文件夹，删除&lt;code class=&quot;highlighter-rouge&quot;&gt;.xcworkspec&lt;/code&gt;文件，然后再次执行&lt;code class=&quot;highlighter-rouge&quot;&gt;pod install --verbose --no-repo-update&lt;/code&gt;即可&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://guides.cocoapods.org&quot;&gt;Cocoapods Guides&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://blog.csdn.net/wzzvictory/article/details/19178709&quot;&gt;CocoaPods详解之—-进阶篇&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://blog.csdn.net/wzzvictory/article/details/19178709&quot;&gt;Podspec Syntax Reference&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Liu Hua Jian</name></author><summary>什么是Cocoapods？</summary></entry><entry><title>git基本用法</title><link href="http://www.lhjzzu.com/2016/05/08/git-base-usage/" rel="alternate" type="text/html" title="git基本用法" /><published>2016-05-08T00:00:00+08:00</published><updated>2016-05-08T00:00:00+08:00</updated><id>http://www.lhjzzu.com/2016/05/08/git-base-usage</id><content type="html" xml:base="http://www.lhjzzu.com/2016/05/08/git-base-usage/">&lt;h2 id=&quot;git&quot;&gt;git简介&lt;/h2&gt;
+
+&lt;h3 id=&quot;git-1&quot;&gt;git作用&lt;/h3&gt;
+
+&lt;p&gt;git是进行版本控制的工具。&lt;/p&gt;
+
+&lt;h3 id=&quot;githubgit&quot;&gt;利用github建立一个git仓库&lt;/h3&gt;
+
+&lt;h4 id=&quot;section&quot;&gt;方法1:直接克隆远程仓库（建议）&lt;/h4&gt;
+
+&lt;p&gt;1 首先注册一个github账号&lt;/p&gt;
+
+&lt;p&gt;2 新建一个仓库，如下图，并且点击&lt;code class=&quot;highlighter-rouge&quot;&gt;creating repository&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xqijx.com1.z0.glb.clouddn.com/git%E4%BB%93%E5%BA%93.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;3 克隆这个仓库到桌面&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;cd到桌面&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $ cd ~/desktop
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;克隆仓库&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $ git clone https://github.com/lhjzzu/learngit
+    
+  Cloning into &#39;learngit&#39;...        
+  remote: Counting objects: 11, done.
+  remote: Compressing objects: 100% (7/7), done.
+  remote: Total 11 (delta 2), reused 7 (delta 1), pack-reused 0
+  Unpacking objects: 100% (11/11), done.
+  Checking connectivity... done
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;添加文件&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $ cd ./learngit
+  $ touch test.txt (创建test.txt文件)
+  $ open test.txt (输入这是一个测试)
+  $ git add . (添加所有文件到版本库的暂存区)
+  $ git commit -m &#39;first commit&#39; （把暂存区的所有内容提交到当前分支）
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;把本地的分支的修改推送到远端&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $ git push
+ 
+  Counting objects: 3, done.
+  Delta compression using up to 8 threads.
+  Compressing objects: 100% (2/2), done.
+  Writing objects: 100% (3/3), 283 bytes | 0 bytes/s, done.
+  Total 3 (delta 1), reused 0 (delta 0)
+  To https://github.com/lhjzzu/learngit
+     ffc4dff..c422d8d  master -&amp;gt; master
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;section-1&quot;&gt;方法2:建立本地仓库，并与远程仓库关联&lt;/h4&gt;
+
+&lt;p&gt;1 首先注册一个github账号&lt;/p&gt;
+
+&lt;p&gt;2 新建一个仓库，如下图，并且点击&lt;code class=&quot;highlighter-rouge&quot;&gt;creating repository&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xqijx.com1.z0.glb.clouddn.com/git%E4%BB%93%E5%BA%93.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;3 在本地建立git仓库，并与远端仓库关联到一起&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;建立learngit文件夹并进入文件夹&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $ cd ~/desktop
+  $ mkdir learngit
+  $ cd ./learngit
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;初始化仓库&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $ git init 
+    
+  Initialized empty Git repository in /Users/chiyou/Desktop/learngit/.git/
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;添加文件&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $ touch test.txt (创建test.txt文件)
+  $ open test.txt (输入这是一个测试)
+  $ git add . (添加所有文件到版本库的暂存区)
+  $ git commit -m &#39;first commit&#39; （把暂存区的所有内容提交到当前分支）
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;与远程仓库建立连接&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $ git remote add origin https://github.com/lhjzzu/learngit
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;由于远程仓库中的信息与本地并不一直，先进行拉取&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $ git pull
+ 
+  See git-pull(1) for details.
+    git pull &amp;lt;remote&amp;gt; &amp;lt;branch&amp;gt;
+  If you wish to set tracking information for this branch you can do so with:
+    git branch --set-upstream-to=origin/&amp;lt;branch&amp;gt; master
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;由上面的信息可知，我们需要设置本地仓库与远程仓库的拉取的关联(pull)&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $ git branch --set-upstream-to=origin/master master 
+   
+     Branch master set up to track remote branch master from origin.
+    
+  $ git pull
+ 
+  Merge made by the &#39;recursive&#39; strategy.
+  .gitignore | 53 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+  LICENSE    | 21 +++++++++++++++++++++
+  README.md  |  2 ++
+  3 files changed, 76 insertions(+)
+  create mode 100644 .gitignore
+  create mode 100644 LICENSE
+  create mode 100644 README.md
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;把本地的分支的修改推送到远端&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $ git push
+ 
+  Counting objects: 5, done.
+  Delta compression using up to 8 threads.
+  Compressing objects: 100% (3/3), done.
+  Writing objects: 100% (5/5), 512 bytes | 0 bytes/s, done.
+  Total 5 (delta 1), reused 0 (delta 0)
+  To https://github.com/lhjzzu/learngit
+     fe6b1e2..10c8b9c  master -&amp;gt; master
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;learngit&quot;&gt;learngit结构分析&lt;/h2&gt;
+
+&lt;p&gt;工作区:learngit文件夹就是工作区&lt;/p&gt;
+
+&lt;p&gt;版本库:工作区中的隐藏目录,.git就是版本库&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;查看.git目录的相关信息&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  $ cd ~/desktop/learngit
+  $ cd .git
+  $ ls -F1
+    
+  COMMIT_EDITMSG
+  HEAD
+  branches/
+  config
+  description
+  hooks/
+  index
+  info/
+  logs/
+  objects/
+  packed-refs
+  refs/
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;关于.git目录下的各项的作用请参考&lt;a href=&quot;http://www.zhihu.com/question/38983686?sort=created&quot;&gt;这篇文章&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;暂存区：版本库中的stage（或者index）就是暂存区，还有Git为我们自动创建的第一个分支master，以及指向master的一个指针叫HEAD。&lt;/p&gt;
+
+&lt;h2 id=&quot;git-2&quot;&gt;git常用命令&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;添加内容并推送&lt;/h3&gt;
+
+&lt;p&gt;这个内容在建立git仓库的时候已经演示过了,这里主要列举一下相关命令&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  小结:
+  git init 初始化一个git仓库
+  git add . 把文件添加进去，实际上就是把文件修改添加到暂存区
+  git commit -m &#39;xx&#39; 提交更改，实际上就是把暂存区的所有内容提交到当前分支。
+  git status 随时查看工作区的状态
+  git diff 查看修改的内容    
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;撤销修改&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-4&quot;&gt;直接撤销工作区的修改&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 1 在test.txt中添加`git基本使用`
+ 2 $ git checkout -- test.txt 
+ 3 此时查看test.txt文件，我们刚才添加的内容已经撤销
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令&lt;code class=&quot;highlighter-rouge&quot;&gt;git checkout -- file&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-5&quot;&gt;当添加到暂存区中后，撤销修改&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  1 在test.txt中添加`git基本使用`
+  2 $ git add .
+  3 $ git reset HEAD test.txt
+     
+     Unstaged changes after reset:
+     M	test.txt  
+  4  git checkout -- test.txt
+  5 此时查看test.txt文件，我们刚才添加的内容已经撤销
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;当你不但改乱了工作区某个文件的内容，还执行 &lt;code class=&quot;highlighter-rouge&quot;&gt;git add . &lt;/code&gt;添加到了暂存区时，想丢弃修改，分两步，第一步用命令&lt;code class=&quot;highlighter-rouge&quot;&gt;git reset HEAD file&lt;/code&gt;，再执行&lt;code class=&quot;highlighter-rouge&quot;&gt;git checkout -- file&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h4 id=&quot;commit&quot;&gt;当已经commit到本地分支后，撤销修改&lt;/h4&gt;
+
+&lt;p&gt;最好直接版本回退&lt;/p&gt;
+
+&lt;h3 id=&quot;section-6&quot;&gt;分支&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-7&quot;&gt;1 查看分支&lt;/h4&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git branch&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;* master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;*指向当前分支&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git branch -a&lt;/code&gt; 会将所有分支以及远程仓库都显示出来&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; * master
+  remotes/origin/HEAD -&amp;gt; origin/master
+  remotes/origin/master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;section-8&quot;&gt;2 创建分支&lt;/h4&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git branch dev&lt;/code&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;section-9&quot;&gt;3 再次查看分支&lt;/h4&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git branch&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dev
+* master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;此时指向master分支&lt;/p&gt;
+
+&lt;h4 id=&quot;section-10&quot;&gt;4 切换分支&lt;/h4&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git checkout dev&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Switched to branch &#39;dev&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;section-11&quot;&gt;5 再次查看分支&lt;/h4&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git branch&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;* dev
+ master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;此时指向dev分支&lt;/p&gt;
+
+&lt;h4 id=&quot;devmaster&quot;&gt;6 修改dev分支并合并到master上&lt;/h4&gt;
+
+&lt;p&gt;给test.txt添加&lt;code class=&quot;highlighter-rouge&quot;&gt;合并分支&lt;/code&gt;的内容&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git add .
+# git commit -m &#39;dev&#39;
+$ git checkout master
+$ git merge dev
+
+ Updating c422d8d..0697ece
+ Fast-forward
+ test.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;要合并分支，首先切换分支到最终合并到的分支(master),此时master中的test.txt并没有&lt;code class=&quot;highlighter-rouge&quot;&gt;合并分支&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;执行完&lt;code class=&quot;highlighter-rouge&quot;&gt;git merge dev&lt;/code&gt;,此时可以看到test.txt中已经有&lt;code class=&quot;highlighter-rouge&quot;&gt;合并分支&lt;/code&gt;的内容了。&lt;/li&gt;
+  &lt;li&gt;注意到上面的Fast-forward信息，Git告诉我们，这次合并是“快进模式”，也就是直接把master指向dev的当前提交，所以合并速度非常快。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;section-12&quot;&gt;7 删除分支&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;删除一个已经合并过的分支（无论修改过与否）&lt;/p&gt;
+
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git branch -d dev&lt;/code&gt;&lt;/p&gt;
+
+    &lt;p&gt;Deleted branch dev (was 0697ece).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;删除一个未合并过的分支,创建一个test分支(修改,并且commit过的)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git branch -d dev&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;error: The branch &#39;test&#39; is not fully merged.
+If you are sure you want to delete it, run &#39;git branch -D test&#39;.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git branch -D dev&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; Deleted branch test (was 51b2ab3).
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;要删除某个分支，当前分支必须是其他分支。&lt;/li&gt;
+  &lt;li&gt;最好不要删除主分支。&lt;/li&gt;
+  &lt;li&gt;如果确定要删除某分支，直接使用&lt;code class=&quot;highlighter-rouge&quot;&gt;git branch -D xxx&lt;/code&gt;即可。&lt;/li&gt;
+  &lt;li&gt;最好还是使用&lt;code class=&quot;highlighter-rouge&quot;&gt;git branch -d xxx&lt;/code&gt;,以防删除未合并的分支。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;section-13&quot;&gt;8 冲突的解决&lt;/h4&gt;
+
+&lt;p&gt;若master分支和feature1分支各自都分别有新的提交，变成了这样&lt;br /&gt;
+&lt;img src=&quot;http://www.liaoxuefeng.com/files/attachments/001384909115478645b93e2b5ae4dc78da049a0d1704a41000/0&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这种情况下，Git无法执行“快速合并”，只能试图把各自的修改合并起来，但这种合并就可能会有冲突&lt;br /&gt;
+Git用&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;=======&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&lt;/code&gt;标记出不同分支的内容，我们修改如下后保存，再add，commit&lt;br /&gt;
+现在，master分支和feature1分支变成了下图所示：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://www.liaoxuefeng.com/files/attachments/00138490913052149c4b2cd9702422aa387ac024943921b000/0&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git log --graph --pretty=oneline --abbrev-commit&lt;/code&gt; 用于查看分支合并情况&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; *   36c2f7a Merge branch &#39;dev&#39;
+ |\  
+ | * 7179ae4 添加空3个空格
+ * | d754fe1 test
+ * | bace4d4 adf
+ |/  
+ * 0697ece 123
+ * c422d8d first commit
+ * ffc4dff adf
+ *   10c8b9c Merge branch &#39;master&#39; of https://github.com/lhjzzu/learngit
+ |\  
+ | * fe6b1e2 Initial commit
+ * e0ae3d2 first commit
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git log --graph &lt;/code&gt;可以看到分支合并图&lt;/p&gt;
+
+&lt;h4 id=&quot;section-14&quot;&gt;9 分支的内容的存储&lt;/h4&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git stash&lt;/code&gt;可以把当前分支未完成的工作储藏起来&lt;br /&gt;
+当其他分支的工作完成之后，切换回这个分支&lt;br /&gt;
+然后&lt;code class=&quot;highlighter-rouge&quot;&gt;git stash list &lt;/code&gt;查看，git把stash的内容存在某个地方了&lt;br /&gt;
+恢复有两个办法&lt;/p&gt;
+
+&lt;p&gt;法1. 用&lt;code class=&quot;highlighter-rouge&quot;&gt;git stash pop&lt;/code&gt;（既恢复了工作区内容，也删除了stash的存储）&lt;/p&gt;
+
+&lt;p&gt;法2.&lt;code class=&quot;highlighter-rouge&quot;&gt;git stash apply&lt;/code&gt;恢复，但是恢复后，stash内容并不删除，你需要用&lt;code class=&quot;highlighter-rouge&quot;&gt;git stash drop&lt;/code&gt;来删除；&lt;br /&gt;
+恢复指定的stash，用命令&lt;code class=&quot;highlighter-rouge&quot;&gt;git stash apply stash@{0}&lt;/code&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;section-15&quot;&gt;分支小结:&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;对分支以及合并分支的理解:(Fast-forward)
+1 HEAD指针原本指向master指针，创建dev分支后仅仅是增加了一个dev指针
+2 切换到dev分支，仅仅是HEAD指针（永远指向当前分支）指向了dev指针
+3 对dev分支的每一个commit，dev指针都向前移动一步，master指针不变
+4 所谓将master与dev分支合并，也仅仅是将master指针直接指向dev指针所在的位置。
+合并完成后，如果不需要dev分支，那么可以删除
+
+查看分支:git branch
+创建分支:git branch &amp;lt;name&amp;gt;
+切换分支:git checkout &amp;lt;name&amp;gt;
+创建+切换分支:git checkout -b &amp;lt;name&amp;gt;
+合并某分支到当前分支: git merge &amp;lt;name&amp;gt;
+删除分支:git branch -d &amp;lt;name&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-16&quot;&gt;远程仓库&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-17&quot;&gt;1 查看远程仓库信息&lt;/h4&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git remote -v &lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;origin	https://github.com/lhjzzu/learngit (fetch)
+origin	https://github.com/lhjzzu/learngit (push)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;section-18&quot;&gt;2 推送到某个远程仓库&lt;/h4&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git push origin &amp;lt;name&amp;gt;&lt;/code&gt;或者 &lt;code class=&quot;highlighter-rouge&quot;&gt;$ git push&lt;/code&gt;会自动推送到与本地分支名字一致的远程仓库&lt;/p&gt;
+
+&lt;h4 id=&quot;dev&quot;&gt;3 某个新建的分支推送到远端(例如dev分支)&lt;/h4&gt;
+&lt;p&gt;切换到dev分支&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git push &lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;fatal: The current branch dev has no upstream branch.
+To push the current branch and set the remote as upstream, use
+
+git push --set-upstream origin dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;设置关联&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git push --set-upstream origin dev&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Delta compression using up to 8 threads.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (6/6), 551 bytes | 0 bytes/s, done.
+Total 6 (delta 2), reused 0 (delta 0)
+To https://github.com/lhjzzu/learngit
+ * [new branch]      dev -&amp;gt; dev
+Branch dev set up to track remote branch dev from origin.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;下次直接&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git push&lt;/code&gt;即可&lt;/p&gt;
+
+&lt;h4 id=&quot;section-19&quot;&gt;4 直接从某个远程仓库抓取&lt;/h4&gt;
+
+&lt;p&gt;首先查看一下有多少远程仓库&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git branch -a&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;* dev
+  master
+  remotes/origin/HEAD -&amp;gt; origin/master
+  remotes/origin/dev
+  remotes/origin/master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;先切换到master分支并将dev分支删除&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git checkout master&lt;/code&gt;&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git branch -D dev&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;创建dev分支，并从远程仓库dev拉取&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git checkout -b dev origin/dev &lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;此时你已经可以正常的提交和远程推送了，但是如果你的修改与小伙伴的修改冲突的话，那么推送失败。那么此时你需要先pull，把小伙伴的修改拉取下来&lt;/p&gt;
+
+&lt;p&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git pull&lt;/code&gt;进行拉取,但是拉取失败,因为没有指定本地dev分支与远程origin/dev分支的连接&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git branch --set-upstream  origin/dev dev&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;此时在进行git pull成功，如果有冲突，手动解决冲突后再进行push即可&lt;/p&gt;
+
+&lt;h4 id=&quot;section-20&quot;&gt;5 删除远程仓库&lt;/h4&gt;
+
+&lt;p&gt;首先先删除远程分支&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git branch -r -d origin/dev&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Deleted remote-tracking branch origin/dev (was e484aab).
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;在将dev置为空&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;$ git push origin :dev&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;To https://github.com/lhjzzu/learngit
+- [deleted]         dev
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;section-21&quot;&gt;小结:&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;查看远程库信息，使用&lt;code class=&quot;highlighter-rouge&quot;&gt;git remote -v&lt;/code&gt;；&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;本地新建的分支如果不推送到远程，对其他人就是不可见的；&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;从本地推送分支，使用&lt;code class=&quot;highlighter-rouge&quot;&gt;git push origi name&lt;/code&gt;，如果推送失败，先用&lt;code class=&quot;highlighter-rouge&quot;&gt;git pull&lt;/code&gt;抓取远程的新提交；&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;在本地创建和远程分支对应的分支，使用&lt;code class=&quot;highlighter-rouge&quot;&gt;git checkout -b name origin/name&lt;/code&gt;，本地和远程分支的名称最好一致；&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;建立本地分支和远程分支的关联，使用&lt;code class=&quot;highlighter-rouge&quot;&gt;git branch --set-upstream  origin/name name&lt;/code&gt;；&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;从远程抓取分支，使用git pull，如果有冲突，要先处理冲突。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-22&quot;&gt;创建和操作标签&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-23&quot;&gt;创建标签&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git tag &amp;lt;tagname&amp;gt; 在当前分支下最新的commit打上标签
+git tag &amp;lt;tagname&amp;gt; &amp;lt;commit id&amp;gt; 指定的commit打上标签
+git tag 查看所有的标签
+git show &amp;lt;tagname&amp;gt; 显示指定标签的信息
+git tag -a &amp;lt;tagname&amp;gt; -m &quot;msg&quot;  -a指定标签名 -m指定说明文字
+git tag -s &amp;lt;tagname&amp;gt; -m &quot;msg&quot;  -s用私钥签名一个标签&amp;lt;PGP签名&amp;gt;不要求掌握
+注意:标签不是按时间排序，而是按字母排序的，创建的标签是放在本地的
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;section-24&quot;&gt;操作标签&lt;/h4&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git tag -d &amp;lt;tagname&amp;gt; 删除标签，只是从本地删除标签
+git push origin —tags 推送所有标签到远程
+推送到远程之后，如果要删除标签，那么先删除本地的标签
+git tag -d &amp;lt;tagname&amp;gt;
+再删除远程的标签
+git push origin :refs/tags/&amp;lt;tagname&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;section-25&quot;&gt;小结&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;命令git push origin &lt;tagname&gt;可以推送一个本地标签；&lt;/tagname&gt;&lt;/li&gt;
+  &lt;li&gt;命令git push origin –tags可以推送全部未推送过的本地标签；&lt;/li&gt;
+  &lt;li&gt;命令git tag -d &lt;tagname&gt;可以删除一个本地标签；&lt;/tagname&gt;&lt;/li&gt;
+  &lt;li&gt;命令git push origin :refs/tags/&lt;tagname&gt;可以删除一个远程标签。&lt;/tagname&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-26&quot;&gt;配置别名&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git config --global alias.st status
+git config --global alias.co checkout
+git config --global alias.ci commit
+git config --global alias.br branch
+git config --global alias.unstage &#39;reset HEAD&#39;
+git config --global alias.last &#39;log -1&#39;
+git config --global alias.lg &quot;log --color --graph --pretty=format:&#39;%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&amp;lt;%an&amp;gt;%Creset&#39; --abbrev-commit&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;faq&quot;&gt;FAQ&lt;/h2&gt;
+
+&lt;h3 id=&quot;commit-1&quot;&gt;1 如何查看所有的历史commit？&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1 git log --pretty=oneline 会将从当前版本及之前的一部分版本列举出来
+2 git reset --hard  xxx(最后一个版本号) ， 然后继续执行1， 直到找到所需的版本.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;git-3&quot;&gt;2 当我们想直接覆盖掉我们git远程分支中的版本的时候？&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git push origin 远程分支名 --force  
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;xcuserstate-xxxxcuserdatad&quot;&gt;3 如何忽略 .xcuserstate ，/xxx.xcuserdatad/等中间文件&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1 git status 会将中间文件列出来
+2 vi .gitignore 打开忽略文件
+3 将列出来的中间文件名放到.gitignore中
+4 git rm -r —cached . （移除缓存以使.gitignore文件生效）
+5 git add .
+6 git commit -m &quot;fiexed untracked files&quot;
+7 git push 即可.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;xcodeprojinfoplist&quot;&gt;4 合并分支时.xcodeproj文件爆红打不开，以及info.plist文件打不开？&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1 回退到合并前的版本
+git reset --hard HEAD^ 或者 git reset —hard 版本号
+ 2 git 忽略.xcodeproj文件
+在.gitignore中加入
+*.xcodeproj/
+DerivedData/
+(解决了问题之后最好把这两个删了，再按下面的步骤提交一下,否则再切换分支的时候.xcodeproj会丢失)
+但是这样做后，.gitignore并没有起作用，是因为缓存的缘故
+.gitignore文件只是ignore没有被staged(cached)文件，对于已经被staged文件，加入ignore文件时一定要先从staged移除。
+git rm -r --cached .
+git add .
+git commit -m &quot;fixed untracked files&quot;
+如果没有加入
+文件，那么工程中很多文件会缺少文件的索引
+可以直接把所有的文件索引删除，然后再添加进来即可
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;section-27&quot;&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000&quot;&gt;廖雪峰Git&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.jianshu.com/p/dcbb8baa6e36&quot;&gt;本地Git仓库和远程仓库的创建及关联&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.zhihu.com/question/38983686?sort=created&quot;&gt;.git文件夹下的每个文件都是做什么的？&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Liu Hua Jian</name></author><summary>git简介</summary></entry><entry><title>ios打包–ipa包重签(四)</title><link href="http://www.lhjzzu.com/2016/05/03/ios-ipa-codesign/" rel="alternate" type="text/html" title="ios打包--ipa包重签(四)" /><published>2016-05-03T00:00:00+08:00</published><updated>2016-05-03T00:00:00+08:00</updated><id>http://www.lhjzzu.com/2016/05/03/ios-ipa-codesign</id><content type="html" xml:base="http://www.lhjzzu.com/2016/05/03/ios-ipa-codesign/">&lt;h2 id=&quot;section&quot;&gt;证书和密匙&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;证书信息&lt;/h3&gt;
+
+&lt;p&gt;代码签名的核心是一个证书，一个公钥和一个私钥&lt;br /&gt;
+&lt;img src=&quot;http://7xqijx.com1.z0.glb.clouddn.com/cer.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xqijx.com1.z0.glb.clouddn.com/cer_detail.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;可以用&lt;code class=&quot;highlighter-rouge&quot;&gt;$ security find-identity -v -p codesigning &lt;/code&gt;来获取证书信息&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1) 697CC3476B6AEC059E4F12DCD5CD28C48441E4CD &quot;iPhone Developer: zhida wu (8MR2HY4EQA)&quot;
+2) 1C6D6C437FB47E188EE5D77105D0D993ADA93E16 &quot;iPhone Distribution: Hangzhou Riguan Apparel Co.,ltd (V9LX9F46VG)&quot;
+3) 8323CA449B35E26865DD08D619DE7EE221349C64 &quot;iPhone Developer: david.wu@davebella.com (48KD969HKA)&quot;
+4) 7494432634E5176DF5DAFF1360AAAD4B871747AB &quot;iPhone Distribution: Hangzhou Ouer Technology Co., Ltd&quot;
+ 4 valid identities found
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;注意:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;一个证书是一个公钥加上许多附加信息组成&lt;/li&gt;
+  &lt;li&gt;这些附加信息都是被某个认证机构（Certificate Authority 简称 CA）进行签名认证过的&lt;/li&gt;
+  &lt;li&gt;认证的目的是认证这个证书中的信息是准确无误的&lt;/li&gt;
+  &lt;li&gt;认证的签名有固定的有效期，这就意味着当前系统时间需要被正确设置&lt;/li&gt;
+  &lt;li&gt;如果我们把系统时间设置的较早或者较后，那么证书会变成失效状态(亲测)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;codesign&quot;&gt;签名工具codesign&lt;/h2&gt;
+
+&lt;h3 id=&quot;codesign-&quot;&gt;codesign 的路径&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcrun --find codesign&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/usr/bin/codesign
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;codesign--1&quot;&gt;codesign 简单介绍&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;签名工具，用来创建和修改代码签名&lt;/li&gt;
+  &lt;li&gt;由&lt;a href=&quot;http://www.lhjzzu.com/2016/04/29/ios-xcodebuild/#section&quot;&gt;ios打包–xcodebuild以及xcrun(二)&lt;/a&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcodebuild -sdk iphoneos9.3&lt;/code&gt;，可知在ProcessProductPackaging之后，会用CodeSign来对Test.app进行代码签名&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;codesign--2&quot;&gt;codesign 命令&lt;/h3&gt;
+
+&lt;p&gt;为一个没有被签过名的.app文件签名&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ codesign -s &#39;iPhone Developer: zhida wu (8MR2HY4EQA)&#39; Test.app&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Test.app: is already signed
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;如果app文件已经被签名过了,通过&lt;code class=&quot;highlighter-rouge&quot;&gt;-f&lt;/code&gt;强制覆盖原来的签名&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ codesign -f -s &#39;iPhone Developer: zhida wu (8MR2HY4EQA)&#39; Test.app&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Test.app: replacing existing signature
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;查看.app的相关信息&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ codesign -vv -d Test.app&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Executable=/Users/chiyou/Library/Developer/Xcode/DerivedData/Test-   fmbqgffmjssiqmbnzkproqvtcqpm/Build/Products/Debug-iphoneos/Test.app/Test
+Identifier=com.ouer.www.Test
+Format=app bundle with Mach-O universal (armv7 arm64)
+CodeDirectory v=20200 size=657 flags=0x0(none) hashes=14+4 location=embedded
+Signature size=4717
+Authority=iPhone Developer: zhida wu (8MR2HY4EQA)
+Authority=Apple Worldwide Developer Relations Certification Authority
+Authority=Apple Root CA
+Signed Time=2016年5月3日 下午11:03:58
+Info.plist entries=27
+TeamIdentifier=V9LX9F46VG
+Sealed Resources version=2 rules=12 files=7
+Internal requirements count=1 size=176
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;iPhone Developer: zhida wu (8MR2HY4EQA)&lt;/code&gt;由&lt;code class=&quot;highlighter-rouge&quot;&gt;Apple Worldwide Developer Relations Certification Authority&lt;/code&gt;授权，&lt;code class=&quot;highlighter-rouge&quot;&gt;Apple Worldwide Developer Relations Certification Authority&lt;/code&gt;由&lt;code class=&quot;highlighter-rouge&quot;&gt;Apple Root CA&lt;/code&gt;授权，所以&lt;code class=&quot;highlighter-rouge&quot;&gt;Apple Root CA&lt;/code&gt;是根证书&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Format=app bundle with Mach-O universal (armv7 arm64)&lt;/code&gt;表明Test.app是一个包含armv7，arm64的二进制文件&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Identifier&lt;/code&gt;即是bundle identifier&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;TeamIdentifier&lt;/code&gt;标示工作组，一个开发者(账号)有唯一的一个工作组.（即无论是打包证书还是push证书，工作组都一样）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;验证签名后的.app文件&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ codesign --verify Test.app&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;没有任何输出信息，代表没有问题&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果修改.app文件，就会破坏我们的签名的完整性&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ echo &#39;lol&#39; &amp;gt;&amp;gt; Test.app/Test
+$ codesign --verify Test.app
+Test.app: main executable failed strict validation  
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;程序包和其他资源文件&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;程序包中的所有文件都会被签名，所有的签名都放在&lt;code class=&quot;highlighter-rouge&quot;&gt;_CodeSignatue/CodeResources&lt;/code&gt;中.&lt;/li&gt;
+  &lt;li&gt;在 CodeResources 文件中会有4个不同区域，其中的 rules 和 files 是为老版本准备的，而 files2 和 rules2是为新的第二版的代码签名准备的&lt;/li&gt;
+  &lt;li&gt;更详细的信息请参考&lt;a href=&quot;http://objccn.io/issue-17-2/&quot;&gt;代码签名探析&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;entitlements--provisioning&quot;&gt;授权机制 (Entitlements) 和配置文件 (Provisioning)&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;授权机制&lt;/h3&gt;
+
+&lt;p&gt;Xcode 会自动生成一个entitlements文件(plist格式),文件格式如下&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;plist&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;version=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1.0&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;dict&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;application-identifier&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;7T2277EURS.com.ouer.test&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;com.apple.developer.team-identifier&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;7T2277EURS&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;get-task-allow&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;false/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;keychain-access-groups&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;array&amp;gt;&lt;/span&gt;
+	    &lt;span class=&quot;nt&quot;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;7T2277EURS.com.ouer.test&lt;span class=&quot;nt&quot;&gt;&amp;lt;/string&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/array&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dict&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/plist&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;授权机制决定了哪些系统资源在什么情况下允许被一个应用使用&lt;/p&gt;
+
+&lt;p&gt;查看签名信息中具体包含了什么授权信息（从ipa包中解压得到Test.app）&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ codesign -d --entitlements - Test.app&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Executable=/Users/chiyou/Desktop/xxxx/Test 2016-05-04 00-11-33/Payload/Test.app/Test
+??qq?&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;
+&amp;lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/    PropertyList-1.0.dtd&quot;&amp;gt;
+&amp;lt;plist version=&quot;1.0&quot;&amp;gt;
+&amp;lt;dict&amp;gt;
+	&amp;lt;key&amp;gt;application-identifier&amp;lt;/key&amp;gt;
+	&amp;lt;string&amp;gt;V9LX9F46VG.com.ouer.www.Test&amp;lt;/string&amp;gt;
+	&amp;lt;key&amp;gt;com.apple.developer.team-identifier&amp;lt;/key&amp;gt;
+	&amp;lt;string&amp;gt;V9LX9F46VG&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;get-task-allow&amp;lt;/key&amp;gt;
+    &amp;lt;false/&amp;gt;
+    &amp;lt;key&amp;gt;keychain-access-groups&amp;lt;/key&amp;gt;
+    &amp;lt;array&amp;gt;
+    	&amp;lt;string&amp;gt;V9LX9F46VG.com.ouer.www.Test&amp;lt;/string&amp;gt;
+    &amp;lt;/array&amp;gt;
+&amp;lt;/dict&amp;gt;
+&amp;lt;/plist&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;配置文件&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;XCode中配置文件都可以在&lt;code class=&quot;highlighter-rouge&quot;&gt;~/Library/MobileDevice/Provisioning Profiles&lt;/code&gt;找到。&lt;/li&gt;
+  &lt;li&gt;它并不是一个 plist 文件，它是一个根据密码讯息语法 (Cryptographic Message Syntax) 加密文件&lt;/li&gt;
+  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;security cms -D -i example.mobileprovision&lt;/code&gt;，查看.mobileprovision文件内部信息&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;ipa&quot;&gt;重签名ipa&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;准备:&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;一个已经签名的ipa包（例如 DV.ipa）&lt;/li&gt;
+  &lt;li&gt;企业发布证书，以及distribution的.mobileprovision文件，命名为embedded&lt;/li&gt;
+  &lt;li&gt;embedded.mobileprovision的bundle identify可以自定(例如com.ouer.test)&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;创建一个entitlements.plist文件,内容如下&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &amp;lt;dict&amp;gt;
+     	&amp;lt;key&amp;gt;application-identifier&amp;lt;/key&amp;gt;
+ 	    &amp;lt;string&amp;gt;7T2277EURS.com.ouer.test&amp;lt;/string&amp;gt;
+      &amp;lt;key&amp;gt;com.apple.developer.team-identifier&amp;lt;/key&amp;gt;
+ 	    &amp;lt;string&amp;gt;7T2277EURS&amp;lt;/string&amp;gt;
+      &amp;lt;key&amp;gt;get-task-allow&amp;lt;/key&amp;gt;
+      &amp;lt;false/&amp;gt;
+      &amp;lt;key&amp;gt;keychain-access-groups&amp;lt;/key&amp;gt;
+      &amp;lt;array&amp;gt;
+      &amp;lt;string&amp;gt;7T2277EURS.com.ouer.test&amp;lt;/string&amp;gt;
+      &amp;lt;/array&amp;gt;
+  &amp;lt;/dict&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;其中&lt;code class=&quot;highlighter-rouge&quot;&gt;7T2277EURS&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;team-identifier&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;com.ouer.test&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;bundle identify&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-6&quot;&gt;整个签名过程如下&lt;/h3&gt;
+
+&lt;h4 id=&quot;codesign-1&quot;&gt;方法一:用codesign命令行&lt;/h4&gt;
+&lt;p&gt;1 解压DV.ipa&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ unzip DV.ipa&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;2 替换证书配置文件（文件名必须为embedded，不得自定义,embedded.mobileprovision与Payload文件夹同级）&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ cp embedded.mobileprovision Payload/DV.app&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;3 重签名（entitlements.plist与Payload同级）&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ codesign -f -s &quot;iPhone Distribution: Hangzhou Ouer Technology Co., Ltd&quot; --entitlements entitlements.plist Payload/DV.app
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;4 打包&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ zip -r DV_Resign.ipa Payload&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;注意:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;步骤3执行之前，可以执行&lt;code class=&quot;highlighter-rouge&quot;&gt;$ open Payload/DV.app/info.plist&lt;/code&gt;,然后修改&lt;code class=&quot;highlighter-rouge&quot;&gt;Bundle identifier&lt;/code&gt;,然后执行继续执行步骤3，这种情况下由于&lt;code class=&quot;highlighter-rouge&quot;&gt;Bundle identifier&lt;/code&gt;不同，所以我们的设备可以安多个app。&lt;/li&gt;
+  &lt;li&gt;修改&lt;code class=&quot;highlighter-rouge&quot;&gt;Bundle identifier&lt;/code&gt;有些弊端是不能进行微博登录，并且不能收到推送等等。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;iresign&quot;&gt;方法二:使用工具iReSign&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://7xqijx.com1.z0.glb.clouddn.com/iResign.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;1 下载&lt;a href=&quot;https://github.com/maciekish/iReSign&quot;&gt;iReSign&lt;/a&gt;工具&lt;/p&gt;
+
+&lt;p&gt;2 选择&lt;code class=&quot;highlighter-rouge&quot;&gt;.ipa&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt;embedded.mobileprovision&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt;entitlements.plist&lt;/code&gt;文件&lt;/p&gt;
+
+&lt;p&gt;3 需要修改&lt;code class=&quot;highlighter-rouge&quot;&gt;Bundle identifier&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;embedded.mobileprovision&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bundle identifier&lt;/code&gt;，否则不能通过。&lt;/p&gt;
+
+&lt;p&gt;4 点击重新签名&lt;/p&gt;
+
+&lt;p&gt;注意:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;修改&lt;code class=&quot;highlighter-rouge&quot;&gt;Bundle identifier&lt;/code&gt;有些弊端是不能进行微博登录，并且不能收到推送等等。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;autoresign&quot;&gt;方法三:自动化脚本(autoResign)&lt;/h4&gt;
+
+&lt;p&gt;1 这是我写的脚本&lt;a href=&quot;https://github.com/lhjzzu/autoResign&quot;&gt;autoResign&lt;/a&gt;,你可以下载直接使用&lt;/p&gt;
+
+&lt;p&gt;2 用法 &lt;code class=&quot;highlighter-rouge&quot;&gt;$ python autoResign.py -f DV&lt;/code&gt;,如果成功会生成一个&lt;code class=&quot;highlighter-rouge&quot;&gt;DV_Resign.ipa&lt;/code&gt;文件&lt;/p&gt;
+
+&lt;p&gt;3 如果第二次执行该命令，会出现 &lt;code class=&quot;highlighter-rouge&quot;&gt;Archive:  DV.ipa
+replace Payload/DV.app/_CodeSignature/CodeResources? [y]es, [n]o, [A]ll, [N]one, [r]ename: &lt;/code&gt;,直接输入A，然后enter即可。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-7&quot;&gt;补充:&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-8&quot;&gt;设置别名–彻底解放&lt;/h3&gt;
+
+&lt;p&gt;我们可以把我们的某些命令，设置一个简单的别名，那么在我们执行的时候，只需输入别名即可&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1 cd ~
+2 vi .bash_profile
+3 点击i,进入输入模式，
+  输入:alias resign=&#39;python autoResign.py -f&#39;
+  点击esc，shift+:,wq 退出
+4 source .bash_profile
+5 进入对应的文件夹，在终端中resign DV即可。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;section-9&quot;&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://objccn.io/issue-17-2/&quot;&gt;代码签名探析&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.olinone.com/?p=198&quot;&gt;iOS证书及ipa包重签名探究&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://gist.github.com/0xc010d/1365444&quot;&gt;ReCodeSign&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Liu Hua Jian</name></author><summary>证书和密匙</summary></entry><entry><title>ios打包–脚本自动化打包并上传到蒲公英(三)</title><link href="http://www.lhjzzu.com/2016/05/03/ios-auto-archive-ipa/" rel="alternate" type="text/html" title="ios打包--脚本自动化打包并上传到蒲公英(三)" /><published>2016-05-03T00:00:00+08:00</published><updated>2016-05-03T00:00:00+08:00</updated><id>http://www.lhjzzu.com/2016/05/03/ios-auto-archive-ipa</id><content type="html" xml:base="http://www.lhjzzu.com/2016/05/03/ios-auto-archive-ipa/">&lt;h2 id=&quot;section&quot;&gt;命令行打包&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;打包可以简单分为两个阶段&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;build生成.app文件&lt;/li&gt;
+  &lt;li&gt;由.app文件生成.ipa文件&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;相关命令&lt;/h3&gt;
+&lt;p&gt;通过&lt;a href=&quot;http://www.lhjzzu.com/2016/04/29/ios-xcodebuild/&quot;&gt;ios打包–xcodebuild以及xcrun&lt;/a&gt;这篇文章的学习，我们可以知道这样两条关键性的命令&lt;/p&gt;
+
+&lt;p&gt;第一条命令&lt;br /&gt;
+如果没有.xcworkspace文件&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;xdebuild -project Test.xcodeproj -target DV -configuration Release -sdk iphoneos9.3 CODE_SIGN_IDENTITY=&quot;iPhone Distribution: Hangzhou Riguan Apparel Co.,ltd (V9LX9F46VG)&quot; PROVISIONING_PROFILE=&quot;a97416b6-a868-44c7-8bd5-5847954305bb&quot;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;如果有.xcworkspace文件&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;xdebuild -workspace DV.xcworkspace -scheme DV -configuration Release -sdk iphoneos9.3 CODE_SIGN_IDENTITY=&quot;iPhone Distribution: Hangzhou Riguan Apparel Co.,ltd (V9LX9F46VG)&quot; PROVISIONING_PROFILE=&quot;a97416b6-a868-44c7-8bd5-5847954305bb&quot;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;第二条命令&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;xcrun -sdk iphoneos -v PackageApplication ./build/Release-iphoneos/Test.app -o ~/Desktop/ipa/Test.ipa&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;意:&lt;/p&gt;
+
+&lt;p&gt;1 第一条命令是生成.app文件，第二条命令是由.app文件生成.ipa文件&lt;/p&gt;
+
+&lt;p&gt;2 要将其中的签名信息，以及路径信息等换成自己的信息&lt;/p&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;脚本打包&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;自动化脚本&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;你可以通过&lt;a href=&quot;https://github.com/carya/Util&quot;&gt;github&lt;/a&gt;来下载该脚本&lt;/li&gt;
+  &lt;li&gt;该脚本来源于&lt;a href=&quot;http://liumh.com&quot;&gt;@CaryaLiu&lt;/a&gt;，非常感谢他的分享。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;脚本的使用&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;首先脚本的使用&lt;a href=&quot;http://liumh.com&quot;&gt;@CaryaLiu&lt;/a&gt;已经在&lt;a href=&quot;https://github.com/carya/Util&quot;&gt;github&lt;/a&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;README.md&lt;/code&gt;中说的很清楚了，各位可以自行参考。&lt;/li&gt;
+  &lt;li&gt;为防止有些同学不会用，我说一下它的用法（我自己就是例子，因为不懂python，所以摸索了好一会儿）。&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;脚本下载下来后要把下面这些信息修改为自己的&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  CODE_SIGN_IDENTITY = &quot;iPhone Distribution: Hangzhou Riguan Apparel Co.,ltd (V9LX9F46VG)&quot;
+  PROVISIONING_PROFILE = &quot;a97416b6-a868-44c7-8bd5-5847954305bb&quot;
+  CONFIGURATION = &quot;release&quot;
+
+  PGYER_UPLOAD_URL = &quot;http://www.pgyer.com/apiv1/app/upload&quot;
+  DOWNLOAD_BASE_URL = &quot;http://www.pgyer.com&quot;
+  USER_KEY = &quot;b836bbd8c0cb96463a6ef0895061c3c9&quot;
+  API_KEY = &quot;0607f8bf8233b5665255acf59f16cdf6&quot;
+    
+  说明: CODE_SIGN_IDENTITY以及PROVISIONING_PROFILE是证书和描述性文件的信息，CONFIGURATION代表打包为线上，PGYER_UPLOAD_URL蒲公英上传的接口，DOWNLOAD_BASE_URL为蒲公英下载的接口，USER_KEY以及API_KEY为蒲公英生成的对用的key，可以通过登录蒲公英-&amp;gt;应用管理-&amp;gt;选择对应的应用-&amp;gt;API 即可看到USER_KEY和API_KEY信息
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;把修改后的脚本放到工程文件夹中（以Test工程为例）&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  1 cd到Test文件夹
+  2 $ python autobuild.py -w Test.xcworkspace -s Test -o ~/desktop/ipa/Test.ipa 即可
+  3 如果工程中没有使用cocoapods，$ python autobuild.py -p Test.xcodeproj -t Test -o ~/desktop/ipa/Test.ipa 即可
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section-6&quot;&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://liumh.com/2015/11/25/ios-auto-archive-ipa/&quot;&gt;iOS自动打包并发布脚本&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://ios.jobbole.com/84677/&quot;&gt;敲一下enter键，完成iOS的打包工作&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Liu Hua Jian</name></author><summary>命令行打包</summary></entry><entry><title>ios打包–xcodebuild以及xcrun(二)</title><link href="http://www.lhjzzu.com/2016/04/29/ios-xcodebuild/" rel="alternate" type="text/html" title="ios打包--xcodebuild以及xcrun(二)" /><published>2016-04-29T00:00:00+08:00</published><updated>2016-04-29T00:00:00+08:00</updated><id>http://www.lhjzzu.com/2016/04/29/ios-xcodebuild</id><content type="html" xml:base="http://www.lhjzzu.com/2016/04/29/ios-xcodebuild/">&lt;h2 id=&quot;xcodebuild&quot;&gt;xcodebuild&lt;/h2&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;简介&lt;/h3&gt;
+
+&lt;p&gt;xcodebuild 用于编译xcode中的projects和workspaces&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;文档&lt;/h3&gt;
+
+&lt;p&gt;1 在终端中输入&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ man xcodebuild&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;2 下面是xcodebuild的部分文档&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;NAME
+ xcodebuild -- build Xcode projects and workspaces
+
+SYNOPSIS
+ xcodebuild [-project name.xcodeproj]
+            [[-target targetname] ... | -alltargets]
+            [-configuration configurationname]
+            [-sdk [sdkfullpath | sdkname]] [action ...]
+            [buildsetting=value ...] [-userdefault=value ...]
+
+ xcodebuild [-project name.xcodeproj] -scheme schemename
+            [[-destination destinationspecifier] ...]
+            [-destination-timeout value]
+            [-configuration configurationname]
+            [-sdk [sdkfullpath | sdkname]] [action ...]
+            [buildsetting=value ...] [-userdefault=value ...]
+
+ xcodebuild -workspace name.xcworkspace -scheme schemename
+            [[-destination destinationspecifier] ...]
+            [-destination-timeout value]
+            [-sdk [sdkfullpath | sdkname]] [action ...]
+            [buildsetting=value ...] [-userdefault=value ...]
+
+ xcodebuild -version [-sdk [sdkfullpath | sdkname]] [infoitem]
+
+ xcodebuild -showsdks
+
+ xcodebuild -showBuildSettings
+            [-project name.xcodeproj | [-workspace name.xcworkspace -scheme schemename]]
+
+ xcodebuild -list [-project name.xcodeproj | -workspace name.xcworkspace]
+
+ xcodebuild -exportArchive -archivePath xcarchivepath -exportPath
+            destinationpath -exportOptionsPlist path
+
+ xcodebuild -exportLocalizations -project name.xcodeproj -localizationPath
+            path [[-exportLanguage language] ...]
+ xcodebuild -importLocalizations -project name.xcodeproj -localizationPath
+            path
+     OS X                            March 19, 2015                            OS X
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;xcodebuild-1&quot;&gt;xcodebuild命令&lt;/h2&gt;
+
+&lt;h3 id=&quot;xcodebuild--version--sdk-sdkfullpath--sdkname-infoitem&quot;&gt;xcodebuild -version [-sdk [sdkfullpath | sdkname]] [infoitem]&lt;/h3&gt;
+
+&lt;p&gt;1 显示版本信息&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcodebuild -version&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Xcode 7.3
+Build version 7D175
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;2 显示某个sdk的版本信息&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcodebuild -version -sdk iphoneos9.3&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;iPhoneOS9.3.sdk - iOS 9.3 (iphoneos9.3)
+SDKVersion: 9.3
+Path: /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/    SDKs/iPhoneOS9.3.sdk
+PlatformVersion: 9.3
+PlatformPath: /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform
+ProductBuildVersion: 13E230
+ProductCopyright: 1983-2016 Apple Inc.
+ProductName: iPhone OS
+ProductVersion: 9.3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;3 注意:&lt;/p&gt;
+
+&lt;p&gt;1 -sdk 对应的值可以通过下面的&lt;code class=&quot;highlighter-rouge&quot;&gt;xcodebuild -showsdks&lt;/code&gt;来得到&lt;/p&gt;
+
+&lt;p&gt;2 infoitem显示信息项，没有什么有意义的作用可以不管&lt;/p&gt;
+
+&lt;h3 id=&quot;xcodebuild--showsdks&quot;&gt;xcodebuild -showsdks&lt;/h3&gt;
+
+&lt;p&gt;1 显示sdk&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcodebuild -showsdks&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;OS X SDKs:
+   OS X 10.11                    	-sdk macosx10.11
+
+iOS SDKs:
+  iOS 9.3                       	-sdk iphoneos9.3
+
+iOS Simulator SDKs:
+  Simulator - iOS 9.3           	-sdk iphonesimulator9.3
+
+tvOS SDKs:
+  tvOS 9.2                      	-sdk appletvos9.2
+
+tvOS Simulator SDKs:
+  Simulator - tvOS 9.2          	-sdk appletvsimulator9.2
+
+watchOS SDKs:
+  watchOS 2.2                   	-sdk watchos2.2
+
+watchOS Simulator SDKs:
+  Simulator - watchOS 2.2       	-sdk watchsimulator2.2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;xcodebuild--showbuildsettings&quot;&gt;xcodebuild -showBuildSettings&lt;/h3&gt;
+
+&lt;p&gt;1 cd进Test工程文件夹,显示buildSettings&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcodebuild -showBuildSettings&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Build settings for action build and target Test:
+    ACTION = build
+    AD_HOC_CODE_SIGNING_ALLOWED = NO
+    ALTERNATE_GROUP = staff
+    ALTERNATE_MODE = u+w,go-w,a+rX
+    ALTERNATE_OWNER = chiyou
+    ALWAYS_SEARCH_USER_PATHS = NO
+    ALWAYS_USE_SEPARATE_HEADERMAPS = NO
+    APPLE_INTERNAL_DEVELOPER_DIR = /AppleInternal/Developer
+    APPLE_INTERNAL_DIR = /AppleInternal
+    APPLE_INTERNAL_DOCUMENTATION_DIR = /AppleInternal/Documentation
+    APPLE_INTERNAL_LIBRARY_DIR = /AppleInternal/Library
+    APPLE_INTERNAL_TOOLS = /AppleInternal/Developer/Tools
+    APPLICATION_EXTENSION_API_ONLY = NO
+    APPLY_RULES_IN_COPY_FILES = NO
+    ARCHS = armv7 arm64
+    ARCHS_STANDARD = armv7 arm64
+    ARCHS_STANDARD_32_64_BIT = armv7 arm64
+    ARCHS_STANDARD_32_BIT = armv7
+    ....
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;xcodebuild--list--project-namexcodeproj---workspace-namexcworkspace&quot;&gt;xcodebuild -list [-project name.xcodeproj | -workspace name.xcworkspace]&lt;/h3&gt;
+
+&lt;p&gt;显示关于Test.xcodeproj的信息&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcodebuild -list&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Information about project &quot;Test&quot;:
+  Targets:
+    Test
+    TestTests
+    TestUITests
+
+Build Configurations:
+    Debug
+    Release
+
+If no build configuration is specified and -scheme is not passed then &quot;Release&quot; is used.
+
+Schemes:
+    Test
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;注意：&lt;/p&gt;
+
+&lt;p&gt;1 在这里我们可以得到project的&lt;code class=&quot;highlighter-rouge&quot;&gt;targets&lt;/code&gt;以及&lt;code class=&quot;highlighter-rouge&quot;&gt;schemes&lt;/code&gt;以及&lt;code class=&quot;highlighter-rouge&quot;&gt;Build Configurations&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;2 &lt;code class=&quot;highlighter-rouge&quot;&gt;xcodebuild -list&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;xcodebuild -list -project Test.xcodeproj&lt;/code&gt;相同，因为它默认取&lt;code class=&quot;highlighter-rouge&quot;&gt;Test.xcodeproj&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;3 如果有pods，&lt;code class=&quot;highlighter-rouge&quot;&gt;xcodebuild -list -workspace Test.xcworkspace&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;xcodebuild--project-namexcodeproj-target-targetname----alltargets--configuration-configurationname-sdk-sdkfullpath--sdkname-action-buildsettingvalue---userdefaultvalue-&quot;&gt;xcodebuild [-project name.xcodeproj][[-target targetname] … | -alltargets] [-configuration configurationname][-sdk [sdkfullpath | sdkname]] [action …][buildsetting=value …] [-userdefault=value …]&lt;/h3&gt;
+
+&lt;p&gt;cd进Test工程文件夹&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcodebuild -sdk iphoneos9.3&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;下面是编译的大致流程:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; Check dependencies 
+ —CompileC 编译各个.m文件
+ —Ld build/Test.build/Release-iphoneos/Test.build/Objects-normal/armv7/Test normal armv7 
+ —Ld build/Test.build/Release-iphoneos/Test.build/Objects-normal/arm64/Test normal arm64 
+ —CreateUniversalBinary build/Release-iphoneos/Test.app/Test normal armv7\ arm64 
+ —CompileStoryboard Test/Base.lproj/LaunchScreen.storyboard 
+ —CompileStoryboard Test/Base.lproj/Main.storyboard
+ —CompileAssetCatalog build/Release-iphoneos/Test.app Test/Assets.xcassets
+ —ProcessInfoPlistFile build/Release-iphoneos/Test.app/Info.plist Test/Info.plist 
+ —GenerateDSYMFile build/Release-iphoneos/Test.app.dSYM build/Release-iphoneos/Test.app/Test
+ —LinkStoryboards 
+ —ProcessProductPackaging /Users/chiyou/Library/MobileDevice/Provisioning\ Profiles/2504ed49-d99e-4f7a-bafb-bd1eb4bcea9e.mobileprovision build/Release-iphoneos/Test.app/embedded.mobileprovision 
+ —Touch build/Release-iphoneos/Test.app 
+ —ProcessProductPackaging /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/Entitlements.plist build/Test.build/Release-iphoneos/Test.build/Test.app.xcent 
+ —CodeSign build/Release-iphoneos/Test.app 
+   Signing Identity:     &quot;iPhone Developer: zhida wu (8MR2HY4EQA)&quot;
+   Provisioning Profile: &quot;iOS Team Provisioning Profile: *&quot;
+                  (2504ed49-d99e-4f7a-bafb-bd1eb4bcea9e) —Validate build/Release-iphoneos/Test.app  
+ -Validate /Users/chiyou/Library/Developer/Xcode/DerivedData/Test-dyjdzvtgqgxtqechyirrgsrcuxma/Build/Products/Debug-iphoneos/Test.app              
+ ** BUILD SUCCEEDED **
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;当出现&lt;code class=&quot;highlighter-rouge&quot;&gt;** BUILD SUCCEEDED **&lt;/code&gt;时，代表编译成功，&lt;/p&gt;
+
+&lt;p&gt;1 这种情况下，默认的&lt;code class=&quot;highlighter-rouge&quot;&gt;-project&lt;/code&gt;的值为&lt;code class=&quot;highlighter-rouge&quot;&gt;Test. xcodeproj&lt;/code&gt;，默认的&lt;code class=&quot;highlighter-rouge&quot;&gt;-target&lt;/code&gt;的值为&lt;code class=&quot;highlighter-rouge&quot;&gt;Test&lt;/code&gt;，默认的&lt;code class=&quot;highlighter-rouge&quot;&gt;-configuration&lt;/code&gt;对应的值为&lt;code class=&quot;highlighter-rouge&quot;&gt;Release&lt;/code&gt;，默认的&lt;code class=&quot;highlighter-rouge&quot;&gt;action&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;build&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;2 在Test文件夹下，生成&lt;code class=&quot;highlighter-rouge&quot;&gt;build&lt;/code&gt;文件夹，在&lt;code class=&quot;highlighter-rouge&quot;&gt;build&lt;/code&gt;中存在&lt;code class=&quot;highlighter-rouge&quot;&gt;Release-iphoneos&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;Test.build&lt;/code&gt;两个文件夹，&lt;code class=&quot;highlighter-rouge&quot;&gt;Test.app&lt;/code&gt;存在于&lt;code class=&quot;highlighter-rouge&quot;&gt;Release-iphoneos&lt;/code&gt;中。&lt;/p&gt;
+
+&lt;p&gt;3 签名信息，Signing Identity:     “iPhone Developer: zhida wu (8MR2HY4EQA)”&lt;br /&gt;
+       Provisioning Profile: “iOS Team Provisioning Profile: *”&lt;br /&gt;
+                      (2504ed49-d99e-4f7a-bafb-bd1eb4bcea9e) —Validate build/Release-iphoneos/Test.app ，自动选择的。&lt;/p&gt;
+
+&lt;p&gt;4 可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;CODE_SIGN_IDENTITY&lt;/code&gt;以及&lt;code class=&quot;highlighter-rouge&quot;&gt;PROVISIONING_PROFILE&lt;/code&gt;改变签名信息&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcodebuild -project Test.xcodeproj -configuration Release -sdk iphoneos9.3 build &lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;1 这种情况与&lt;code class=&quot;highlighter-rouge&quot;&gt;xcodebuild -sdk iphoneos9.3&lt;/code&gt;等价&lt;/p&gt;
+
+&lt;p&gt;2 可以将&lt;code class=&quot;highlighter-rouge&quot;&gt;iphoneos9.3&lt;/code&gt;换成&lt;code class=&quot;highlighter-rouge&quot;&gt;iphonesimulator9.3&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;build&lt;/code&gt;下会生成&lt;code class=&quot;highlighter-rouge&quot;&gt;Release-iphonesimulator&lt;/code&gt;文件夹，可以将&lt;code class=&quot;highlighter-rouge&quot;&gt;Release&lt;/code&gt;换成&lt;code class=&quot;highlighter-rouge&quot;&gt;Debug&lt;/code&gt;，&lt;code class=&quot;highlighter-rouge&quot;&gt;build&lt;/code&gt;下会生成对应的&lt;code class=&quot;highlighter-rouge&quot;&gt;debug_xxx&lt;/code&gt;文件夹&lt;/p&gt;
+
+&lt;p&gt;3 作用是编译生成&lt;code class=&quot;highlighter-rouge&quot;&gt;xx.app&lt;/code&gt;文件&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ xcodebuild -project Test.xcodeproj -target Test -configuration Release -sdk iphoneos9.3 CODE_SIGN_IDENTITY=&quot;iPhone Distribution: Hangzhou Riguan Apparel Co.,ltd (V9LX9F46VG)&quot; PROVISIONING_PROFILE=&quot;a97416b6-a868-44c7-8bd5-5847954305bb&quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;1 当我们使用xcode来进行打包的时候，&lt;code class=&quot;highlighter-rouge&quot;&gt;CODE_SIGN_IDENTITY&lt;/code&gt;以及&lt;code class=&quot;highlighter-rouge&quot;&gt;PROVISIONING_PROFILE&lt;/code&gt;的值就是&lt;code class=&quot;highlighter-rouge&quot;&gt;buildsetting&lt;/code&gt;中选择的证书和&lt;code class=&quot;highlighter-rouge&quot;&gt;profile&lt;/code&gt;文件对应的值。&lt;/p&gt;
+
+&lt;p&gt;2 注意，要将工程的bundle id与描述性文件中的bundle id保持一致&lt;/p&gt;
+
+&lt;p&gt;3 &lt;code class=&quot;highlighter-rouge&quot;&gt;CODE_SIGN_IDENTITY&lt;/code&gt;可以通过钥匙串来查看，证书完整的名字就是对应的值&lt;/p&gt;
+
+&lt;p&gt;4 &lt;code class=&quot;highlighter-rouge&quot;&gt;PROVISIONING_PROFILE&lt;/code&gt;通过xcode,同时按住&lt;code class=&quot;highlighter-rouge&quot;&gt;command&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;,&lt;/code&gt;,然后选择Accounts-&amp;gt;证书对应的账号-&amp;gt;View Details -&amp;gt;选择对应的profile-&amp;gt;show in finder -&amp;gt;文件名就是PROVISIONING_PROFILE对应的值。&lt;/p&gt;
+
+&lt;p&gt;5 此时的签名信息为&lt;/p&gt;
+
+&lt;p&gt;Signing Identity:     “iPhone Distribution: Hangzhou Riguan Apparel Co.,ltd (V9LX9F46VG)”&lt;/p&gt;
+
+&lt;p&gt;Provisioning Profile: “davebella_adhoc_all”(a97416b6-a868-44c7-8bd5-5847954305bb)&lt;/p&gt;
+
+&lt;h3 id=&quot;xcodebuild--workspace-namexcworkspace--scheme-schemename--destination-destinationspecifier---destination-timeout-value--sdk-sdkfullpath--sdkname-action-buildsettingvalue---userdefaultvalue-&quot;&gt;xcodebuild -workspace name.xcworkspace -scheme schemename [[-destination destinationspecifier] …] [-destination-timeout value] [-sdk [sdkfullpath | sdkname]] [action …][buildsetting=value …] [-userdefault=value …]&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcodebuild -workspace Test.xcworkspace -scheme Test -sdk iphoneos9.3 build&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;1  -scheme的值可以通过xcodebuild -list -workspace Test.xcworkspace得到。&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcodebuild -workspace Test.xcworkspace -scheme Test -sdk iphoneos9.3 archive&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;1 生成一个&lt;code class=&quot;highlighter-rouge&quot;&gt;.xcarchive&lt;/code&gt;文件,可以通过选择&lt;code class=&quot;highlighter-rouge&quot;&gt;window-&amp;gt;organizer-&amp;gt;Test&lt;/code&gt; 可以看到我们的&lt;code class=&quot;highlighter-rouge&quot;&gt;.xcarchive&lt;/code&gt;文件，右键&lt;code class=&quot;highlighter-rouge&quot;&gt;show in finder&lt;/code&gt; 即可找到我们的文件.&lt;/p&gt;
+
+&lt;h3 id=&quot;xcodebuild--exportarchive--archivepath-mymobileappxcarchive--exportpath-exportdestination--exportoptionsplist-exportplist&quot;&gt;xcodebuild -exportArchive -archivePath MyMobileApp.xcarchive -exportPath ExportDestination -exportOptionsPlist ‘export.plist’&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; $ xcodebuild -exportArchive -archivePath /Users/chiyou/Library/Developer/Xcode/Archives/2016-05-02/Test.xcarchive -exportPath ~/desktop/ipa -exportOptionsPlist &#39;export.plist&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;1 作用是将生成的.xcarchive文件，打包成ipa文件.&lt;/p&gt;
+
+&lt;p&gt;2 &lt;code class=&quot;highlighter-rouge&quot;&gt;-archivePath&lt;/code&gt;的值即是&lt;code class=&quot;highlighter-rouge&quot;&gt;.xcarchive&lt;/code&gt;文件的路径，可以打开xcode，选择&lt;code class=&quot;highlighter-rouge&quot;&gt;window-&amp;gt;organizer-&amp;gt;Test&lt;/code&gt; 可以看到我们的&lt;code class=&quot;highlighter-rouge&quot;&gt;.xcarchive&lt;/code&gt;文件，右键&lt;code class=&quot;highlighter-rouge&quot;&gt;show in finder&lt;/code&gt; 即可找到我们的文件，可以看到文件的名字是&lt;code class=&quot;highlighter-rouge&quot;&gt;工程名+archive&lt;/code&gt;的时间，我们要把名字改成容易识别的名字，例如把&lt;code class=&quot;highlighter-rouge&quot;&gt;Test 16-5-2 下午12.46.xcarchive&lt;/code&gt;改为&lt;code class=&quot;highlighter-rouge&quot;&gt;Test.xcarchive&lt;/code&gt;，否则识别不出来.&lt;/p&gt;
+
+&lt;p&gt;3 &lt;code class=&quot;highlighter-rouge&quot;&gt;-exportPath&lt;/code&gt;对应的值为输出的ipa包的存放路径，本例中是在桌面上建立一个ipa文件夹。&lt;/p&gt;
+
+&lt;p&gt;4 &lt;code class=&quot;highlighter-rouge&quot;&gt;-exportOptionsPlist&lt;/code&gt;对应的是&lt;code class=&quot;highlighter-rouge&quot;&gt;export.plist&lt;/code&gt;文件，我们要建立一个&lt;code class=&quot;highlighter-rouge&quot;&gt;export.plist&lt;/code&gt;文件，文件内输入&lt;code class=&quot;highlighter-rouge&quot;&gt;ExportDestination&lt;/code&gt;，对应的值为输出ipa包的路径&lt;code class=&quot;highlighter-rouge&quot;&gt;~/desktop/ipa&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h2 id=&quot;xcrun&quot;&gt;xcrun&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;简介&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt; xcrun - Run or locate development tools and properties.&lt;/code&gt; &lt;br /&gt;
+  运行或定位开发工具以及属性&lt;/p&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;部分文档&lt;/h3&gt;
+&lt;p&gt;1 在终端中输入 &lt;code class=&quot;highlighter-rouge&quot;&gt;$ man xcrun&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;2 下面是xcrun的整个文档&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; NAME
+   xcrun - Run or locate development tools and properties.
+
+SYNOPSIS
+   xcrun [--sdk &amp;lt;SDK name&amp;gt;] --find &amp;lt;tool name&amp;gt;
+
+   xcrun [--sdk &amp;lt;SDK name&amp;gt;] &amp;lt;tool name&amp;gt; ... tool arguments ...
+
+   &amp;lt;tool name&amp;gt; ... tool arguments ...
+
+ DESCRIPTION
+   xcrun  provides  a  means  to locate or invoke developer tools from the
+   command-line, without requiring users to modify Makefiles or  otherwise
+   take inconvenient measures to support multiple Xcode tool chains.
+
+   The tool xcode-select(1) is used to set a system default for the active
+   developer directory, and may be overridden by the  DEVELOPER_DIR  envi-
+   ronment variable (see ENVIRONMENT).
+   
+   The  SDK  which  will be searched defaults to the most recent available
+   SDK, and can be specified by the SDKROOT environment  variable  or  the
+   --sdk  option  (which  takes  precedences  over  SDKROOT). When used to
+   invoke another tool (as opposed to simply finding it), xcrun will  pro-
+   vide  the  absolute path to the selected SDK in the SDKROOT environment
+   variable. See ENVIRONMENT for more information.
+   
+   
+   Usage
+   xcrun supports several different usages, to both look up the  paths  to
+   tools as well as execute them.
+
+   When  used  with  the  --find  argument, as in xcrun [--sdk &amp;lt;SDK name&amp;gt;]
+   --find &amp;lt;tool name&amp;gt;, the absolute path to the tool (in the provided SDK,
+   if given) will be printed.
+
+   When  used  without --find, the name of a tool is required and the tool
+   will be executed with the provided arguments.
+
+   When used as the target of a symbolic link, it derives the tool name to
+   use from the name it was invoked under, and then executes that tool.
+   
+   
+   OPTIONS
+   -v, --verbose
+          Add verbose information on how the tool lookup is performed.
+
+   -n, --no-cache
+          Don&#39;t  consult  the  cache  when  looking  up values. In effect,
+          causes the cache entry to be refreshed.
+
+   -k, --kill-cache
+          Removes the cache. Causes all values to be re-cached.
+
+   --sdk  Specifies which SDK to search for tools. If no --sdk argument is
+          provided, then the SDK used will be taken from the SDKROOT envi-
+          ronment variable, if present.
+
+          Use xcodebuild -showsdks to list the available SDK names.
+  --toolchain
+          Specifies which toolchain to use to perform the  lookup.  If  no
+          --toolchain argument is provided, then the toolchain to use will
+          be taken from the TOOLCHAINS environment variable, if present.
+
+   -l, --log
+          Print the full command line that is invoked.
+
+   -f, --find
+          Enable &quot;find&quot; mode, in which the resolved tool path  is  printed
+          instead of the tool being executed.
+
+   -r, --run
+          Enable  &quot;run&quot;  mode, in which the resolved tool path is executed
+          with any provided additional  arguments.  This  is  the  default
+          mode.
+
+   --show-sdk-path
+          Print the path to the selected SDK.
+          
+   --show-sdk-version
+          Print the version number of the selected SDK.
+
+   --show-sdk-build-version
+          Print the build version number of the selected SDK.
+
+   --show-sdk-platform-path
+          Print the path to the platform for the selected SDK.
+
+   --show-sdk-platform-version
+          Print the version number of the platform for the selected SDK.
+          
+          
+   ENVIRONMENT
+   DEVELOPER_DIR
+      Overrides the active developer directory. When DEVELOPER_DIR is set,
+      its value will be used instead of the system-wide  active  developer
+      directory.
+
+   SDKROOT
+      Specifies  the  default  SDK  to be used when looking up tools (some
+      tools may have SDK specific versions).
+
+      This environment variable is also set by xcrun to  be  the  absolute
+      path  to  the  user  provided  SDK  (either via SDKROOT or the --sdk
+      option), when it is used to invoke a normal  developer  tool  (build
+      tools like xcodebuild or make are exempt from this behavior).
+
+      For example, if xcrun is used to invoke clang via:
+          xcrun --sdk macosx clang test.c
+          
+      then xcrun will provide the full path to the macosx SDK in the envi-
+      ronment variable SDKROOT. That in turn will be used by  clang(1)  to
+      automatically select that SDK when compiling the test.c file.
+
+   TOOLCHAINS
+      Specifies  the  default  toolchain  to be used when looking up tools
+      (for tools which are toolchain specific).
+
+   xcrun_log
+      Same as specifying --log.
+
+   xcrun_nocache
+      Same as specifying --no-cache.
+
+   xcrun_verbose
+      Same as specifying --verbose.
+      
+      
+   EXAMPLES
+   xcrun --find clang
+      Finds the path to the clang binary in the default SDK.
+
+   xcrun --sdk iphoneos --find texturetool
+      Finds the path to the texturetool binary in the iOS SDK.
+
+   xcrun --sdk macosx --show-sdk-path
+      Prints the path to the current Mac OS X SDK.
+
+   xcrun git status
+      Locates the git command and then executes it with a single  argument
+      (&quot;status&quot;).
+                
+   DIAGNOSTICS
+   When  xcrun  is  invoked  with  the  name  xcrun, the options --log and
+   --verbose are useful debugging aids. The option --no-cache can be  used
+   to bypass cache lookup, but often at a significant cost in performance.
+
+   When xcrun has taken the place of another tool, the arguments are those
+   of  the  tool replaced, and the various xcrun options can&#39;t be used. In
+   this case, use the specific environment variables instead.
+
+SEE ALSO
+   xcodebuild(1), xcode-select(1)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;xcrun-&quot;&gt;xcrun 命令探析&lt;/h2&gt;
+
+&lt;h3 id=&quot;clangsdk&quot;&gt;找到二进制文件clang在默认的SDK中的路径&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcrun --find clang&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;1 通过&lt;code class=&quot;highlighter-rouge&quot;&gt;/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr
+  /bin/&lt;/code&gt;，我们可以发现在&lt;code class=&quot;highlighter-rouge&quot;&gt;bin&lt;/code&gt;文件夹内，有好多与clang类似的二进制文件.&lt;/p&gt;
+
+&lt;p&gt;2 通过&lt;code class=&quot;highlighter-rouge&quot;&gt;xcrun --find xxxxx&lt;/code&gt;，可以方便的定位出其他二进制文件的路径&lt;/p&gt;
+
+&lt;h3 id=&quot;texturetool-ios-sdk&quot;&gt;找到二进制文件texturetool在 IOS SDK中的路径&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcrun --sdk iphoneos --find texturetool&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/texturetool&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;1 通过 &lt;code class=&quot;highlighter-rouge&quot;&gt;/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer
+ /usr/bin/&lt;/code&gt;，我们可以发现在&lt;code class=&quot;highlighter-rouge&quot;&gt;bin&lt;/code&gt;文件夹内，有好多与texturetool类似的二进制文件.&lt;/p&gt;
+
+&lt;p&gt;2 通过&lt;code class=&quot;highlighter-rouge&quot;&gt;xcrun --find xxxxx&lt;/code&gt;，可以方便的定位出其他二进制文件的路径&lt;/p&gt;
+
+&lt;p&gt;3 其中二进制文件&lt;code class=&quot;highlighter-rouge&quot;&gt;PackageApplication&lt;/code&gt;是用来将.app文件打包成ipa文件的.&lt;/p&gt;
+
+&lt;h3 id=&quot;mac-os-x-sdk&quot;&gt;打印出当前Mac OS X SDK的路径&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcrun --sdk macosx --show-sdk-path&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;xxxappxxxipa&quot;&gt;将xxx.app文件打包成xxx.ipa并输出到指定位置(重点)&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcrun -sdk iphoneos -v PackageApplication ./build/Release-iphoneos/Test.app -o ~/Desktop/ipa/Test.ipa&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;1 &lt;code class=&quot;highlighter-rouge&quot;&gt;PackageApplication&lt;/code&gt;指定打包的工具&lt;/p&gt;
+
+&lt;p&gt;2 &lt;code class=&quot;highlighter-rouge&quot;&gt;./build/Release-iphoneos/Test.app&lt;/code&gt;指定打包的目标文件(.app)&lt;/p&gt;
+
+&lt;p&gt;3 &lt;code class=&quot;highlighter-rouge&quot;&gt;~/Desktop/ipa/Test.ipa&lt;/code&gt;指定输出的路径&lt;/p&gt;
+
+&lt;h3 id=&quot;git&quot;&gt;定位git命令并执行&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;$ xcrun git status&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-4&quot;&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://liumh.com/2015/11/25/ios-auto-archive-ipa/&quot;&gt;iOS自动打包并发布脚本&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://ios.jobbole.com/84677/&quot;&gt;敲一下enter键，完成iOS的打包工作&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.cnblogs.com/xiaodao/archive/2012/03/01/2375609.html&quot;&gt;iphone-命令行编译之–xcodebuild&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Liu Hua Jian</name></author><summary>xcodebuild</summary></entry><entry><title>ios打包–build过程探析（一）</title><link href="http://www.lhjzzu.com/2016/04/29/ios-build-phase/" rel="alternate" type="text/html" title="ios打包--build过程探析（一）" /><published>2016-04-29T00:00:00+08:00</published><updated>2016-04-29T00:00:00+08:00</updated><id>http://www.lhjzzu.com/2016/04/29/ios-build-phase</id><content type="html" xml:base="http://www.lhjzzu.com/2016/04/29/ios-build-phase/">&lt;h2 id=&quot;build-&quot;&gt;build 过程控制&lt;/h2&gt;
+&lt;p&gt;一般来说，当你选择打开xcode工程并且选择工程文件的时候，会在 project editor 顶部显示出 6 个 tabs：General, Capabilities, Info, Build Settings, Build Phases 以及 Build Rules。对我们的build过程来说，后三项与build紧密相关。&lt;/p&gt;
+
+&lt;h2 id=&quot;build-phases&quot;&gt;build Phases解析&lt;/h2&gt;
+
+&lt;h3 id=&quot;build-phases-&quot;&gt;build phases 代表将代码转变为可执行文件的最高规则，&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xqijx.com1.z0.glb.clouddn.com/1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;下图对各项过程进行简单介绍&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;http://7xqijx.com1.z0.glb.clouddn.com/build%2BPhases.png&quot; alt=&quot;build Phases解析&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;至此，build过程并没有结束，还有code sigining以及packageing阶段。总的来说我们可以把build过程分为编译，链接，&lt;br /&gt;
+code signing ，packageing四个阶段。&lt;/p&gt;
+
+&lt;h2 id=&quot;build-rules&quot;&gt;build Rules&lt;/h2&gt;
+
+&lt;p&gt;Build rules 指定了不同的文件类型该如何编译。一般不许要开发者进行设置，如果想要详细了解，请参考&lt;a href=&quot;http://objccn.io/issue-6-1/&quot;&gt;这篇文章&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;build-setting&quot;&gt;build setting&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Prefix Header -&amp;gt;${SRCROOT}/工程名/文件名.pch
+Framework Search Paths -&amp;gt; $(PROJECT_DIR)/DV/Frameworks/Lib/QQSDK）
+Header Search Paths -&amp;gt; &quot;${PODS_ROOT}/Headers/Public/AFNetworking&quot;
+Library Search Paths -&amp;gt; $(PROJECT_DIR)/DV/Frameworks/Lib/PingcooSDK
+Oher Linker Flags -&amp;gt; -ObjC 或者 -all_load
+Code Signing Identity -&amp;gt; 选择证书
+Provisioning Profile -&amp;gt; 选择对用的配置文件
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;先列举我常用的，以后会继续补充&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;参考文章&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://objccn.io/issue-6-1/&quot;&gt;Build 过程&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Liu Hua Jian</name></author><summary>build 过程控制
+一般来说，当你选择打开xcode工程并且选择工程文件的时候，会在 project editor 顶部显示出 6 个 tabs：General, Capabilities, Info, Build Settings, Build Phases 以及 Build Rules。对我们的build过程来说，后三项与build紧密相关。</summary></entry><entry><title>判断前台 Activity 是否属于本进程</title><link href="http://www.lhjzzu.com/2016/04/20/determine-if-my-activities-foreground/" rel="alternate" type="text/html" title="判断前台 Activity 是否属于本进程" /><published>2016-04-20T00:00:00+08:00</published><updated>2016-04-20T00:00:00+08:00</updated><id>http://www.lhjzzu.com/2016/04/20/determine-if-my-activities-foreground</id><content type="html" xml:base="http://www.lhjzzu.com/2016/04/20/determine-if-my-activities-foreground/">&lt;p&gt;本文记录的是一种判断当前激活的 Activity 是否属于本进程的方法。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;约定：文中表述说一个 Activity 处于激活状态是指它是屏幕上当前展示的 Activity，且没有被 Dialog 覆盖。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;原理&lt;/h2&gt;
+
+&lt;p&gt;Activity 的生命周期由 Android 系统维护，所以使用一个 Activity 的生命周期方法 &lt;code class=&quot;highlighter-rouge&quot;&gt;onResume&lt;/code&gt; 与 &lt;code class=&quot;highlighter-rouge&quot;&gt;onPause&lt;/code&gt; 来记录它的激活状态是可靠的。&lt;/p&gt;
+
+&lt;p&gt;同理，因为前台 Activity 只有一个，所以判断前台 Activity 是否属于本进程只需要判断本进程是否有 Activity 处于激活状态即可。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;实现&lt;/h2&gt;
+
+&lt;p&gt;顺着这个思路，直接想到的方案就是去给代码里所有的 Activity 实现一个共同基类，然后在基类里的 &lt;code class=&quot;highlighter-rouge&quot;&gt;onResume&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;onPause&lt;/code&gt; 方法去更新一个全局计数器了。&lt;/p&gt;
+
+&lt;p&gt;这固然可行，但遇到有些不能继承共同基类的情况，比如继承自 ListActivity 和 ExpandableListActivity 等 Activity 的子类的，就得重复去在具体 Activity 里的对应方法里添加代码了，一旦有一个 Activity 忘了添加，这个机制就失效了，所以并不优雅。&lt;/p&gt;
+
+&lt;p&gt;幸好 Android 在 API Level 14 的时候新加入了 &lt;code class=&quot;highlighter-rouge&quot;&gt;android.app.Application.ActivityLifecycleCallbacks&lt;/code&gt; 接口，它会在 Activity 生命周期事件发生时产生回调：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ActivityLifecycleCallbacks&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onActivityCreated&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Bundle&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;savedInstanceState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onActivityStarted&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onActivityResumed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onActivityPaused&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onActivityStopped&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onActivitySaveInstanceState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Bundle&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;outState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onActivityDestroyed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;这真是救星。&lt;/p&gt;
+
+&lt;p&gt;那么优雅的实现方案：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyApplication&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Application&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hasActivityActivate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onCreate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;onCreate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;registerActivityLifecycleCallbacks&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ActivityLifecycleCallbacks&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onActivityCreated&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Bundle&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;savedInstanceState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+            &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onActivityStarted&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+            &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onActivityResumed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;hasActivityActivate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+            &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onActivityPaused&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;hasActivityActivate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+            &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onActivityStopped&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+            &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onActivitySaveInstanceState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Bundle&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;outState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+            &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onActivityDestroyed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Activity&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;activity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hasActivityActivate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hasActivityActivate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;然后在需要的时候调用 &lt;code class=&quot;highlighter-rouge&quot;&gt;MyApplication.hasActivityActivate()&lt;/code&gt; 就行了。&lt;/p&gt;
+
+&lt;p&gt;当然别忘了在 AndroidManifest.xml 里声明指定你的 Application 类名：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;...
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;application&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;android:name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;.MyApplication&quot;&lt;/span&gt;
+    &lt;span class=&quot;err&quot;&gt;....&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;后话&lt;/h2&gt;
+
+&lt;p&gt;本文记录的只是判断当前进程是否有 Activity 处于激活状态的方法，判断当前应用、其它应用的前后台情况有多种方法，它们的优缺点、适用场景在以下 GitHub 仓库有详细列举，有需求的同学可以参考：&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/wenmingvs/AndroidProcess&quot;&gt;https://github.com/wenmingvs/AndroidProcess&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;参考&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/wenmingvs/AndroidProcess&quot;&gt;wenmingvs/AndroidProcess&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://stackoverflow.com/questions/3667022/checking-if-an-android-application-is-running-in-the-background/5862048#5862048&quot;&gt;Checking if an Android application is running in the background&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Liu Hua Jian</name></author><summary>本文记录的是一种判断当前激活的 Activity 是否属于本进程的方法。</summary></entry><entry><title>配置 Node.js 开发环境——使用 Atom</title><link href="http://www.lhjzzu.com/2016/04/18/develop-nodejs-with-atom/" rel="alternate" type="text/html" title="配置 Node.js 开发环境——使用 Atom" /><published>2016-04-18T00:00:00+08:00</published><updated>2016-04-18T00:00:00+08:00</updated><id>http://www.lhjzzu.com/2016/04/18/develop-nodejs-with-atom</id><content type="html" xml:base="http://www.lhjzzu.com/2016/04/18/develop-nodejs-with-atom/">&lt;p&gt;Node.js 的开发环境选择很多，比如 WebStrom/Visual Studio Code/Atom/HBuilder，还有万能的 Vim/Emacs 等等。&lt;/p&gt;
+
+&lt;p&gt;根据我个人的试用，WebStorm 应该是配置起来最省心，用起来最顺手的选择，而且有 Android Studio 和 PyCharm 的使用经验上手毫无障碍。但一来 WebStorm 价格不菲，二来最近刚刚被 Atom 圈粉，而 Visual Studio Code 和 Atom 又是这些编辑器里面与 Node.js 渊源最深的，所以最终决定最近在学习 Node.js 以及写一些练手项目时以使用 Atom 为主，Vim 为辅。&lt;/p&gt;
+
+&lt;h2 id=&quot;atom-&quot;&gt;安装 Atom 插件&lt;/h2&gt;
+
+&lt;p&gt;主要是它们：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;atom-ternjs&lt;/strong&gt; 用于 Javascript 和 Node.js 的自动补全&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;script&lt;/strong&gt; 用于一键运行程序&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;自动补全插件&lt;/h3&gt;
+
+&lt;p&gt;Atom 上的 Javascript 自动补全主要依赖 atom-ternjs 插件，貌似没有什么其它更好的选择。（配合 autocomplete-plus 插件使用，Atom 默认已经安装。）&lt;/p&gt;
+
+&lt;p&gt;安装方法与安装其它插件无异，主要有三种选择：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;图形界面。&lt;/p&gt;
+
+    &lt;p&gt;在 Atom 的 Settings &amp;gt; Install 里搜索找到 atom-ternjs 并安装。&lt;/p&gt;
+
+    &lt;p&gt;这种方法在国内需要科学上网。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;命令行。&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;apm install atom-ternjs
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;p&gt;这种方法在国内也需要科学上网。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;本地安装。&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ~/.atom/packages
+git clone git@github.com:tststs/atom-ternjs.git
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;atom-ternjs
+npm install
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;一键运行插件&lt;/h3&gt;
+
+&lt;p&gt;安装 script 插件，然后有两种方法可以一键运行/结束程序了：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Packages &amp;gt; Script &amp;gt; Run Script/Stop Script。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;快捷键。&lt;/p&gt;
+
+    &lt;table&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;
+          &lt;th&gt; &lt;/th&gt;
+          &lt;th&gt;Mac&lt;/th&gt;
+          &lt;th&gt;Windows&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;运行&lt;/td&gt;
+          &lt;td&gt;&lt;kbd&gt;cmd&lt;/kbd&gt;+&lt;kbd&gt;i&lt;/kbd&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;kbd&gt;ctrl&lt;/kbd&gt;+&lt;kbd&gt;shift&lt;/kbd&gt;+&lt;kbd&gt;b&lt;/kbd&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;td&gt;结束&lt;/td&gt;
+          &lt;td&gt;&lt;kbd&gt;ctrl&lt;/kbd&gt;+&lt;kbd&gt;c&lt;/kbd&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;kbd&gt;ctrl&lt;/kbd&gt;+&lt;kbd&gt;q&lt;/kbd&gt;&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;配置项目&lt;/h2&gt;
+
+&lt;p&gt;atom-ternjs 插件对项目配置做了可视化，可以通过菜单来操作。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;File &amp;gt; Open 打开 Node.js 项目文件夹。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Package &amp;gt; Atom Ternjs &amp;gt; Configure project&lt;/p&gt;
+
+    &lt;p&gt;&lt;img src=&quot;/images/posts/node/ternjs-configure-project.jpeg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+    &lt;p&gt;Save &amp;amp; Restart server 之后会在项目根目录生成 .tern-project 文件，该配置文件里常用字段：&lt;/p&gt;
+
+    &lt;table&gt;
+      &lt;thead&gt;
+        &lt;tr&gt;
+          &lt;th&gt;字段名&lt;/th&gt;
+          &lt;th&gt;含义&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+      &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;ecmaVersion&lt;/td&gt;
+          &lt;td&gt;选择 ECMAScript 版本&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;td&gt;libs&lt;/td&gt;
+          &lt;td&gt;browser 表示原生 js 补全，jquery 代表 jQuery 补全&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;td&gt;loadEagerly&lt;/td&gt;
+          &lt;td&gt;指定加载解析的 js 文件&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;td&gt;dontLoad&lt;/td&gt;
+          &lt;td&gt;排除加载的文件&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;td&gt;plugins&lt;/td&gt;
+          &lt;td&gt;ternjs 使用的插件，配置的扩展补全的库等&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+
+    &lt;p&gt;目前插件的配置页面暂不支持 plugins 部分配置，需要手动配置。&lt;/p&gt;
+
+    &lt;p&gt;比如一份最简单的 .tern-project 文件的示例：&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;s2&quot;&gt;&quot;ecmaVersion&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;s2&quot;&gt;&quot;libs&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[],&lt;/span&gt;
+  &lt;span class=&quot;s2&quot;&gt;&quot;loadEagerly&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;**/*.js&quot;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+  &lt;span class=&quot;s2&quot;&gt;&quot;plugins&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;node&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{},&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;node-express&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+
+    &lt;p&gt;它代表使用 ECMAScript 6，递归加载项目文件夹下所有的 js 文件（包括 node_modules），使用 ternjs 的 node 插件用于 Node.js 核心库补全，node-express 插件用于 express 补全。&lt;/p&gt;
+
+    &lt;p&gt;这部分推荐详细阅读一下 &lt;a href=&quot;https://github.com/tststs/atom-ternjs&quot;&gt;atom-ternjs&lt;/a&gt; 的 README，会更清楚怎么回事。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;创建/修改 .tern-project 文件后，执行 Packages &amp;gt; Atom Ternjs &amp;gt; Restart server。&lt;/p&gt;
+
+    &lt;p&gt;进行完这一步以后，顺利的话你应该已经能愉快地看到原生 js 和 Node.js 的自动补全了；不顺利的话，看看下面的 Q &amp;amp; A 一节，有我遇到的问题的记录。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;最终效果：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/posts/node/ternjs-auto-completion.jpeg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;q--a&quot;&gt;Q &amp;amp; A&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;在 Mac 下按步骤官方的 README 操作后自动提示出不来？&lt;/p&gt;
+
+    &lt;p&gt;我在 Windows 下按官方指南配置 atom-ternjs 倒是很顺利，按默认步骤操作完，然后在 plugins 一节添加 node 就一切 OK 了，但在 Mac 下貌似不配置 loadEagerly 为 &lt;code class=&quot;highlighter-rouge&quot;&gt;**/*.js&lt;/code&gt; 智能提示出不来。&lt;/p&gt;
+
+    &lt;p&gt;另外就是 .tern-project 文件放置的位置，最好与 package.json 放在同级目录。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;安装 atom-ternjs 总是失败。&lt;/p&gt;
+
+    &lt;p&gt;科学上网。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Vim 也有 &lt;a href=&quot;https://github.com/ternjs/tern_for_vim&quot;&gt;tern_for_vim&lt;/a&gt;，作为主力编辑器，为何不使用它来写 Node.js 呢？&lt;/p&gt;
+
+    &lt;p&gt;别提了，如果没有把 .tern-project 文件配置好，打一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt; 之后能卡五秒，严重拉低 Vim 编辑速度。&lt;/p&gt;
+
+    &lt;p&gt;不过 tern_for_vim 也有一个好处，那就是不用像 atom-ternjs 这样每次改完配置后都要手动 Restart server。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;后话&lt;/h2&gt;
+
+&lt;p&gt;ternjs 功能强大，包括：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;自动补全方法和变量&lt;/li&gt;
+  &lt;li&gt;查找引用/定义&lt;/li&gt;
+  &lt;li&gt;显示方法详情，包括方法签名和文档等&lt;/li&gt;
+  &lt;li&gt;简单的重构&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;把它用好了还是能不错地提升开发效率的。&lt;/p&gt;</content><author><name>Liu Hua Jian</name></author><summary>Node.js 的开发环境选择很多，比如 WebStrom/Visual Studio Code/Atom/HBuilder，还有万能的 Vim/Emacs 等等。</summary></entry></feed>
