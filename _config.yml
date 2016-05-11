@@ -1,0 +1,101 @@
+# ---------------- #
+#   Main Configs   #
+# ---------------- #
+baseurl:
+url: http://www.lhjzzu.com
+date_format: "ordinal"
+title: 刘华健
+subtitle: "好风凭借力"
+description: "刘华健的个人博客"
+keywords: 刘华健, Liu Hua Jian, lhjzzu
+favicon: /favicon.ico
+timezone: Asia/Shanghai
+encoding: "utf-8"
+source_code: https://github.com/lhjzzu/lhjzzu.github.io
+
+# ---------------- #
+#      Author      #
+# ---------------- #
+author: Liu Hua Jian
+organization: ouer, Inc.
+organization_url: https://www.kkkd.com
+location: HangZhou, China
+email: 1822657131@qq.com
+
+# ---------------- #
+#    Navigation    #
+# ---------------- #
+navs:
+  -
+    href: /
+    label: 首页
+
+  -
+    href: /categories/
+    label: 分类
+  -
+    href: /links/
+    label: 链接
+
+  -
+    href: /about/
+    label: 关于
+
+# ---------------- #
+#       RSS        #
+# ---------------- #
+subscribe_rss: /feed.xml
+
+# ---------------- #
+#      Jekyll      #
+# ---------------- #
+markdown: kramdown
+kramdown:
+    input: GFM
+highlighter: rouge
+paginate: 8
+lsi: false
+quiet: false
+excerpt_separator: "\n\n"
+permalink: /:year/:month/:day/:title/
+gems:
+    - rouge
+#     - jekyll-html-pipeline
+    - jekyll-paginate
+    - jekyll-sitemap
+    - jekyll-feed
+    - jemoji
+#     - jekyll-mentions
+collections:
+    wiki:
+        output: true
+        permalink: /wiki/:path/
+
+# ---------------- #
+#      Socials     #
+# ---------------- #
+github_username: lhjzzu
+#douban_username: lhjzzu
+#facebook_username: lhjzzu
+#weibo_username: lhjzzu
+#zhihu_username: lhjzzu
+#twitter_username: lhjzzu
+
+# ---------------- #
+#      Comments    #
+# ---------------- #
+# support provider: disqus, duoshuo, changyan
+comments_provider: duoshuo
+# !!!重要!!! 请修改下面两个用户名为你自己申请的
+# !!!Important!!! Please modify usernames below to yours
+duoshuo_username: abc19911991
+disqus_username: duoshuo
+
+# ---------------- #
+#      Datas       #
+# ---------------- #
+skill_software_keywords: [Objective-C]
+skill_mobile_app_keywords: [ios]
+#skill_windows_keywords: [Win32 SDK, DuiLib, WTL, COM, WinDbg]
+popular_repos: ['lhjzzu.github.io']
+contribute_repos: ['sparanoid/chinese-copywriting-guidelines', 'waylife/RentCrawer']
