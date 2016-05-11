@@ -2,7 +2,7 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: git@github.com:ztmegnyuxuan/ztmengyuxuan.github.io.git
+url: https://ztmengyuxuan.github.io
 date_format: "ordinal"
 title: 刘华健
 subtitle: "好风凭借力"
