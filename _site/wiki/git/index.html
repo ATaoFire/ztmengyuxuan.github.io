@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" prefix="og: http://ogp.me/ns#" class="han-init">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>Git &mdash; 刘华健</title>
+    <link rel="stylesheet" href="/assets/vendor/primer-css/css/primer.css">
+    <link rel="stylesheet" href="/assets/vendor/primer-markdown/dist/user-content.min.css">
+    <link rel="stylesheet" href="/assets/vendor/octicons/octicons/octicons.css">
+    <link rel="stylesheet" href="/assets/css/components/collection.css">
+    <link rel="stylesheet" href="/assets/css/components/repo-card.css">
+    <link rel="stylesheet" href="/assets/css/sections/repo-list.css">
+    <link rel="stylesheet" href="/assets/css/sections/mini-repo-list.css">
+    <link rel="stylesheet" href="/assets/css/components/boxed-group.css">
+    <link rel="stylesheet" href="/assets/css/globals/common.css">
+    <link rel="stylesheet" href="/assets/vendor/share.js/dist/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/globals/responsive.css">
+    <link rel="stylesheet" href="/assets/css/posts/index.css">
+    <!-- Latest compiled and minified CSS -->
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="刘华健" href="/feed.xml">
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+    <meta property="og:title" content="Git">
+      
+    <meta name="keywords" content="Git, 版本控制">
+    <meta name="og:keywords" content="Git, 版本控制">
+      
+    <meta name="description" content="快捷键">
+    <meta name="og:description" content="快捷键">
+      
+    
+    
+        
+    
+    <meta property="og:url" content="http://www.lhjzzu.com/wiki/git/">
+    <meta property="og:site_name" content="刘华健">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="zh_CN" />
+    
+    <meta property="article:published_time" content="2016-05-11">
+    
+    <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.js"></script>
+</head>
+<body class="" data-mz="">
+    <header class="site-header">
+        <div class="container">
+            <h1><a href="/" title="刘华健"><span class="octicon octicon-mark-github"></span> 刘华健</a></h1>
+            <nav class="site-header-nav" role="navigation">
+                
+                <a href="/" class=" site-header-nav-item" target="" title="首页">首页</a>
+                
+                <a href="/categories/" class=" site-header-nav-item" target="" title="分类">分类</a>
+                
+                <a href="/links/" class=" site-header-nav-item" target="" title="链接">链接</a>
+                
+                <a href="/about/" class=" site-header-nav-item" target="" title="关于">关于</a>
+                
+            </nav>
+        </div>
+    </header>
+    <!-- / header -->
+
+    <section class="collection-head small geopattern" data-pattern-id="Git">
+<div class="container">
+  <div class="columns">
+    <div class="column three-fourths">
+      <div class="collection-title">
+        <h1 class="collection-header">Git</h1>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- / .banner -->
+<section class="container content">
+<div class="columns">
+  <div class="column three-fourths" >
+    <article class="article-content markdown-body">
+    <h3 id="section">快捷键</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">功能</th>
+      <th style="text-align: left">命令</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">添加文件/更改到暂存区</td>
+      <td style="text-align: left">git add filename</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">添加所有文件/更改到暂存区</td>
+      <td style="text-align: left">git add .</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">提交</td>
+      <td style="text-align: left">git commit -m msg</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">从远程仓库拉取最新代码</td>
+      <td style="text-align: left">git pull origin master</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">推送到远程仓库</td>
+      <td style="text-align: left">git push origin master</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">查看配置信息</td>
+      <td style="text-align: left">git config –list</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">查看文件列表</td>
+      <td style="text-align: left">git ls-files</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">比较工作区和暂存区</td>
+      <td style="text-align: left">git diff</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">比较暂存区和版本库</td>
+      <td style="text-align: left">git diff –cached</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">比较工作区和版本库</td>
+      <td style="text-align: left">git diff HEAD</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">从暂存区移除文件</td>
+      <td style="text-align: left">git reset HEAD filename</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">查看本地远程仓库配置</td>
+      <td style="text-align: left">git remote -v</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">回滚</td>
+      <td style="text-align: left">git reset –hard 提交SHA</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">强制推送到远程仓库</td>
+      <td style="text-align: left">git push -f origin master</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">修改上次 commit</td>
+      <td style="text-align: left">git commit –amend</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">推送 tags 到远程仓库</td>
+      <td style="text-align: left">git push –tags</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">推送单个 tag 到远程仓库</td>
+      <td style="text-align: left">git push origin [tagname]</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="qa">Q&amp;A</h3>
+
+<h4 id="gitkgit-ls-files-">如何解决gitk中文乱码，git ls-files 中文文件名乱码问题？</h4>
+
+<p>在~/.gitconfig中添加如下内容</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[core]
+   quotepath = false
+[gui]
+   encoding = utf-8
+[i18n]
+   commitencoding = utf-8 
+[svn]
+   pathnameencoding = utf-8 
+</code></pre>
+</div>
+
+<p>参考 <a href="http://zengrong.net/post/1249.htm">http://zengrong.net/post/1249.htm</a></p>
+
+<h4 id="section-1">如何处理本地有更改需要从服务器合入新代码的情况？</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git stash
+git pull
+git stash pop
+</code></pre>
+</div>
+
+<h4 id="fork-">如何合并 fork 的仓库的上游更新？</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git remote add upstream https://upstream-repo-url
+git fetch upstream
+git merge upstream/master
+</code></pre>
+</div>
+
+<h4 id="tortoisesvn--tortoisemergeexe--git--conflict">如何通过 TortoiseSVN 带的 TortoiseMerge.exe 处理 git 产生的 conflict？</h4>
+<ul>
+  <li>将 TortoiseMerge.exe 所在路径添加到 <code class="highlighter-rouge">path</code> 环境变量。</li>
+  <li>运行命令 <code class="highlighter-rouge">git config --global merge.tool tortoisemerge</code> 将 TortoiseMerge.exe 设置为默认的 merge tool。</li>
+  <li>
+    <p>在产生 conflict 的目录运行 <code class="highlighter-rouge">git mergetool</code>，TortoiseMerge.exe 会跳出来供你 resolve conflict。</p>
+
+    <blockquote>
+      <p>也可以运行 <code class="highlighter-rouge">git mergetool -t vimdiff</code> 使用 <code class="highlighter-rouge">-t</code> 参数临时指定一个想要使用的 merge tool。</p>
+    </blockquote>
+  </li>
+</ul>
+
+<h4 id="section-2">不想跟踪的文件已经被提交了，如何不再跟踪而保留本地文件？</h4>
+
+<p><code class="highlighter-rouge">git rm --cached /path/to/file</code>，然后正常 add 和 commit 即可。</p>
+
+<h4 id="parent--branch">如何不建立一个没有 parent 的 branch？</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git checkout --orphan newbranch
+</code></pre>
+</div>
+
+<p>此时 <code class="highlighter-rouge">git branch</code> 是不会显示该 branch 的，直到你做完更改首次 commit。比如你可能会想建立一个空的 gh-pages branch，那么：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git checkout --orphan gh-pages
+git rm -rf .
+// add your gh-pages branch files
+git add .
+git commit -m "init commit"
+</code></pre>
+</div>
+
+<h4 id="submodule-">submodule 的常用命令</h4>
+
+<p><strong>添加 submodule</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git submodule add git@github.com:philsquared/Catch.git Catch
+</code></pre>
+</div>
+
+<p>这会在仓库根目录下生成如下 .gitmodules 文件并 clone 该 submodule 到本地。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[submodule "Catch"]
+path = Catch
+url = git@github.com:philsquared/Catch.git
+</code></pre>
+</div>
+
+<p><strong>更新 submodule</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git submodule update
+</code></pre>
+</div>
+
+<p>当 submodule 的 remote 有更新的时候，需要</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git submodule update --remote
+</code></pre>
+</div>
+
+<p><strong>删除 submodule</strong></p>
+
+<p>在 .gitmodules 中删除对应 submodule 的信息，然后使用如下命令删除子模块所有文件：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git rm --cached Catch
+</code></pre>
+</div>
+
+<p><strong>clone 仓库时拉取 submodule</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git submodule update --init --recursive
+</code></pre>
+</div>
+
+<h4 id="tag">删除远程 tag</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git tag -d v0.0.9
+git push origin :refs/tags/v0.0.9
+</code></pre>
+</div>
+
+<h4 id="section-3">清除未跟踪文件</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git clean
+</code></pre>
+</div>
+
+<p>可选项：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>选项</th>
+      <th>含义</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>-q, –quiet</td>
+      <td>不显示删除文件名称</td>
+    </tr>
+    <tr>
+      <td>-n, –dry-run</td>
+      <td>试运行</td>
+    </tr>
+    <tr>
+      <td>-f, –force</td>
+      <td>强制删除</td>
+    </tr>
+    <tr>
+      <td>-i, –interactive</td>
+      <td>交互式删除</td>
+    </tr>
+    <tr>
+      <td>-d</td>
+      <td>删除文件夹</td>
+    </tr>
+    <tr>
+      <td>-e, –exclude <pattern></pattern></td>
+      <td>忽略符合 <pattern> 的文件</pattern></td>
+    </tr>
+    <tr>
+      <td>-x</td>
+      <td>清除包括 .gitignore 里忽略的文件</td>
+    </tr>
+    <tr>
+      <td>-X</td>
+      <td>只清除 .gitignore 里忽略的文件</td>
+    </tr>
+  </tbody>
+</table>
+
+    </article>
+    <div class="share">
+      <div class="share-component"></div>
+    </div>
+    <div class="comment">
+      
+  
+      
+      <!-- Duoshuo Comment BEGIN -->
+      <!-- 多说评论框 BEGIN -->
+      <div class="ds-thread" data-thread-key="/wiki/git/" data-title="Git" data-url="http://www.lhjzzu.com/wiki/git/"></div>
+      <!-- 多说评论框 END -->
+      <!-- 多说公共JS代码 BEGIN (一个网页只需插入一次) -->
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"abc19911991"};
+        (function() {
+          var ds = document.createElement('script');
+          ds.type = 'text/javascript';ds.async = true;
+          ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+          ds.charset = 'UTF-8';
+          (document.getElementsByTagName('head')[0]
+           || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+      <!-- 多说公共JS代码 END -->
+      <!-- Duoshuo Comment END -->
+      
+    
+
+
+    </div>
+  </div>
+  <div class="column one-fourth">
+    
+<h3>Search</h3>
+<form action="get" id="site_search">
+    <input type="text" id="search_box" placeholder="Search">
+    <button class="btn btn-default" type="submit"><span class="octicon octicon-search"></span></button>
+</form>
+
+<ul id="search_results"></ul>
+
+<link rel="stylesheet" type="text/css" href="/assets/css/modules/sidebar-search.css">
+<script src="/assets/js/lunr.min.js"></script>
+<script src="/assets/js/search.js"></script>
+
+
+    
+<h3>Post Directory</h3>
+<div id="post-directory-module" class="mobile-hidden">
+  <section class="post-directory">
+  <!-- Links that trigger the jumping -->
+  <!-- Added by javascript below -->
+  <dl></dl>
+  </section>
+</div>
+
+<script src="/assets/js/jquery.toc.js"></script>
+
+  </div>
+</div>
+</section>
+<!-- /section.content -->
+
+    <footer class="container">
+        <div class="site-footer" role="contentinfo">
+            <div class="copyright left mobile-block">
+                    © 2015
+                    <span title="Liu Hua Jian">Liu Hua Jian</span>
+                    <a href="javascript:window.scrollTo(0,0)" class="right mobile-visible">TOP</a>
+            </div>
+
+            <ul class="site-footer-links right mobile-hidden">
+                <li>
+                    <a href="javascript:window.scrollTo(0,0)" >TOP</a>
+                </li>
+            </ul>
+            <a href="https://github.com/lhjzzu/lhjzzu.github.io" target="_blank" aria-label="view source code">
+                <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+            </a>
+            <ul class="site-footer-links mobile-hidden">
+                
+                <li>
+                    <a href="/" title="首页" target="">首页</a>
+                </li>
+                
+                <li>
+                    <a href="/categories/" title="分类" target="">分类</a>
+                </li>
+                
+                <li>
+                    <a href="/links/" title="链接" target="">链接</a>
+                </li>
+                
+                <li>
+                    <a href="/about/" title="关于" target="">关于</a>
+                </li>
+                
+                <li><a href="/feed.xml"><span class="octicon octicon-rss" style="color:orange;"></span></a></li>
+            </ul>
+        </div>
+    </footer>
+    <!-- / footer -->
+    <script src="/assets/vendor/s.js/dist/js/share.min.js"></script>
+    <script src="/assets/js/geopattern.js"></script>
+    <script src="/assets/js/prism.js"></script>
+    <link rel="stylesheet" href="/assets/css/globals/prism.css">
+    <script>
+      jQuery(document).ready(function($) {
+        // geopattern
+        $('.geopattern').each(function(){
+          $(this).geopattern($(this).data('pattern-id'));
+        });
+       // hljs.initHighlightingOnLoad();
+      });
+    </script>
+    
+</body>
+</html>

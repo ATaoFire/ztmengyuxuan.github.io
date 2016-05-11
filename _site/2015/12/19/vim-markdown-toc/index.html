@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" prefix="og: http://ogp.me/ns#" class="han-init">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>为 Markdown 生成 TOC 的 Vim 插件 &mdash; 刘华健</title>
+    <link rel="stylesheet" href="/assets/vendor/primer-css/css/primer.css">
+    <link rel="stylesheet" href="/assets/vendor/primer-markdown/dist/user-content.min.css">
+    <link rel="stylesheet" href="/assets/vendor/octicons/octicons/octicons.css">
+    <link rel="stylesheet" href="/assets/css/components/collection.css">
+    <link rel="stylesheet" href="/assets/css/components/repo-card.css">
+    <link rel="stylesheet" href="/assets/css/sections/repo-list.css">
+    <link rel="stylesheet" href="/assets/css/sections/mini-repo-list.css">
+    <link rel="stylesheet" href="/assets/css/components/boxed-group.css">
+    <link rel="stylesheet" href="/assets/css/globals/common.css">
+    <link rel="stylesheet" href="/assets/vendor/share.js/dist/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/globals/responsive.css">
+    <link rel="stylesheet" href="/assets/css/posts/index.css">
+    <!-- Latest compiled and minified CSS -->
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="刘华健" href="/feed.xml">
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+    <meta property="og:title" content="为 Markdown 生成 TOC 的 Vim 插件">
+      
+    <meta name="keywords" content="vim, markdown, toc">
+    <meta name="og:keywords" content="vim, markdown, toc">
+      
+    <meta name="description" content="因为饱受 GFM 和 Redcarpet 两种 Markdown 引擎生成 TOC 链接的差异的折磨，而我又不得不同时使用它们——博客基于 Jekyll 使用 Redcarpet，而其它放在 GitHub 仓库里的文档使用 GFM，我决定为我常用的 Markdown 编辑器 Vim 做一款同时支持 GFM 和 Redcarpet 两种 TOC 链接风格的 Table of Contents 自动生成插件。">
+    <meta name="og:description" content="因为饱受 GFM 和 Redcarpet 两种 Markdown 引擎生成 TOC 链接的差异的折磨，而我又不得不同时使用它们——博客基于 Jekyll 使用 Redcarpet，而其它放在 GitHub 仓库里的文档使用 GFM，我决定为我常用的 Markdown 编辑器 Vim 做一款同时支持 GFM 和 Redcarpet 两种 TOC 链接风格的 Table of Contents 自动生成插件。">
+      
+    
+    
+        
+    
+    <meta property="og:url" content="http://www.lhjzzu.com/2015/12/19/vim-markdown-toc/">
+    <meta property="og:site_name" content="刘华健">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="zh_CN" />
+    
+    <meta property="article:published_time" content="2015-12-19">
+    
+    <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.js"></script>
+</head>
+<body class="" data-mz="">
+    <header class="site-header">
+        <div class="container">
+            <h1><a href="/" title="刘华健"><span class="octicon octicon-mark-github"></span> 刘华健</a></h1>
+            <nav class="site-header-nav" role="navigation">
+                
+                <a href="/" class=" site-header-nav-item" target="" title="首页">首页</a>
+                
+                <a href="/categories/" class=" site-header-nav-item" target="" title="分类">分类</a>
+                
+                <a href="/links/" class=" site-header-nav-item" target="" title="链接">链接</a>
+                
+                <a href="/about/" class=" site-header-nav-item" target="" title="关于">关于</a>
+                
+            </nav>
+        </div>
+    </header>
+    <!-- / header -->
+
+    <section class="collection-head small geopattern" data-pattern-id="为 Markdown 生成 T">
+<div class="container">
+  <div class="columns">
+    <div class="column three-fourths">
+      <div class="collection-title">
+        <h1 class="collection-header">为 Markdown 生成 TOC 的 Vim 插件</h1>
+        <div class="collection-info">
+          
+          <span class="meta-info">
+            <span class="octicon octicon-calendar"></span> 2015/12/19
+          </span>
+          
+          
+          <span class="meta-info">
+            <span class="octicon octicon-file-directory"></span>
+            <a href="/categories/#Vim" title="Vim">Vim</a>
+          </span>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- / .banner -->
+<section class="container content">
+<div class="columns">
+  <div class="column three-fourths" >
+    <article class="article-content markdown-body">
+    <p>因为饱受 GFM 和 Redcarpet 两种 Markdown 引擎生成 TOC 链接的差异的折磨，而我又不得不同时使用它们——博客基于 Jekyll 使用 Redcarpet，而其它放在 GitHub 仓库里的文档使用 GFM，我决定为我常用的 Markdown 编辑器 Vim 做一款同时支持 GFM 和 Redcarpet 两种 TOC 链接风格的 Table of Contents 自动生成插件。</p>
+
+<p>这算是我真正意义上完全独立开发的第一款实用 Vim 插件，当然开发过程中也参考了别人的做法。</p>
+
+<p><strong>目录</strong></p>
+
+<ul id="markdown-toc">
+  <li><a href="#section" id="markdown-toc-section">下载地址</a></li>
+  <li><a href="#section-1" id="markdown-toc-section-1">使用方法</a></li>
+  <li><a href="#section-2" id="markdown-toc-section-2">安装方法</a></li>
+  <li><a href="#section-3" id="markdown-toc-section-3">屏幕截图</a></li>
+  <li><a href="#section-4" id="markdown-toc-section-4">参考链接</a></li>
+</ul>
+
+<h3 id="section">下载地址</h3>
+
+<ul>
+  <li><a href="https://github.com/mzlogin/vim-markdown-toc">vim-markdown-toc</a></li>
+</ul>
+
+<h3 id="section-1">使用方法</h3>
+
+<ol>
+  <li>
+    <p><code class="highlighter-rouge">:GenTocGFM</code></p>
+
+    <p>生成 GFM 链接风格的 Table of Contents.</p>
+
+    <p>适用于 GitHub 仓库里的 Markdown 文件，还有使用启用 GFM 支持的 kramdown 作为 Markdown 引擎的 Jekyll/gh-pages 等环境。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">:GenTocRedcarpet</code></p>
+
+    <p>生成 Redcarpet 链接风格的 Table of Contents.</p>
+
+    <p>适用于使用 Redcarpet 作为 Markdown 引擎的 Jekyll/gh-pages 或其它地方。</p>
+  </li>
+</ol>
+
+<h3 id="section-2">安装方法</h3>
+
+<p>推荐使用 <a href="http://github.com/VundleVim/Vundle.Vim">Vundle</a> 来管理你的 Vim 插件，这样你就可以简单三步完成安装：</p>
+
+<ol>
+  <li>
+    <p>在你的 vimrc 文件中添加如下内容：</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>Plugin 'mzlogin/vim-markdown-toc'
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">:so $MYVIMRC</code></p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">:PluginInstall</code></p>
+  </li>
+</ol>
+
+<h3 id="section-3">屏幕截图</h3>
+
+<p><a href="https://github.com/mzlogin/chinese-copywriting-guidelines/blob/Simplified/README.en.md">使用本插件生成 TOC 的英文文档在线示例</a></p>
+
+<p><img src="https://github.com/mzlogin/vim-markdown-toc/raw/master/screenshots/english.gif" alt="" /></p>
+
+<p><a href="http://mazhuang.org/wiki/chinese-copywriting-guidelines/">使用本插件生成 TOC 的中文文档在线示例</a></p>
+
+<p><img src="https://github.com/mzlogin/vim-markdown-toc/raw/master/screenshots/chinese.gif" alt="" /></p>
+
+<h3 id="section-4">参考链接</h3>
+
+<ul>
+  <li><a href="http://mazhuang.org/2015/12/05/diff-between-gfm-and-redcarpet/">GFM 与 Redcarpet 的不同点</a></li>
+  <li><a href="https://github.com/ajorgensen/vim-markdown-toc">ajorgensen/vim-markdown-toc</a></li>
+</ul>
+
+    </article>
+    <div class="share">
+      <div class="share-component"></div>
+    </div>
+    <div class="comment">
+      
+  
+      
+      <!-- Duoshuo Comment BEGIN -->
+      <!-- 多说评论框 BEGIN -->
+      <div class="ds-thread" data-thread-key="/2015/12/19/vim-markdown-toc/" data-title="为 Markdown 生成 TOC 的 Vim 插件" data-url="http://www.lhjzzu.com/2015/12/19/vim-markdown-toc/"></div>
+      <!-- 多说评论框 END -->
+      <!-- 多说公共JS代码 BEGIN (一个网页只需插入一次) -->
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"abc19911991"};
+        (function() {
+          var ds = document.createElement('script');
+          ds.type = 'text/javascript';ds.async = true;
+          ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+          ds.charset = 'UTF-8';
+          (document.getElementsByTagName('head')[0]
+           || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+      <!-- 多说公共JS代码 END -->
+      <!-- Duoshuo Comment END -->
+      
+    
+
+
+    </div>
+  </div>
+  <div class="column one-fourth">
+    
+<h3>Search</h3>
+<form action="get" id="site_search">
+    <input type="text" id="search_box" placeholder="Search">
+    <button class="btn btn-default" type="submit"><span class="octicon octicon-search"></span></button>
+</form>
+
+<ul id="search_results"></ul>
+
+<link rel="stylesheet" type="text/css" href="/assets/css/modules/sidebar-search.css">
+<script src="/assets/js/lunr.min.js"></script>
+<script src="/assets/js/search.js"></script>
+
+
+    
+<h3>Post Directory</h3>
+<div id="post-directory-module" class="mobile-hidden">
+  <section class="post-directory">
+  <!-- Links that trigger the jumping -->
+  <!-- Added by javascript below -->
+  <dl></dl>
+  </section>
+</div>
+
+<script src="/assets/js/jquery.toc.js"></script>
+
+  </div>
+</div>
+</section>
+<!-- /section.content -->
+
+    <footer class="container">
+        <div class="site-footer" role="contentinfo">
+            <div class="copyright left mobile-block">
+                    © 2015
+                    <span title="Liu Hua Jian">Liu Hua Jian</span>
+                    <a href="javascript:window.scrollTo(0,0)" class="right mobile-visible">TOP</a>
+            </div>
+
+            <ul class="site-footer-links right mobile-hidden">
+                <li>
+                    <a href="javascript:window.scrollTo(0,0)" >TOP</a>
+                </li>
+            </ul>
+            <a href="https://github.com/lhjzzu/lhjzzu.github.io" target="_blank" aria-label="view source code">
+                <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+            </a>
+            <ul class="site-footer-links mobile-hidden">
+                
+                <li>
+                    <a href="/" title="首页" target="">首页</a>
+                </li>
+                
+                <li>
+                    <a href="/categories/" title="分类" target="">分类</a>
+                </li>
+                
+                <li>
+                    <a href="/links/" title="链接" target="">链接</a>
+                </li>
+                
+                <li>
+                    <a href="/about/" title="关于" target="">关于</a>
+                </li>
+                
+                <li><a href="/feed.xml"><span class="octicon octicon-rss" style="color:orange;"></span></a></li>
+            </ul>
+        </div>
+    </footer>
+    <!-- / footer -->
+    <script src="/assets/vendor/s.js/dist/js/share.min.js"></script>
+    <script src="/assets/js/geopattern.js"></script>
+    <script src="/assets/js/prism.js"></script>
+    <link rel="stylesheet" href="/assets/css/globals/prism.css">
+    <script>
+      jQuery(document).ready(function($) {
+        // geopattern
+        $('.geopattern').each(function(){
+          $(this).geopattern($(this).data('pattern-id'));
+        });
+       // hljs.initHighlightingOnLoad();
+      });
+    </script>
+    
+</body>
+</html>

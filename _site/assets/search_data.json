@@ -1,0 +1,1259 @@
+{
+  
+  "2016-05-10-make-lib-with-cocoapods": {
+    "title": "Cocoapods系列:使用Cocoapods制作静态库(三)",
+    "url": " /2016/05/10/make-lib-with-Cocoapods/",
+    "category": "IOS"
+  },
+  
+  "2016-05-10-make-cocoapods": {
+    "title": "Cocoapods系列:制作自己的pods(二)",
+    "url": " /2016/05/10/make-Cocoapods/",
+    "category": "IOS"
+  },
+  
+  "2016-05-09-cocoapods-install": {
+    "title": "Cocoapods系列:安装与使用(一)",
+    "url": " /2016/05/09/Cocoapods-install/",
+    "category": "IOS"
+  },
+  
+  "2016-05-08-git-base-usage": {
+    "title": "git基本用法",
+    "url": " /2016/05/08/git-base-usage/",
+    "category": "Git"
+  },
+  
+  "2016-05-03-ios-ipa-codesign": {
+    "title": "ios打包--ipa包重签(四)",
+    "url": " /2016/05/03/ios-ipa-codesign/",
+    "category": "IOS"
+  },
+  
+  "2016-05-03-ios-auto-archive-ipa": {
+    "title": "ios打包--脚本自动化打包并上传到蒲公英(三)",
+    "url": " /2016/05/03/ios-auto-archive-ipa/",
+    "category": "IOS"
+  },
+  
+  "2016-04-29-ios-xcodebuild": {
+    "title": "ios打包--xcodebuild以及xcrun(二)",
+    "url": " /2016/04/29/ios-xcodebuild/",
+    "category": "IOS"
+  },
+  
+  "2016-04-29-ios-build-phase": {
+    "title": "ios打包--build过程探析（一）",
+    "url": " /2016/04/29/ios-build-phase/",
+    "category": "IOS"
+  },
+  
+  "2016-04-20-determine-if-my-activities-foreground": {
+    "title": "判断前台 Activity 是否属于本进程",
+    "url": " /2016/04/20/determine-if-my-activities-foreground/",
+    "category": "Android"
+  },
+  
+  "2016-04-18-develop-nodejs-with-atom": {
+    "title": "配置 Node.js 开发环境——使用 Atom",
+    "url": " /2016/04/18/develop-nodejs-with-atom/",
+    "category": "Node.js"
+  },
+  
+  "2016-04-07-how-to-use-github-effective": {
+    "title": "如何有效使用 GitHub",
+    "url": " /2016/04/07/how-to-use-github-effective/",
+    "category": "GitHub"
+  },
+  
+  "2016-03-23-masonry-note": {
+    "title": "Masonry原理",
+    "url": " /2016/03/23/Masonry-note/",
+    "category": "blog"
+  },
+  
+  "2016-03-14-show-chump": {
+    "title": "不藏拙的人生",
+    "url": " /2016/03/14/show-chump/",
+    "category": "Blog"
+  },
+  
+  "2016-02-10-am-start-user-parameter": {
+    "title": "am start 的 --user 参数详解",
+    "url": " /2016/02/10/am-start-user-parameter/",
+    "category": "Android"
+  },
+  
+  "2016-02-04-switch-to-kramdown-from-redcarpet": {
+    "title": "将 GitHub Pages 从 Redcarpet 切换到 kramdown",
+    "url": " /2016/02/04/switch-to-kramdown-from-redcarpet/",
+    "category": "Markdown"
+  },
+  
+  "2016-01-16-build-zeal-for-mac-osx": {
+    "title": "Build Zeal for Mac OS X",
+    "url": " /2016/01/16/build-zeal-for-mac-osx/",
+    "category": "Mac"
+  },
+  
+  "2016-01-14-android-system-cache": {
+    "title": "Android 垃圾清理之系统缓存",
+    "url": " /2016/01/14/android-system-cache/",
+    "category": "Android"
+  },
+  
+  "2016-01-12-use-ubuntu-notes": {
+    "title": "Ubuntu 使用笔记",
+    "url": " /2016/01/12/use-ubuntu-notes/",
+    "category": "Linux"
+  },
+  
+  "2015-12-19-vim-markdown-toc": {
+    "title": "为 Markdown 生成 TOC 的 Vim 插件",
+    "url": " /2015/12/19/vim-markdown-toc/",
+    "category": "Vim"
+  },
+  
+  "2015-12-15-java-object-finalize": {
+    "title": "Java 对象释放与 finalize 方法",
+    "url": " /2015/12/15/java-object-finalize/",
+    "category": "Java"
+  },
+  
+  "2015-12-05-diff-between-gfm-and-redcarpet": {
+    "title": "GFM 与 Redcarpet 的不同点",
+    "url": " /2015/12/05/diff-between-gfm-and-redcarpet/",
+    "category": "Markdown"
+  },
+  
+  "2015-12-02-excel-sift": {
+    "title": "Excel 保留行号的去重",
+    "url": " /2015/12/02/excel-sift/",
+    "category": "Excel"
+  },
+  
+  "2015-10-31-pits-in-vimscript": {
+    "title": "Vimscript 中的坑",
+    "url": " /2015/10/31/pits-in-vimscript/",
+    "category": "Vim"
+  },
+  
+  "2015-10-25-without-internet": {
+    "title": "断网之后",
+    "url": " /2015/10/25/without-internet/",
+    "category": "Blog"
+  },
+  
+  "2015-10-25-mac": {
+    "title": "Mac 遇到问题集锦",
+    "url": " /2015/10/25/mac/",
+    "category": "Mac"
+  },
+  
+  "2015-09-02-love": {
+    "title": "爱你就像爱生命",
+    "url": " /2015/09/02/love/",
+    "category": "Blog"
+  },
+  
+  "2015-07-23-busy-smart": {
+    "title": "你忙得踏实吗？",
+    "url": " /2015/07/23/busy-smart/",
+    "category": "Blog"
+  },
+  
+  "2015-07-08-fiddler-filter-by-device": {
+    "title": "定制 Fiddler 之按设备过滤请求",
+    "url": " /2015/07/08/fiddler-filter-by-device/",
+    "category": "Fiddler"
+  },
+  
+  "2015-06-23-vim-taglist-smali": {
+    "title": "为 Vim 添加 Smali 语法高亮和 Taglist 支持",
+    "url": " /2015/06/23/vim-taglist-smali/",
+    "category": "Vim"
+  },
+  
+  "2015-06-14-win-discuz": {
+    "title": "Win7 下部署 Discuz!",
+    "url": " /2015/06/14/win-discuz/",
+    "category": "PHP"
+  },
+  
+  "2015-06-12-wangxiaobo": {
+    "title": "去看特立独行的猪",
+    "url": " /2015/06/12/wangxiaobo/",
+    "category": "Blog"
+  },
+  
+  "2015-06-01-sogou-hackathon": {
+    "title": "黑客马拉松参赛总结",
+    "url": " /2015/06/01/sogou-hackathon/",
+    "category": "Blog"
+  },
+  
+  "2015-05-28-leader-art": {
+    "title": "领导与员工的艺术",
+    "url": " /2015/05/28/leader-art/",
+    "category": "Blog"
+  },
+  
+  "2015-05-27-svn-exception": {
+    "title": "TortoiseSVN 从 GitHub 更新时发生异常",
+    "url": " /2015/05/27/svn-exception/",
+    "category": "SVN"
+  },
+  
+  "2015-05-15-java-compare": {
+    "title": "Java 中的比较运算符",
+    "url": " /2015/05/15/java-compare/",
+    "category": "Java"
+  },
+  
+  "2015-05-10-emacs": {
+    "title": "Emacs 折腾记",
+    "url": " /2015/05/10/emacs/",
+    "category": "Emacs"
+  },
+  
+  "2015-05-09-no-need-to-tangle": {
+    "title": "一些不必纠结的事情",
+    "url": " /2015/05/09/no-need-to-tangle/",
+    "category": "Blog"
+  },
+  
+  "2015-05-06-android-studio": {
+    "title": "Android Studio 遇到问题集锦",
+    "url": " /2015/05/06/android-studio/",
+    "category": "Android"
+  },
+  
+  "2015-04-06-dp-sp-px": {
+    "title": "Android UI 开发里的尺寸单位理解",
+    "url": " /2015/04/06/dp-sp-px/",
+    "category": "Android"
+  },
+  
+  "2015-04-03-java-date": {
+    "title": "Java 日期类常用写法小结",
+    "url": " /2015/04/03/java-date/",
+    "category": "Java"
+  },
+  
+  "2015-03-31-singleton-process": {
+    "title": "Windows 实现单实例进程的两种方法",
+    "url": " /2015/03/31/singleton-process/",
+    "category": "Windows"
+  },
+  
+  "2015-03-30-work-lesson": {
+    "title": "工作中得来的教训",
+    "url": " /2015/03/30/work-lesson/",
+    "category": "Blog"
+  },
+  
+  "2015-02-14-strum-life": {
+    "title": "乱弹一气人生",
+    "url": " /2015/02/14/strum-life/",
+    "category": "Blog"
+  },
+  
+  "2015-02-01-some-impressions": {
+    "title": "生活这件小事，烦请费思量",
+    "url": " /2015/02/01/some-impressions/",
+    "category": "Blog"
+  },
+  
+  "2015-01-19-printf": {
+    "title": "一个 printf 引发的基础复习",
+    "url": " /2015/01/19/printf/",
+    "category": "CPlusPlus"
+  },
+  
+  "2014-12-31-simplify-apk": {
+    "title": "如何让 HelloWorld.apk 体积最小",
+    "url": " /2014/12/31/simplify-apk/",
+    "category": "Android"
+  },
+  
+  "2014-12-21-vim-python-autocomplete": {
+    "title": "使用 gVim 的 Python 自动补全时遇到的问题",
+    "url": " /2014/12/21/vim-python-autocomplete/",
+    "category": "Vim"
+  },
+  
+  "2014-12-14-find-a-girl-friend": {
+    "title": "工科男难找对象的那点事儿",
+    "url": " /2014/12/14/find-a-girl-friend/",
+    "category": "Blog"
+  },
+  
+  "2014-12-07-habit-training-1": {
+    "title": "好习惯 one by one 之一",
+    "url": " /2014/12/07/habit-training-1/",
+    "category": "Blog"
+  },
+  
+  "2014-12-06-emotion-manage": {
+    "title": "情绪管理的建议",
+    "url": " /2014/12/06/emotion-manage/",
+    "category": "Blog"
+  },
+  
+  "2014-11-25-jestem": {
+    "title": "Jestem",
+    "url": " /2014/11/25/jestem/",
+    "category": "Blog"
+  },
+  
+  "2014-10-28-sevenhabits": {
+    "title": "习惯成就高效能",
+    "url": " /2014/10/28/sevenhabits/",
+    "category": "Blog"
+  },
+  
+  "2014-10-12-csdnresautocomment": {
+    "title": "CSDN 已下载资源自动批量评论脚本",
+    "url": " /2014/10/12/csdnresautocomment/",
+    "category": "Python"
+  },
+  
+  "2014-10-09-path-after-rename": {
+    "title": "获取运行过程中改名的文件的路径",
+    "url": " /2014/10/09/path-after-rename/",
+    "category": "Windows"
+  },
+  
+  "2014-09-27-myself": {
+    "title": "眼中的自己",
+    "url": " /2014/09/27/myself/",
+    "category": "Blog"
+  },
+  
+  "2014-09-13-make-exe-small": {
+    "title": "如何让你的 EXE/DLL 足够小",
+    "url": " /2014/09/13/make-exe-small/",
+    "category": "Windows"
+  },
+  
+  "2014-08-30-aboutlife": {
+    "title": "我所理解的生活",
+    "url": " /2014/08/30/aboutlife/",
+    "category": "Blog"
+  },
+  
+  "2014-08-26-takephotos": {
+    "title": "摄影教训总结",
+    "url": " /2014/08/26/takephotos/",
+    "category": "Blog"
+  },
+  
+  "2014-08-01-deadlock": {
+    "title": "TaobaoProtectSE.dll 注入引起的死锁分析",
+    "url": " /2014/08/01/deadlock/",
+    "category": "WinDbg"
+  },
+  
+  "2014-07-20-fiddlercontextmenu": {
+    "title": "定制 Fiddler 之将请求发往另一服务器",
+    "url": " /2014/07/20/fiddlercontextmenu/",
+    "category": "Fiddler"
+  },
+  
+  "2014-07-19-fiddlerwithwinhttp": {
+    "title": "定制 Fiddler 之抓获 WinHTTP 请求",
+    "url": " /2014/07/19/fiddlerwithwinhttp/",
+    "category": "Fiddler"
+  },
+  
+  "2014-07-13-dllsearch": {
+    "title": "默认的 DLL 搜索路径优先级",
+    "url": " /2014/07/13/dllsearch/",
+    "category": "Windows"
+  },
+  
+  "2014-07-13-cppinit": {
+    "title": "C++ 类成员变量初始化",
+    "url": " /2014/07/13/cppinit/",
+    "category": "CPlusPlus"
+  },
+  
+  "2014-06-29-acl-chapter2": {
+    "title": "ANSI Common Lisp 第二章习题解答",
+    "url": " /2014/06/29/acl-chapter2/",
+    "category": "Lisp"
+  },
+  
+  "2014-06-01-comsketch": {
+    "title": "COM 原理与应用学习笔记",
+    "url": " /2014/06/01/comsketch/",
+    "category": "COM"
+  },
+  
+  "2014-05-31-hfdp-note4": {
+    "title": "设计模式学习之单件模式",
+    "url": " /2014/05/31/HFDP-Note4/",
+    "category": "DesignPattern"
+  },
+  
+  "2014-05-24-virtualfunctions": {
+    "title": "对象内存结构及虚函数表分析",
+    "url": " /2014/05/24/virtualfunctions/",
+    "category": "CPlusPlus"
+  },
+  
+  "2014-05-10-numbersign": {
+    "title": "C++ 中的#，##，和&quot;",
+    "url": " /2014/05/10/numbersign/",
+    "category": "CPlusPlus"
+  },
+  
+  "2014-03-07-pits-in-windows": {
+    "title": "Windows API 中的坑",
+    "url": " /2014/03/07/pits-in-windows/",
+    "category": "Windows"
+  },
+  
+  "2014-02-19-excel-incommonuse": {
+    "title": "Excel 常用操作",
+    "url": " /2014/02/19/excel-incommonuse/",
+    "category": "Excel"
+  },
+  
+  "2013-12-22-hfdp-notes3": {
+    "title": "设计模式学习之装饰者模式",
+    "url": " /2013/12/22/HFDP-Notes3/",
+    "category": "DesignPattern"
+  },
+  
+  "2013-12-03-hfdp-notes2": {
+    "title": "设计模式学习之观察者模式",
+    "url": " /2013/12/03/HFDP-Notes2/",
+    "category": "DesignPattern"
+  },
+  
+  "2013-11-23-hfdp-notes1": {
+    "title": "设计模式学习之策略模式",
+    "url": " /2013/11/23/HFDP-Notes1/",
+    "category": "DesignPattern"
+  },
+  
+  "2013-10-26-namespace-with-a-static-variable": {
+    "title": "有 static 变量的 namespace 被多个 cpp 包含",
+    "url": " /2013/10/26/namespace-with-a-static-variable/",
+    "category": "CPlusPlus"
+  },
+  
+  "2013-06-22-multi-included-source-file": {
+    "title": "文件被多个中间文件输出目录相同的工程包含",
+    "url": " /2013/06/22/multi-included-source-file/",
+    "category": "CPlusPlus"
+  },
+  
+  "2013-05-19-when-your-exe-name-contains-install-or-setup": {
+    "title": "可执行文件名中包含 install 或 setup",
+    "url": " /2013/05/19/when-your-exe-name-contains-install-or-setup/",
+    "category": "Windows"
+  },
+  
+  "2013-04-18-windows-ui-notes": {
+    "title": "Windows 界面相关小知识点",
+    "url": " /2013/04/18/windows-ui-notes/",
+    "category": "Windows"
+  },
+  
+  "2012-06-19-gecko-use-profile": {
+    "title": "为基于 xulrunner 的内嵌 Gecko 程序启用 Profile",
+    "url": " /2012/06/19/gecko-use-profile/",
+    "category": "Gecko"
+  },
+  
+  "2012-06-17-windows-skills": {
+    "title": "Windows 实用技巧汇总",
+    "url": " /2012/06/17/windows-skills/",
+    "category": "Windows"
+  },
+  
+  "2012-04-08-learn-python-practise": {
+    "title": "Python 核心编程中文第二版课后练习 3.8 答案",
+    "url": " /2012/04/08/learn-python-practise/",
+    "category": "Python"
+  },
+  
+  "2012-04-05-learn-python-practise": {
+    "title": "Python 核心编程中文第二版课后练习 2.21 答案",
+    "url": " /2012/04/05/learn-python-practise/",
+    "category": "Python"
+  },
+  
+  "2012-03-22-vba-knowledge": {
+    "title": "VBA 在 Excel 中的常用操作",
+    "url": " /2012/03/22/vba-knowledge/",
+    "category": "Excel"
+  },
+  
+  "2012-03-15-gecko-plugin": {
+    "title": "Firefox 和内嵌 Gecko 程序的 Plugins",
+    "url": " /2012/03/15/gecko-plugin/",
+    "category": "Gecko"
+  },
+  
+  "2012-03-01-mozilla-file-tree": {
+    "title": "Moziila 文件结构概览（译）",
+    "url": " /2012/03/01/mozilla-file-tree/",
+    "category": "Gecko"
+  },
+  
+  "2012-02-24-gecko-embed": {
+    "title": "将 Mozilla 源码里的 winEmbed 工程移植到 VC",
+    "url": " /2012/02/24/gecko-embed/",
+    "category": "Gecko"
+  },
+  
+  "2012-02-12-hge": {
+    "title": "HGE 引擎学习笔记 1——如何模拟物理碰撞",
+    "url": " /2012/02/12/hge/",
+    "category": "HGE"
+  },
+  
+  "2011-11-20-permutation": {
+    "title": "简单的全排列算法实现",
+    "url": " /2011/11/20/permutation/",
+    "category": "Algorithm"
+  },
+  
+  "2011-11-06-basis": {
+    "title": "操作系统和数据库基础",
+    "url": " /2011/11/06/basis/",
+    "category": "Basis"
+  },
+  
+  "2011-11-04-basis": {
+    "title": "C++ 语言基础",
+    "url": " /2011/11/04/basis/",
+    "category": "Basis"
+  },
+  
+  "2011-10-11-fibonacci": {
+    "title": "青蛙跳台阶的问题——Fibonacci",
+    "url": " /2011/10/11/fibonacci/",
+    "category": "Algorithm"
+  },
+  
+
+  
+  
+  "404-html": {
+    "title": "页面没有找到",
+    "url": "/404.html"
+  },
+  
+  
+  
+  "about": {
+    "title": "About",
+    "url": "/about/"
+  },
+  
+  
+  
+  "categories": {
+    "title": "Categories",
+    "url": "/categories/"
+  },
+  
+  
+  
+  
+  
+  "links": {
+    "title": "Links",
+    "url": "/links/"
+  },
+  
+  
+  
+  "open-source": {
+    "title": "Open Source Projects",
+    "url": "/open-source/"
+  },
+  
+  
+  
+  
+  
+  "wiki": {
+    "title": "Wiki",
+    "url": "/wiki/"
+  },
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  
+  "2011-10-11-fibonacci": {
+    "title": "青蛙跳台阶的问题——Fibonacci",
+    "url": "/2011/10/11/fibonacci/",
+    "category": "[&quot;Algorithm&quot;]"
+  },
+  
+  "2011-11-04-basis": {
+    "title": "C++ 语言基础",
+    "url": "/2011/11/04/basis/",
+    "category": "[&quot;Basis&quot;]"
+  },
+  
+  "2011-11-06-basis": {
+    "title": "操作系统和数据库基础",
+    "url": "/2011/11/06/basis/",
+    "category": "[&quot;Basis&quot;]"
+  },
+  
+  "2011-11-20-permutation": {
+    "title": "简单的全排列算法实现",
+    "url": "/2011/11/20/permutation/",
+    "category": "[&quot;Algorithm&quot;]"
+  },
+  
+  "2012-02-12-hge": {
+    "title": "HGE 引擎学习笔记 1——如何模拟物理碰撞",
+    "url": "/2012/02/12/hge/",
+    "category": "[&quot;HGE&quot;]"
+  },
+  
+  "2012-02-24-gecko-embed": {
+    "title": "将 Mozilla 源码里的 winEmbed 工程移植到 VC",
+    "url": "/2012/02/24/gecko-embed/",
+    "category": "[&quot;Gecko&quot;]"
+  },
+  
+  "2012-03-01-mozilla-file-tree": {
+    "title": "Moziila 文件结构概览（译）",
+    "url": "/2012/03/01/mozilla-file-tree/",
+    "category": "[&quot;Gecko&quot;]"
+  },
+  
+  "2012-03-15-gecko-plugin": {
+    "title": "Firefox 和内嵌 Gecko 程序的 Plugins",
+    "url": "/2012/03/15/gecko-plugin/",
+    "category": "[&quot;Gecko&quot;]"
+  },
+  
+  "2012-03-22-vba-knowledge": {
+    "title": "VBA 在 Excel 中的常用操作",
+    "url": "/2012/03/22/vba-knowledge/",
+    "category": "[&quot;Excel&quot;]"
+  },
+  
+  "2012-04-05-learn-python-practise": {
+    "title": "Python 核心编程中文第二版课后练习 2.21 答案",
+    "url": "/2012/04/05/learn-python-practise/",
+    "category": "[&quot;Python&quot;]"
+  },
+  
+  "2012-04-08-learn-python-practise": {
+    "title": "Python 核心编程中文第二版课后练习 3.8 答案",
+    "url": "/2012/04/08/learn-python-practise/",
+    "category": "[&quot;Python&quot;]"
+  },
+  
+  "2012-06-17-windows-skills": {
+    "title": "Windows 实用技巧汇总",
+    "url": "/2012/06/17/windows-skills/",
+    "category": "[&quot;Windows&quot;]"
+  },
+  
+  "2012-06-19-gecko-use-profile": {
+    "title": "为基于 xulrunner 的内嵌 Gecko 程序启用 Profile",
+    "url": "/2012/06/19/gecko-use-profile/",
+    "category": "[&quot;Gecko&quot;]"
+  },
+  
+  "2013-04-18-windows-ui-notes": {
+    "title": "Windows 界面相关小知识点",
+    "url": "/2013/04/18/windows-ui-notes/",
+    "category": "[&quot;Windows&quot;]"
+  },
+  
+  "2013-05-19-when-your-exe-name-contains-install-or-setup": {
+    "title": "可执行文件名中包含 install 或 setup",
+    "url": "/2013/05/19/when-your-exe-name-contains-install-or-setup/",
+    "category": "[&quot;Windows&quot;]"
+  },
+  
+  "2013-06-22-multi-included-source-file": {
+    "title": "文件被多个中间文件输出目录相同的工程包含",
+    "url": "/2013/06/22/multi-included-source-file/",
+    "category": "[&quot;CPlusPlus&quot;]"
+  },
+  
+  "2013-10-26-namespace-with-a-static-variable": {
+    "title": "有 static 变量的 namespace 被多个 cpp 包含",
+    "url": "/2013/10/26/namespace-with-a-static-variable/",
+    "category": "[&quot;CPlusPlus&quot;]"
+  },
+  
+  "2013-11-23-hfdp-notes1": {
+    "title": "设计模式学习之策略模式",
+    "url": "/2013/11/23/HFDP-Notes1/",
+    "category": "[&quot;DesignPattern&quot;]"
+  },
+  
+  "2013-12-03-hfdp-notes2": {
+    "title": "设计模式学习之观察者模式",
+    "url": "/2013/12/03/HFDP-Notes2/",
+    "category": "[&quot;DesignPattern&quot;]"
+  },
+  
+  "2013-12-22-hfdp-notes3": {
+    "title": "设计模式学习之装饰者模式",
+    "url": "/2013/12/22/HFDP-Notes3/",
+    "category": "[&quot;DesignPattern&quot;]"
+  },
+  
+  "2014-02-19-excel-incommonuse": {
+    "title": "Excel 常用操作",
+    "url": "/2014/02/19/excel-incommonuse/",
+    "category": "[&quot;Excel&quot;]"
+  },
+  
+  "2014-03-07-pits-in-windows": {
+    "title": "Windows API 中的坑",
+    "url": "/2014/03/07/pits-in-windows/",
+    "category": "[&quot;Windows&quot;]"
+  },
+  
+  "2014-05-10-numbersign": {
+    "title": "C++ 中的#，##，和&quot;",
+    "url": "/2014/05/10/numbersign/",
+    "category": "[&quot;CPlusPlus&quot;]"
+  },
+  
+  "2014-05-24-virtualfunctions": {
+    "title": "对象内存结构及虚函数表分析",
+    "url": "/2014/05/24/virtualfunctions/",
+    "category": "[&quot;CPlusPlus&quot;]"
+  },
+  
+  "2014-05-31-hfdp-note4": {
+    "title": "设计模式学习之单件模式",
+    "url": "/2014/05/31/HFDP-Note4/",
+    "category": "[&quot;DesignPattern&quot;]"
+  },
+  
+  "2014-06-01-comsketch": {
+    "title": "COM 原理与应用学习笔记",
+    "url": "/2014/06/01/comsketch/",
+    "category": "[&quot;COM&quot;]"
+  },
+  
+  "2014-06-29-acl-chapter2": {
+    "title": "ANSI Common Lisp 第二章习题解答",
+    "url": "/2014/06/29/acl-chapter2/",
+    "category": "[&quot;Lisp&quot;]"
+  },
+  
+  "2014-07-13-cppinit": {
+    "title": "C++ 类成员变量初始化",
+    "url": "/2014/07/13/cppinit/",
+    "category": "[&quot;CPlusPlus&quot;]"
+  },
+  
+  "2014-07-13-dllsearch": {
+    "title": "默认的 DLL 搜索路径优先级",
+    "url": "/2014/07/13/dllsearch/",
+    "category": "[&quot;Windows&quot;]"
+  },
+  
+  "2014-07-19-fiddlerwithwinhttp": {
+    "title": "定制 Fiddler 之抓获 WinHTTP 请求",
+    "url": "/2014/07/19/fiddlerwithwinhttp/",
+    "category": "[&quot;Fiddler&quot;]"
+  },
+  
+  "2014-07-20-fiddlercontextmenu": {
+    "title": "定制 Fiddler 之将请求发往另一服务器",
+    "url": "/2014/07/20/fiddlercontextmenu/",
+    "category": "[&quot;Fiddler&quot;]"
+  },
+  
+  "2014-08-01-deadlock": {
+    "title": "TaobaoProtectSE.dll 注入引起的死锁分析",
+    "url": "/2014/08/01/deadlock/",
+    "category": "[&quot;WinDbg&quot;]"
+  },
+  
+  "2014-08-26-takephotos": {
+    "title": "摄影教训总结",
+    "url": "/2014/08/26/takephotos/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2014-08-30-aboutlife": {
+    "title": "我所理解的生活",
+    "url": "/2014/08/30/aboutlife/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2014-09-13-make-exe-small": {
+    "title": "如何让你的 EXE/DLL 足够小",
+    "url": "/2014/09/13/make-exe-small/",
+    "category": "[&quot;Windows&quot;]"
+  },
+  
+  "2014-09-27-myself": {
+    "title": "眼中的自己",
+    "url": "/2014/09/27/myself/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2014-10-09-path-after-rename": {
+    "title": "获取运行过程中改名的文件的路径",
+    "url": "/2014/10/09/path-after-rename/",
+    "category": "[&quot;Windows&quot;]"
+  },
+  
+  "2014-10-12-csdnresautocomment": {
+    "title": "CSDN 已下载资源自动批量评论脚本",
+    "url": "/2014/10/12/csdnresautocomment/",
+    "category": "[&quot;Python&quot;]"
+  },
+  
+  "2014-10-28-sevenhabits": {
+    "title": "习惯成就高效能",
+    "url": "/2014/10/28/sevenhabits/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2014-11-25-jestem": {
+    "title": "Jestem",
+    "url": "/2014/11/25/jestem/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2014-12-06-emotion-manage": {
+    "title": "情绪管理的建议",
+    "url": "/2014/12/06/emotion-manage/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2014-12-07-habit-training-1": {
+    "title": "好习惯 one by one 之一",
+    "url": "/2014/12/07/habit-training-1/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2014-12-14-find-a-girl-friend": {
+    "title": "工科男难找对象的那点事儿",
+    "url": "/2014/12/14/find-a-girl-friend/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2014-12-21-vim-python-autocomplete": {
+    "title": "使用 gVim 的 Python 自动补全时遇到的问题",
+    "url": "/2014/12/21/vim-python-autocomplete/",
+    "category": "[&quot;Vim&quot;]"
+  },
+  
+  "2014-12-31-simplify-apk": {
+    "title": "如何让 HelloWorld.apk 体积最小",
+    "url": "/2014/12/31/simplify-apk/",
+    "category": "[&quot;Android&quot;]"
+  },
+  
+  "2015-01-19-printf": {
+    "title": "一个 printf 引发的基础复习",
+    "url": "/2015/01/19/printf/",
+    "category": "[&quot;CPlusPlus&quot;]"
+  },
+  
+  "2015-02-01-some-impressions": {
+    "title": "生活这件小事，烦请费思量",
+    "url": "/2015/02/01/some-impressions/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2015-02-14-strum-life": {
+    "title": "乱弹一气人生",
+    "url": "/2015/02/14/strum-life/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2015-03-30-work-lesson": {
+    "title": "工作中得来的教训",
+    "url": "/2015/03/30/work-lesson/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2015-03-31-singleton-process": {
+    "title": "Windows 实现单实例进程的两种方法",
+    "url": "/2015/03/31/singleton-process/",
+    "category": "[&quot;Windows&quot;]"
+  },
+  
+  "2015-04-03-java-date": {
+    "title": "Java 日期类常用写法小结",
+    "url": "/2015/04/03/java-date/",
+    "category": "[&quot;Java&quot;]"
+  },
+  
+  "2015-04-06-dp-sp-px": {
+    "title": "Android UI 开发里的尺寸单位理解",
+    "url": "/2015/04/06/dp-sp-px/",
+    "category": "[&quot;Android&quot;]"
+  },
+  
+  "2015-05-06-android-studio": {
+    "title": "Android Studio 遇到问题集锦",
+    "url": "/2015/05/06/android-studio/",
+    "category": "[&quot;Android&quot;]"
+  },
+  
+  "2015-05-09-no-need-to-tangle": {
+    "title": "一些不必纠结的事情",
+    "url": "/2015/05/09/no-need-to-tangle/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2015-05-10-emacs": {
+    "title": "Emacs 折腾记",
+    "url": "/2015/05/10/emacs/",
+    "category": "[&quot;Emacs&quot;]"
+  },
+  
+  "2015-05-15-java-compare": {
+    "title": "Java 中的比较运算符",
+    "url": "/2015/05/15/java-compare/",
+    "category": "[&quot;Java&quot;]"
+  },
+  
+  "2015-05-27-svn-exception": {
+    "title": "TortoiseSVN 从 GitHub 更新时发生异常",
+    "url": "/2015/05/27/svn-exception/",
+    "category": "[&quot;SVN&quot;]"
+  },
+  
+  "2015-05-28-leader-art": {
+    "title": "领导与员工的艺术",
+    "url": "/2015/05/28/leader-art/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2015-06-01-sogou-hackathon": {
+    "title": "黑客马拉松参赛总结",
+    "url": "/2015/06/01/sogou-hackathon/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2015-06-12-wangxiaobo": {
+    "title": "去看特立独行的猪",
+    "url": "/2015/06/12/wangxiaobo/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2015-06-14-win-discuz": {
+    "title": "Win7 下部署 Discuz!",
+    "url": "/2015/06/14/win-discuz/",
+    "category": "[&quot;PHP&quot;]"
+  },
+  
+  "2015-06-23-vim-taglist-smali": {
+    "title": "为 Vim 添加 Smali 语法高亮和 Taglist 支持",
+    "url": "/2015/06/23/vim-taglist-smali/",
+    "category": "[&quot;Vim&quot;]"
+  },
+  
+  "2015-07-08-fiddler-filter-by-device": {
+    "title": "定制 Fiddler 之按设备过滤请求",
+    "url": "/2015/07/08/fiddler-filter-by-device/",
+    "category": "[&quot;Fiddler&quot;]"
+  },
+  
+  "2015-07-23-busy-smart": {
+    "title": "你忙得踏实吗？",
+    "url": "/2015/07/23/busy-smart/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2015-09-02-love": {
+    "title": "爱你就像爱生命",
+    "url": "/2015/09/02/love/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2015-10-25-mac": {
+    "title": "Mac 遇到问题集锦",
+    "url": "/2015/10/25/mac/",
+    "category": "[&quot;Mac&quot;]"
+  },
+  
+  "2015-10-25-without-internet": {
+    "title": "断网之后",
+    "url": "/2015/10/25/without-internet/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2015-10-31-pits-in-vimscript": {
+    "title": "Vimscript 中的坑",
+    "url": "/2015/10/31/pits-in-vimscript/",
+    "category": "[&quot;Vim&quot;]"
+  },
+  
+  "2015-12-02-excel-sift": {
+    "title": "Excel 保留行号的去重",
+    "url": "/2015/12/02/excel-sift/",
+    "category": "[&quot;Excel&quot;]"
+  },
+  
+  "2015-12-05-diff-between-gfm-and-redcarpet": {
+    "title": "GFM 与 Redcarpet 的不同点",
+    "url": "/2015/12/05/diff-between-gfm-and-redcarpet/",
+    "category": "[&quot;Markdown&quot;]"
+  },
+  
+  "2015-12-15-java-object-finalize": {
+    "title": "Java 对象释放与 finalize 方法",
+    "url": "/2015/12/15/java-object-finalize/",
+    "category": "[&quot;Java&quot;]"
+  },
+  
+  "2015-12-19-vim-markdown-toc": {
+    "title": "为 Markdown 生成 TOC 的 Vim 插件",
+    "url": "/2015/12/19/vim-markdown-toc/",
+    "category": "[&quot;Vim&quot;]"
+  },
+  
+  "2016-01-12-use-ubuntu-notes": {
+    "title": "Ubuntu 使用笔记",
+    "url": "/2016/01/12/use-ubuntu-notes/",
+    "category": "[&quot;Linux&quot;]"
+  },
+  
+  "2016-01-14-android-system-cache": {
+    "title": "Android 垃圾清理之系统缓存",
+    "url": "/2016/01/14/android-system-cache/",
+    "category": "[&quot;Android&quot;]"
+  },
+  
+  "2016-01-16-build-zeal-for-mac-osx": {
+    "title": "Build Zeal for Mac OS X",
+    "url": "/2016/01/16/build-zeal-for-mac-osx/",
+    "category": "[&quot;Mac&quot;]"
+  },
+  
+  "2016-02-04-switch-to-kramdown-from-redcarpet": {
+    "title": "将 GitHub Pages 从 Redcarpet 切换到 kramdown",
+    "url": "/2016/02/04/switch-to-kramdown-from-redcarpet/",
+    "category": "[&quot;Markdown&quot;]"
+  },
+  
+  "2016-02-10-am-start-user-parameter": {
+    "title": "am start 的 --user 参数详解",
+    "url": "/2016/02/10/am-start-user-parameter/",
+    "category": "[&quot;Android&quot;]"
+  },
+  
+  "2016-03-14-show-chump": {
+    "title": "不藏拙的人生",
+    "url": "/2016/03/14/show-chump/",
+    "category": "[&quot;Blog&quot;]"
+  },
+  
+  "2016-03-23-masonry-note": {
+    "title": "Masonry原理",
+    "url": "/2016/03/23/Masonry-note/",
+    "category": "[&quot;blog&quot;]"
+  },
+  
+  "2016-04-07-how-to-use-github-effective": {
+    "title": "如何有效使用 GitHub",
+    "url": "/2016/04/07/how-to-use-github-effective/",
+    "category": "[&quot;GitHub&quot;]"
+  },
+  
+  "2016-04-18-develop-nodejs-with-atom": {
+    "title": "配置 Node.js 开发环境——使用 Atom",
+    "url": "/2016/04/18/develop-nodejs-with-atom/",
+    "category": "[&quot;Node.js&quot;]"
+  },
+  
+  "2016-04-20-determine-if-my-activities-foreground": {
+    "title": "判断前台 Activity 是否属于本进程",
+    "url": "/2016/04/20/determine-if-my-activities-foreground/",
+    "category": "[&quot;Android&quot;]"
+  },
+  
+  "2016-04-29-ios-build-phase": {
+    "title": "ios打包--build过程探析（一）",
+    "url": "/2016/04/29/ios-build-phase/",
+    "category": "[&quot;IOS&quot;]"
+  },
+  
+  "2016-04-29-ios-xcodebuild": {
+    "title": "ios打包--xcodebuild以及xcrun(二)",
+    "url": "/2016/04/29/ios-xcodebuild/",
+    "category": "[&quot;IOS&quot;]"
+  },
+  
+  "2016-05-03-ios-auto-archive-ipa": {
+    "title": "ios打包--脚本自动化打包并上传到蒲公英(三)",
+    "url": "/2016/05/03/ios-auto-archive-ipa/",
+    "category": "[&quot;IOS&quot;]"
+  },
+  
+  "2016-05-03-ios-ipa-codesign": {
+    "title": "ios打包--ipa包重签(四)",
+    "url": "/2016/05/03/ios-ipa-codesign/",
+    "category": "[&quot;IOS&quot;]"
+  },
+  
+  "2016-05-08-git-base-usage": {
+    "title": "git基本用法",
+    "url": "/2016/05/08/git-base-usage/",
+    "category": "[&quot;Git&quot;]"
+  },
+  
+  "2016-05-09-cocoapods-install": {
+    "title": "Cocoapods系列:安装与使用(一)",
+    "url": "/2016/05/09/Cocoapods-install/",
+    "category": "[&quot;IOS&quot;]"
+  },
+  
+  "2016-05-10-make-cocoapods": {
+    "title": "Cocoapods系列:制作自己的pods(二)",
+    "url": "/2016/05/10/make-Cocoapods/",
+    "category": "[&quot;IOS&quot;]"
+  },
+  
+  "2016-05-10-make-lib-with-cocoapods": {
+    "title": "Cocoapods系列:使用Cocoapods制作静态库(三)",
+    "url": "/2016/05/10/make-lib-with-Cocoapods/",
+    "category": "[&quot;IOS&quot;]"
+  },
+  
+  "wiki-android-studio": {
+    "title": "Android Studio",
+    "url": "/wiki/android-studio/",
+    "category": "[&quot;Android&quot;]"
+  },
+  
+  "wiki-badminton": {
+    "title": "Badminton",
+    "url": "/wiki/badminton/",
+    "category": "[&quot;Hobbies&quot;]"
+  },
+  
+  "wiki-chinese-copywriting-guidelines": {
+    "title": "中文文案排版指北（简体中文版）",
+    "url": "/wiki/chinese-copywriting-guidelines/",
+    "category": "[&quot;Copywriting&quot;]"
+  },
+  
+  "wiki-eclipse": {
+    "title": "Eclipse",
+    "url": "/wiki/eclipse/",
+    "category": "[&quot;Eclipse&quot;]"
+  },
+  
+  "wiki-emacs": {
+    "title": "Emacs",
+    "url": "/wiki/emacs/",
+    "category": "[&quot;Emacs&quot;]"
+  },
+  
+  "wiki-git": {
+    "title": "Git",
+    "url": "/wiki/git/",
+    "category": "[&quot;Git&quot;]"
+  },
+  
+  "wiki-good-soft": {
+    "title": "善用佳软",
+    "url": "/wiki/good-soft/",
+    "category": "[&quot;Recommends&quot;]"
+  },
+  
+  "wiki-ida-pro": {
+    "title": "IDA Pro",
+    "url": "/wiki/ida-pro/",
+    "category": "[&quot;Debug&quot;]"
+  },
+  
+  "wiki-mac": {
+    "title": "Mac OS X",
+    "url": "/wiki/mac/",
+    "category": "[&quot;Mac&quot;]"
+  },
+  
+  "wiki-markdown": {
+    "title": "Markdown",
+    "url": "/wiki/markdown/",
+    "category": "[&quot;Markdown&quot;]"
+  },
+  
+  "wiki-ollydbg": {
+    "title": "OllyDbg",
+    "url": "/wiki/ollydbg/",
+    "category": "[&quot;debug&quot;]"
+  },
+  
+  "wiki-python": {
+    "title": "Python",
+    "url": "/wiki/python/",
+    "category": "[&quot;Python&quot;]"
+  },
+  
+  "wiki-qt-creator": {
+    "title": "Qt Creator",
+    "url": "/wiki/qt-creator/",
+    "category": "[&quot;Qt&quot;]"
+  },
+  
+  "wiki-source-insight": {
+    "title": "Source Insight",
+    "url": "/wiki/source-insight/",
+    "category": "[&quot;tools&quot;]"
+  },
+  
+  "wiki-swimming": {
+    "title": "Swimming",
+    "url": "/wiki/swimming/",
+    "category": "[&quot;Hobbies&quot;]"
+  },
+  
+  "wiki-template": {
+    "title": "Wiki Template",
+    "url": "/wiki/template/",
+    "category": "[&quot;cate1&quot;, &quot;cate2&quot;]"
+  },
+  
+  "wiki-vim": {
+    "title": "Vim",
+    "url": "/wiki/vim/",
+    "category": "[&quot;Vim&quot;]"
+  }
+  
+}

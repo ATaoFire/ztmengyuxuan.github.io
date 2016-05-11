@@ -2,7 +2,7 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: http://www.lhjzzu.com
+url:http://ztmengyuxuan.github.io
 date_format: "ordinal"
 title: 刘华健
 subtitle: "好风凭借力"
@@ -11,7 +11,7 @@ keywords: 刘华健, Liu Hua Jian, lhjzzu
 favicon: /favicon.ico
 timezone: Asia/Shanghai
 encoding: "utf-8"
-source_code: https://github.com/lhjzzu/lhjzzu.github.io
+source_code: https://github.com/ztmengyuxuan/ztmengyuxuan.github.io
 
 # ---------------- #
 #      Author      #
@@ -20,7 +20,7 @@ author: Liu Hua Jian
 organization: ouer, Inc.
 organization_url: https://www.kkkd.com
 location: HangZhou, China
-email: 1822657131@qq.com
+email: 583299127@qq.com
 
 # ---------------- #
 #    Navigation    #

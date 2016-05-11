@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" prefix="og: http://ogp.me/ns#" class="han-init">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>Windows 实用技巧汇总 &mdash; 刘华健</title>
+    <link rel="stylesheet" href="/assets/vendor/primer-css/css/primer.css">
+    <link rel="stylesheet" href="/assets/vendor/primer-markdown/dist/user-content.min.css">
+    <link rel="stylesheet" href="/assets/vendor/octicons/octicons/octicons.css">
+    <link rel="stylesheet" href="/assets/css/components/collection.css">
+    <link rel="stylesheet" href="/assets/css/components/repo-card.css">
+    <link rel="stylesheet" href="/assets/css/sections/repo-list.css">
+    <link rel="stylesheet" href="/assets/css/sections/mini-repo-list.css">
+    <link rel="stylesheet" href="/assets/css/components/boxed-group.css">
+    <link rel="stylesheet" href="/assets/css/globals/common.css">
+    <link rel="stylesheet" href="/assets/vendor/share.js/dist/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/globals/responsive.css">
+    <link rel="stylesheet" href="/assets/css/posts/index.css">
+    <!-- Latest compiled and minified CSS -->
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="刘华健" href="/feed.xml">
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+    <meta property="og:title" content="Windows 实用技巧汇总">
+      
+    <meta name="keywords" content="Windows, Skill">
+    <meta name="og:keywords" content="Windows, Skill">
+      
+    <meta name="description" content="目录">
+    <meta name="og:description" content="目录">
+      
+    
+    
+        
+    
+    <meta property="og:url" content="http://www.lhjzzu.com/2012/06/17/windows-skills/">
+    <meta property="og:site_name" content="刘华健">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="zh_CN" />
+    
+    <meta property="article:published_time" content="2012-06-17">
+    
+    <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.js"></script>
+</head>
+<body class="" data-mz="">
+    <header class="site-header">
+        <div class="container">
+            <h1><a href="/" title="刘华健"><span class="octicon octicon-mark-github"></span> 刘华健</a></h1>
+            <nav class="site-header-nav" role="navigation">
+                
+                <a href="/" class=" site-header-nav-item" target="" title="首页">首页</a>
+                
+                <a href="/categories/" class=" site-header-nav-item" target="" title="分类">分类</a>
+                
+                <a href="/links/" class=" site-header-nav-item" target="" title="链接">链接</a>
+                
+                <a href="/about/" class=" site-header-nav-item" target="" title="关于">关于</a>
+                
+            </nav>
+        </div>
+    </header>
+    <!-- / header -->
+
+    <section class="collection-head small geopattern" data-pattern-id="Windows 实用技巧汇总">
+<div class="container">
+  <div class="columns">
+    <div class="column three-fourths">
+      <div class="collection-title">
+        <h1 class="collection-header">Windows 实用技巧汇总</h1>
+        <div class="collection-info">
+          
+          <span class="meta-info">
+            <span class="octicon octicon-calendar"></span> 2012/06/17
+          </span>
+          
+          
+          <span class="meta-info">
+            <span class="octicon octicon-file-directory"></span>
+            <a href="/categories/#Windows" title="Windows">Windows</a>
+          </span>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- / .banner -->
+<section class="container content">
+<div class="columns">
+  <div class="column three-fourths" >
+    <article class="article-content markdown-body">
+    <p><strong>目录</strong></p>
+
+<ul id="markdown-toc">
+  <li><a href="#win7--shift--w" id="markdown-toc-win7--shift--w">Win7 不按 Shift，右键显示 “在此处打开命令窗口 (W)”</a></li>
+  <li><a href="#win7-" id="markdown-toc-win7-">Win7 搜索文件内容</a></li>
+  <li><a href="#caps-lock--ctrl" id="markdown-toc-caps-lock--ctrl">将 Caps Lock 映射为 Ctrl</a></li>
+</ul>
+
+<h3 id="win7--shift--w">Win7 不按 Shift，右键显示 “在此处打开命令窗口 (W)”</h3>
+
+<p><img src="/images/posts/windowsskill/rclick.png" alt="Windows Skills" /></p>
+
+<p>图上的这条右键命令一般在 Win7 下是需要 Shift + 右键在弹出菜单里才能看到的，怎么省掉这个 Shift，直接就能出来呢？</p>
+
+<p>先说方法：</p>
+
+<p>将如下代码保存为 .reg 文件然后执行即可。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Directory\shell\cmd]
+"Extended"=-
+
+[HKEY_CLASSES_ROOT\Drive\shell\cmd]
+"Extended"=-
+
+[HKEY_CLASSES_ROOT\LibraryFolder\background\shell]
+@="none"
+
+[HKEY_CLASSES_ROOT\LibraryFolder\background\shell\cmd]
+@="@shell32.dll,-8506"
+"NoWorkingDirectory"=""
+"Extended"=-
+
+[HKEY_CLASSES_ROOT\LibraryFolder\background\shell\cmd\command]
+@="cmd.exe /s /k pushd \"%V\""
+</code></pre>
+</div>
+
+<p>再说原理：</p>
+
+<ol>
+  <li>
+    <p>普通文件夹右键</p>
+
+    <p>将注册表 HKEY_CLASSES_ROOT\Directory\Background\shell\cmd 下的键 Extended 改名或者删除</p>
+  </li>
+  <li>
+    <p>磁盘分区右键</p>
+
+    <p>将注册表 HKEY_CLASSES_ROOT\Drive\shell\cmd 下的键 Extended 改名或者删除</p>
+  </li>
+  <li>
+    <p>库文件夹右键</p>
+
+    <p>在注册表 HKEY_CLASSES_ROOT\LibraryFolder\background 下建立和第一条的 Directory\Background 中相同的键值</p>
+  </li>
+</ol>
+
+<h3 id="win7-">Win7 搜索文件内容</h3>
+
+<p>控制面板 – 索引选项 – 高级 – 文件类型 – 找到你想要搜索内容的文件后缀名，点中它，然后选中下面的「为属性和文件内容添加索引」。</p>
+
+<h3 id="caps-lock--ctrl">将 Caps Lock 映射为 Ctrl</h3>
+
+<p>因为个人习惯输入大写字母时使用「Shift + 字母」的方式，所以 Caps Lock 键并没有什么用，而且经常使用 Vim，偶尔使用 Emacs，都需要频繁地按 Ctrl 键，在 Mac OS X 下已经将 Caps Lock 键映射为 Ctrl，为了统一体验和按键方便，也需要在 Windows 下做一个映射。</p>
+
+<p>先说方法：</p>
+
+<p>将如下代码保存为 .reg 文件然后执行即可。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]
+"Scancode Map"=hex:00,00,00,00,00,00,00,00,02,00,00,00,1d,00,3a,00,00,00,00,00
+</code></pre>
+</div>
+
+<p>再说原理：</p>
+
+<p>Scancode Map 这个键值的讲解实例参见 <a href="https://msdn.microsoft.com/en-us/library/windows/hardware/jj128267(v=vs.85).aspx#code-snippet-1">Keyboard and mouse class drivers (Windows Drivers)</a>，我们这里填写的值</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>00000000 00000000 02000000 1d003a00 00000000
+</code></pre>
+</div>
+
+<p>可以对应理解如下：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>值</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0x00000000</td>
+      <td>Header: 版本。全部设置为 0。</td>
+    </tr>
+    <tr>
+      <td>0x00000000</td>
+      <td>Header: 标志。全部设置为 0。</td>
+    </tr>
+    <tr>
+      <td>0x00000002</td>
+      <td>2 条映射条目（包括结尾的 null 条目）。</td>
+    </tr>
+    <tr>
+      <td>0x003a001d</td>
+      <td>Caps Lock –&gt; Left Ctrl (0x3a –&gt; 0x1d).</td>
+    </tr>
+    <tr>
+      <td>0x00000000</td>
+      <td>终止符，即 null 条目。</td>
+    </tr>
+  </tbody>
+</table>
+
+    </article>
+    <div class="share">
+      <div class="share-component"></div>
+    </div>
+    <div class="comment">
+      
+  
+      
+      <!-- Duoshuo Comment BEGIN -->
+      <!-- 多说评论框 BEGIN -->
+      <div class="ds-thread" data-thread-key="/2012/06/17/windows-skills/" data-title="Windows 实用技巧汇总" data-url="http://www.lhjzzu.com/2012/06/17/windows-skills/"></div>
+      <!-- 多说评论框 END -->
+      <!-- 多说公共JS代码 BEGIN (一个网页只需插入一次) -->
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"abc19911991"};
+        (function() {
+          var ds = document.createElement('script');
+          ds.type = 'text/javascript';ds.async = true;
+          ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+          ds.charset = 'UTF-8';
+          (document.getElementsByTagName('head')[0]
+           || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+      <!-- 多说公共JS代码 END -->
+      <!-- Duoshuo Comment END -->
+      
+    
+
+
+    </div>
+  </div>
+  <div class="column one-fourth">
+    
+<h3>Search</h3>
+<form action="get" id="site_search">
+    <input type="text" id="search_box" placeholder="Search">
+    <button class="btn btn-default" type="submit"><span class="octicon octicon-search"></span></button>
+</form>
+
+<ul id="search_results"></ul>
+
+<link rel="stylesheet" type="text/css" href="/assets/css/modules/sidebar-search.css">
+<script src="/assets/js/lunr.min.js"></script>
+<script src="/assets/js/search.js"></script>
+
+
+    
+<h3>Post Directory</h3>
+<div id="post-directory-module" class="mobile-hidden">
+  <section class="post-directory">
+  <!-- Links that trigger the jumping -->
+  <!-- Added by javascript below -->
+  <dl></dl>
+  </section>
+</div>
+
+<script src="/assets/js/jquery.toc.js"></script>
+
+  </div>
+</div>
+</section>
+<!-- /section.content -->
+
+    <footer class="container">
+        <div class="site-footer" role="contentinfo">
+            <div class="copyright left mobile-block">
+                    © 2015
+                    <span title="Liu Hua Jian">Liu Hua Jian</span>
+                    <a href="javascript:window.scrollTo(0,0)" class="right mobile-visible">TOP</a>
+            </div>
+
+            <ul class="site-footer-links right mobile-hidden">
+                <li>
+                    <a href="javascript:window.scrollTo(0,0)" >TOP</a>
+                </li>
+            </ul>
+            <a href="https://github.com/lhjzzu/lhjzzu.github.io" target="_blank" aria-label="view source code">
+                <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+            </a>
+            <ul class="site-footer-links mobile-hidden">
+                
+                <li>
+                    <a href="/" title="首页" target="">首页</a>
+                </li>
+                
+                <li>
+                    <a href="/categories/" title="分类" target="">分类</a>
+                </li>
+                
+                <li>
+                    <a href="/links/" title="链接" target="">链接</a>
+                </li>
+                
+                <li>
+                    <a href="/about/" title="关于" target="">关于</a>
+                </li>
+                
+                <li><a href="/feed.xml"><span class="octicon octicon-rss" style="color:orange;"></span></a></li>
+            </ul>
+        </div>
+    </footer>
+    <!-- / footer -->
+    <script src="/assets/vendor/s.js/dist/js/share.min.js"></script>
+    <script src="/assets/js/geopattern.js"></script>
+    <script src="/assets/js/prism.js"></script>
+    <link rel="stylesheet" href="/assets/css/globals/prism.css">
+    <script>
+      jQuery(document).ready(function($) {
+        // geopattern
+        $('.geopattern').each(function(){
+          $(this).geopattern($(this).data('pattern-id'));
+        });
+       // hljs.initHighlightingOnLoad();
+      });
+    </script>
+    
+</body>
+</html>

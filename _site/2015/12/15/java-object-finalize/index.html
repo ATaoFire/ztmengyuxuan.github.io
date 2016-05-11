@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" prefix="og: http://ogp.me/ns#" class="han-init">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>Java 对象释放与 finalize 方法 &mdash; 刘华健</title>
+    <link rel="stylesheet" href="/assets/vendor/primer-css/css/primer.css">
+    <link rel="stylesheet" href="/assets/vendor/primer-markdown/dist/user-content.min.css">
+    <link rel="stylesheet" href="/assets/vendor/octicons/octicons/octicons.css">
+    <link rel="stylesheet" href="/assets/css/components/collection.css">
+    <link rel="stylesheet" href="/assets/css/components/repo-card.css">
+    <link rel="stylesheet" href="/assets/css/sections/repo-list.css">
+    <link rel="stylesheet" href="/assets/css/sections/mini-repo-list.css">
+    <link rel="stylesheet" href="/assets/css/components/boxed-group.css">
+    <link rel="stylesheet" href="/assets/css/globals/common.css">
+    <link rel="stylesheet" href="/assets/vendor/share.js/dist/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/globals/responsive.css">
+    <link rel="stylesheet" href="/assets/css/posts/index.css">
+    <!-- Latest compiled and minified CSS -->
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="刘华健" href="/feed.xml">
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+    <meta property="og:title" content="Java 对象释放与 finalize 方法">
+      
+    <meta name="keywords" content="java, finalize, release">
+    <meta name="og:keywords" content="java, finalize, release">
+      
+    <meta name="description" content="本文谈论的知识很浅显，只是我发现自己掌握的相关知识并不扎实，对细节并不清楚，遂将疑惑解开，并记录于此。">
+    <meta name="og:description" content="本文谈论的知识很浅显，只是我发现自己掌握的相关知识并不扎实，对细节并不清楚，遂将疑惑解开，并记录于此。">
+      
+    
+    
+        
+    
+    <meta property="og:url" content="http://www.lhjzzu.com/2015/12/15/java-object-finalize/">
+    <meta property="og:site_name" content="刘华健">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="zh_CN" />
+    
+    <meta property="article:published_time" content="2015-12-15">
+    
+    <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.js"></script>
+</head>
+<body class="" data-mz="">
+    <header class="site-header">
+        <div class="container">
+            <h1><a href="/" title="刘华健"><span class="octicon octicon-mark-github"></span> 刘华健</a></h1>
+            <nav class="site-header-nav" role="navigation">
+                
+                <a href="/" class=" site-header-nav-item" target="" title="首页">首页</a>
+                
+                <a href="/categories/" class=" site-header-nav-item" target="" title="分类">分类</a>
+                
+                <a href="/links/" class=" site-header-nav-item" target="" title="链接">链接</a>
+                
+                <a href="/about/" class=" site-header-nav-item" target="" title="关于">关于</a>
+                
+            </nav>
+        </div>
+    </header>
+    <!-- / header -->
+
+    <section class="collection-head small geopattern" data-pattern-id="Java 对象释放与 fina">
+<div class="container">
+  <div class="columns">
+    <div class="column three-fourths">
+      <div class="collection-title">
+        <h1 class="collection-header">Java 对象释放与 finalize 方法</h1>
+        <div class="collection-info">
+          
+          <span class="meta-info">
+            <span class="octicon octicon-calendar"></span> 2015/12/15
+          </span>
+          
+          
+          <span class="meta-info">
+            <span class="octicon octicon-file-directory"></span>
+            <a href="/categories/#Java" title="Java">Java</a>
+          </span>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- / .banner -->
+<section class="container content">
+<div class="columns">
+  <div class="column three-fourths" >
+    <article class="article-content markdown-body">
+    <p>本文谈论的知识很浅显，只是我发现自己掌握的相关知识并不扎实，对细节并不清楚，遂将疑惑解开，并记录于此。</p>
+
+<p>按惯例先上结论，对如下知识点已经清楚的选手可以省下看本文的时间了。</p>
+
+<h2 id="section">结论</h2>
+
+<ol>
+  <li>
+    <p>对象的 <code class="highlighter-rouge">finalize</code> 方法不一定会被调用，即使是进程退出前。</p>
+  </li>
+  <li>
+    <p>发生 GC 时一个对象的内存是否释放取决于是否存在该对象的引用，如果该对象包含对象成员，那对象成员也遵循本条。</p>
+  </li>
+  <li>
+    <p>对象里包含的对象成员按声明顺序进行释放。</p>
+  </li>
+</ol>
+
+<h2 id="section-1">证明</h2>
+
+<p>假设有以下类定义：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">A</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">A</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"A()"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="n">finalize</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"~A()"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="n">B</span> <span class="n">b</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">B</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">B</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"B()"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="n">finalize</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"~B()"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h3 id="section-2">结论 1 证明</h3>
+
+<p>在 <code class="highlighter-rouge">main</code> 方法中有如下代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">A</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">A</span><span class="o">();</span>
+<span class="n">B</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span><span class="o">();</span>
+<span class="n">a</span><span class="o">.</span><span class="na">b</span> <span class="o">=</span> <span class="n">b</span><span class="o">;</span>
+<span class="n">a</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</code></pre>
+</div>
+
+<p>输出是什么呢？</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>A()
+B()
+</code></pre>
+</div>
+
+<p>与我想象中的有些不一样，我以为至少在进程退出前 A 类对象和 B 类对象都会被释放掉的。</p>
+
+<p>我们明确一下 <code class="highlighter-rouge">finalize</code> 方法的调用时机，引用官方 API 文档的解释：</p>
+
+<blockquote>
+  <p>Called by the garbage collector on an object when garbage collection determines that there are no more references to the object. A subclass overrides the finalize method to dispose of system resources or to perform other cleanup.</p>
+</blockquote>
+
+<p>也就是说，<code class="highlighter-rouge">finalize</code> 是在 JVM 执行 GC 的时候才会执行的，而很显然，在这个例子里 <code class="highlighter-rouge">main</code> 方法退出时并没有执行 GC，而 GC 是否执行以及其执行的时机并不是我们可以精确控制的，此即证明了<strong>结论 1</strong>。</p>
+
+<h3 id="section-3">结论 2 证明</h3>
+
+<p>虽然我们不能精确控制 GC 的时机，但我们可以给 JVM 建议，比如我们在最后加个 <code class="highlighter-rouge">System.gc()</code> 建议 JVM 进行 GC。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">A</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">A</span><span class="o">();</span>
+<span class="n">B</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span><span class="o">();</span>
+<span class="n">a</span><span class="o">.</span><span class="na">b</span> <span class="o">=</span> <span class="n">b</span><span class="o">;</span>
+<span class="n">a</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+<span class="n">System</span><span class="o">.</span><span class="na">gc</span><span class="o">();</span>
+</code></pre>
+</div>
+
+<p>现在输出变成了</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>A()
+B()
+~A()
+</code></pre>
+</div>
+
+<p>可见 JVM 听从了我们的建议，执行了 GC，由于此时 A 类对象已经没有引用了，所以它被释放，而该对象的 B 类对象成员由于被局部变量 b 引用，此时不会释放。</p>
+
+<p>而一个在 GC 时对象成员也会被释放的 A 类对象调用是怎么样的呢？</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">A</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">A</span><span class="o">();</span>
+<span class="n">a</span><span class="o">.</span><span class="na">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span><span class="o">();</span>
+<span class="n">a</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+<span class="n">System</span><span class="o">.</span><span class="na">gc</span><span class="o">();</span>
+</code></pre>
+</div>
+
+<p>此时输出为</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>A()
+B()
+~B()
+~A()
+</code></pre>
+</div>
+
+<p>如上两段代码执行结果的对比证明了<strong>结论 2</strong>。</p>
+
+<p>另外需要说明的是，Runtime 类里有一个 <code class="highlighter-rouge">runFinalizersOnExit</code> 方法，可以让程序在退出时执行所有对象的未被自动调用 <code class="highlighter-rouge">finalize</code> 方法，<strong>即使该对象仍被引用</strong>。但是从官方文档可以看出，该方法已经废弃，不建议使用，引用官方 API 文档如下：</p>
+
+<blockquote>
+  <p><strong>Deprecated.</strong> <em>This method is inherently unsafe. It may result in finalizers being called on live objects while other threads are concurrently manipulating those objects, resulting in erratic behavior or deadlock.</em></p>
+
+  <p>Enable or disable finalization on exit; doing so specifies that the finalizers of all objects that have finalizers that have not yet been automatically invoked are to be run before the Java runtime exits. By default, finalization on exit is disabled.</p>
+</blockquote>
+
+<p>而同样是 Runtime 类里的 <code class="highlighter-rouge">runFinalization</code> 方法则在调用后并没有看到明显的效果，即如果不发生 GC，那即使调用了 <code class="highlighter-rouge">runFinalization</code> 方法，已经待回收的对象的 <code class="highlighter-rouge">finalize</code> 方法依然没有被调用。</p>
+
+<h3 id="section-4">结论 3 证明</h3>
+
+<p>我们修改一下几个类的定义：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">A</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">A</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"A()"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="n">finalize</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"~A()"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="n">B</span> <span class="n">b</span><span class="o">;</span>    <span class="c1">// line a</span>
+    <span class="n">C</span> <span class="n">c</span><span class="o">;</span>    <span class="c1">// line b</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">B</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">B</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"B()"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="n">finalize</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"~B()"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">C</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">C</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"C()"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="n">finalize</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"~C()"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>现在在 <code class="highlighter-rouge">main</code> 方法里有如下调用：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">A</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">A</span><span class="o">();</span>
+<span class="n">a</span><span class="o">.</span><span class="na">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">B</span><span class="o">();</span>
+<span class="n">a</span><span class="o">.</span><span class="na">c</span> <span class="o">=</span> <span class="k">new</span> <span class="n">C</span><span class="o">();</span>
+<span class="n">a</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+<span class="n">System</span><span class="o">.</span><span class="na">gc</span><span class="o">();</span>
+</code></pre>
+</div>
+
+<p>输出是</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>A()
+B()
+C()
+~B()
+~C()
+~A()
+</code></pre>
+</div>
+
+<p>而如果我们互换一下 A 类声明带注释的 line a 与 line b 的位置，即变成</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">C</span> <span class="n">c</span><span class="o">;</span>    <span class="c1">// line b</span>
+<span class="n">B</span> <span class="n">b</span><span class="o">;</span>    <span class="c1">// line a</span>
+</code></pre>
+</div>
+
+<p>输出变成</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>A()
+B()
+C()
+~C()
+~B()
+~A()
+</code></pre>
+</div>
+
+<p>此即证明了<strong>结论 3</strong>。</p>
+
+    </article>
+    <div class="share">
+      <div class="share-component"></div>
+    </div>
+    <div class="comment">
+      
+  
+      
+      <!-- Duoshuo Comment BEGIN -->
+      <!-- 多说评论框 BEGIN -->
+      <div class="ds-thread" data-thread-key="/2015/12/15/java-object-finalize/" data-title="Java 对象释放与 finalize 方法" data-url="http://www.lhjzzu.com/2015/12/15/java-object-finalize/"></div>
+      <!-- 多说评论框 END -->
+      <!-- 多说公共JS代码 BEGIN (一个网页只需插入一次) -->
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"abc19911991"};
+        (function() {
+          var ds = document.createElement('script');
+          ds.type = 'text/javascript';ds.async = true;
+          ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+          ds.charset = 'UTF-8';
+          (document.getElementsByTagName('head')[0]
+           || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+      <!-- 多说公共JS代码 END -->
+      <!-- Duoshuo Comment END -->
+      
+    
+
+
+    </div>
+  </div>
+  <div class="column one-fourth">
+    
+<h3>Search</h3>
+<form action="get" id="site_search">
+    <input type="text" id="search_box" placeholder="Search">
+    <button class="btn btn-default" type="submit"><span class="octicon octicon-search"></span></button>
+</form>
+
+<ul id="search_results"></ul>
+
+<link rel="stylesheet" type="text/css" href="/assets/css/modules/sidebar-search.css">
+<script src="/assets/js/lunr.min.js"></script>
+<script src="/assets/js/search.js"></script>
+
+
+    
+<h3>Post Directory</h3>
+<div id="post-directory-module" class="mobile-hidden">
+  <section class="post-directory">
+  <!-- Links that trigger the jumping -->
+  <!-- Added by javascript below -->
+  <dl></dl>
+  </section>
+</div>
+
+<script src="/assets/js/jquery.toc.js"></script>
+
+  </div>
+</div>
+</section>
+<!-- /section.content -->
+
+    <footer class="container">
+        <div class="site-footer" role="contentinfo">
+            <div class="copyright left mobile-block">
+                    © 2015
+                    <span title="Liu Hua Jian">Liu Hua Jian</span>
+                    <a href="javascript:window.scrollTo(0,0)" class="right mobile-visible">TOP</a>
+            </div>
+
+            <ul class="site-footer-links right mobile-hidden">
+                <li>
+                    <a href="javascript:window.scrollTo(0,0)" >TOP</a>
+                </li>
+            </ul>
+            <a href="https://github.com/lhjzzu/lhjzzu.github.io" target="_blank" aria-label="view source code">
+                <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+            </a>
+            <ul class="site-footer-links mobile-hidden">
+                
+                <li>
+                    <a href="/" title="首页" target="">首页</a>
+                </li>
+                
+                <li>
+                    <a href="/categories/" title="分类" target="">分类</a>
+                </li>
+                
+                <li>
+                    <a href="/links/" title="链接" target="">链接</a>
+                </li>
+                
+                <li>
+                    <a href="/about/" title="关于" target="">关于</a>
+                </li>
+                
+                <li><a href="/feed.xml"><span class="octicon octicon-rss" style="color:orange;"></span></a></li>
+            </ul>
+        </div>
+    </footer>
+    <!-- / footer -->
+    <script src="/assets/vendor/s.js/dist/js/share.min.js"></script>
+    <script src="/assets/js/geopattern.js"></script>
+    <script src="/assets/js/prism.js"></script>
+    <link rel="stylesheet" href="/assets/css/globals/prism.css">
+    <script>
+      jQuery(document).ready(function($) {
+        // geopattern
+        $('.geopattern').each(function(){
+          $(this).geopattern($(this).data('pattern-id'));
+        });
+       // hljs.initHighlightingOnLoad();
+      });
+    </script>
+    
+</body>
+</html>

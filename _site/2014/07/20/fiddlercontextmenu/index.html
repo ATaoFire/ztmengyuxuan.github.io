@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" prefix="og: http://ogp.me/ns#" class="han-init">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>定制 Fiddler 之将请求发往另一服务器 &mdash; 刘华健</title>
+    <link rel="stylesheet" href="/assets/vendor/primer-css/css/primer.css">
+    <link rel="stylesheet" href="/assets/vendor/primer-markdown/dist/user-content.min.css">
+    <link rel="stylesheet" href="/assets/vendor/octicons/octicons/octicons.css">
+    <link rel="stylesheet" href="/assets/css/components/collection.css">
+    <link rel="stylesheet" href="/assets/css/components/repo-card.css">
+    <link rel="stylesheet" href="/assets/css/sections/repo-list.css">
+    <link rel="stylesheet" href="/assets/css/sections/mini-repo-list.css">
+    <link rel="stylesheet" href="/assets/css/components/boxed-group.css">
+    <link rel="stylesheet" href="/assets/css/globals/common.css">
+    <link rel="stylesheet" href="/assets/vendor/share.js/dist/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/globals/responsive.css">
+    <link rel="stylesheet" href="/assets/css/posts/index.css">
+    <!-- Latest compiled and minified CSS -->
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="刘华健" href="/feed.xml">
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+    <meta property="og:title" content="定制 Fiddler 之将请求发往另一服务器">
+      
+    <meta name="keywords" content="Fiddler">
+    <meta name="og:keywords" content="Fiddler">
+      
+    <meta name="description" content="需求">
+    <meta name="og:description" content="需求">
+      
+    
+    
+        
+    
+    <meta property="og:url" content="http://www.lhjzzu.com/2014/07/20/fiddlercontextmenu/">
+    <meta property="og:site_name" content="刘华健">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="zh_CN" />
+    
+    <meta property="article:published_time" content="2014-07-20">
+    
+    <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.js"></script>
+</head>
+<body class="" data-mz="">
+    <header class="site-header">
+        <div class="container">
+            <h1><a href="/" title="刘华健"><span class="octicon octicon-mark-github"></span> 刘华健</a></h1>
+            <nav class="site-header-nav" role="navigation">
+                
+                <a href="/" class=" site-header-nav-item" target="" title="首页">首页</a>
+                
+                <a href="/categories/" class=" site-header-nav-item" target="" title="分类">分类</a>
+                
+                <a href="/links/" class=" site-header-nav-item" target="" title="链接">链接</a>
+                
+                <a href="/about/" class=" site-header-nav-item" target="" title="关于">关于</a>
+                
+            </nav>
+        </div>
+    </header>
+    <!-- / header -->
+
+    <section class="collection-head small geopattern" data-pattern-id="定制 Fiddler 之将请求">
+<div class="container">
+  <div class="columns">
+    <div class="column three-fourths">
+      <div class="collection-title">
+        <h1 class="collection-header">定制 Fiddler 之将请求发往另一服务器</h1>
+        <div class="collection-info">
+          
+          <span class="meta-info">
+            <span class="octicon octicon-calendar"></span> 2014/07/20
+          </span>
+          
+          
+          <span class="meta-info">
+            <span class="octicon octicon-file-directory"></span>
+            <a href="/categories/#Fiddler" title="Fiddler">Fiddler</a>
+          </span>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- / .banner -->
+<section class="container content">
+<div class="columns">
+  <div class="column three-fourths" >
+    <article class="article-content markdown-body">
+    <h3 id="section">需求</h3>
+
+<p>对 Fiddler 抓取的某个特定 SESSION 能在必要时手动操作发往另一个服务器。</p>
+
+<h3 id="section-1">设想</h3>
+
+<p>在 SESSION 上点击右键弹出的菜单中添加一项，让它对应的响应事件来完成此操作。而联想到 Fiddler 的 Composer 功能能够将某条 SESSION 按自己的需要修改后重新发出，那利用 Composer 来做应该是比较容易实现且便捷的方式。</p>
+
+<h3 id="section-2">实现</h3>
+
+<p>对 Fiddler 的扩展比较方便的是使用 FiddlerScript，修改 CustomRules.js 来做。比如希望在 hostname 为<code class="highlighter-rouge">www.mazhuang.org</code>的 SESSION 上右键后利用自己添加的菜单项将此 SESSION 的 hostname 修改为<code class="highlighter-rouge">mazhuang.org</code>后重新发送请求，最终在 CustomRules.js 文件中添加了如下代码即可。</p>
+
+<p>添加方法：</p>
+
+<p><strong>启动 Fiddler &gt; 选择菜单 Rules &gt; 选择菜单项 Customize Rules… &gt; 将如下代码粘贴在<code class="highlighter-rouge">OnDetach</code>函数后面 &gt; 保存</strong></p>
+
+<p><em>注：发现将下面的函数放在<code class="highlighter-rouge">OnDetach</code>函数前自己添加的菜单项就不是第一项，而放在<code class="highlighter-rouge">OnDetach</code>后就是第一项了，这个很奇怪，未想到合理原因。</em></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kr">public</span> <span class="kr">static</span> <span class="nx">ContextAction</span><span class="p">(</span><span class="s2">"发送到 mazhuang.org"</span><span class="p">)</span>
+<span class="kd">function</span> <span class="nx">DoSend2RootDomain</span><span class="p">(</span><span class="nx">oSessions</span><span class="err">:</span> <span class="nx">Fiddler</span><span class="p">.</span><span class="nx">Session</span><span class="p">[]){</span>
+    <span class="kd">var</span> <span class="nx">oS</span><span class="err">:</span> <span class="nx">Session</span> <span class="o">=</span> <span class="nx">FiddlerApplication</span><span class="p">.</span><span class="nx">UI</span><span class="p">.</span><span class="nx">GetFirstSelectedSession</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="kc">null</span> <span class="o">==</span> <span class="nx">oS</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">oS</span><span class="p">.</span><span class="nx">HostnameIs</span><span class="p">(</span><span class="s2">"www.mazhuang.org"</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="nx">oS</span><span class="p">.</span><span class="nx">hostname</span> <span class="o">=</span> <span class="s2">"mazhuang.org"</span><span class="p">;</span>
+        <span class="nx">FiddlerApplication</span><span class="p">.</span><span class="nx">DoComposeByCloning</span><span class="p">(</span><span class="nx">oS</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="nx">MessageBox</span><span class="p">.</span><span class="nx">Show</span><span class="p">(</span><span class="s2">"不是发往 www.mazhuang.org 的请求"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>然后就能看到效果了，在 hostname 为<code class="highlighter-rouge">www.mazhuang.org</code>的 SESSION 上右键，点击刚刚我们自己添加的「发送到 mazhuang.org」菜单项，会发现 Fiddler 界面右边的 Composer 标签已打开，然后 hostname 已经替换为<code class="highlighter-rouge">mazhuang.org</code>，这时再手动点击 Execute 按钮即可将更改 hostname 后的请求重新发出。</p>
+
+<h3 id="section-3">缺陷</h3>
+
+<p>当前做法有如下缺陷，尚未想到好办法解决：</p>
+
+<ol>
+  <li>会破坏原 SESSION，即将原 SESSION 的 hostname 也替换为了<code class="highlighter-rouge">mazhuang.org</code>。</li>
+  <li>一次操作需要点选右键菜单项后再点击一次 Composer 窗口中的 Execute 按钮才能完成，比较理想的状况是点选右键菜单后即完成替换 hostname 且重新发出请求。</li>
+</ol>
+
+<h3 id="section-4">附注</h3>
+
+<p>我使用的完整最新的 CustomRules.js 文件我上传到了一个 Gist 里，详见：<a href="https://gist.github.com/mzlogin/3c5f9781c5bedff3fcfb">https://gist.github.com/mzlogin/3c5f9781c5bedff3fcfb</a>，如果想直接使用可以复制脚本内容后放置到「我的文档 /Fiddler 2/Scripts/CustomRules.js」，也可以在此目录下使用 git 抓取我的最新定制 js 文件。</p>
+
+    </article>
+    <div class="share">
+      <div class="share-component"></div>
+    </div>
+    <div class="comment">
+      
+  
+      
+      <!-- Duoshuo Comment BEGIN -->
+      <!-- 多说评论框 BEGIN -->
+      <div class="ds-thread" data-thread-key="/2014/07/20/fiddlercontextmenu/" data-title="定制 Fiddler 之将请求发往另一服务器" data-url="http://www.lhjzzu.com/2014/07/20/fiddlercontextmenu/"></div>
+      <!-- 多说评论框 END -->
+      <!-- 多说公共JS代码 BEGIN (一个网页只需插入一次) -->
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"abc19911991"};
+        (function() {
+          var ds = document.createElement('script');
+          ds.type = 'text/javascript';ds.async = true;
+          ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+          ds.charset = 'UTF-8';
+          (document.getElementsByTagName('head')[0]
+           || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+      <!-- 多说公共JS代码 END -->
+      <!-- Duoshuo Comment END -->
+      
+    
+
+
+    </div>
+  </div>
+  <div class="column one-fourth">
+    
+<h3>Search</h3>
+<form action="get" id="site_search">
+    <input type="text" id="search_box" placeholder="Search">
+    <button class="btn btn-default" type="submit"><span class="octicon octicon-search"></span></button>
+</form>
+
+<ul id="search_results"></ul>
+
+<link rel="stylesheet" type="text/css" href="/assets/css/modules/sidebar-search.css">
+<script src="/assets/js/lunr.min.js"></script>
+<script src="/assets/js/search.js"></script>
+
+
+    
+<h3>Post Directory</h3>
+<div id="post-directory-module" class="mobile-hidden">
+  <section class="post-directory">
+  <!-- Links that trigger the jumping -->
+  <!-- Added by javascript below -->
+  <dl></dl>
+  </section>
+</div>
+
+<script src="/assets/js/jquery.toc.js"></script>
+
+  </div>
+</div>
+</section>
+<!-- /section.content -->
+
+    <footer class="container">
+        <div class="site-footer" role="contentinfo">
+            <div class="copyright left mobile-block">
+                    © 2015
+                    <span title="Liu Hua Jian">Liu Hua Jian</span>
+                    <a href="javascript:window.scrollTo(0,0)" class="right mobile-visible">TOP</a>
+            </div>
+
+            <ul class="site-footer-links right mobile-hidden">
+                <li>
+                    <a href="javascript:window.scrollTo(0,0)" >TOP</a>
+                </li>
+            </ul>
+            <a href="https://github.com/lhjzzu/lhjzzu.github.io" target="_blank" aria-label="view source code">
+                <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+            </a>
+            <ul class="site-footer-links mobile-hidden">
+                
+                <li>
+                    <a href="/" title="首页" target="">首页</a>
+                </li>
+                
+                <li>
+                    <a href="/categories/" title="分类" target="">分类</a>
+                </li>
+                
+                <li>
+                    <a href="/links/" title="链接" target="">链接</a>
+                </li>
+                
+                <li>
+                    <a href="/about/" title="关于" target="">关于</a>
+                </li>
+                
+                <li><a href="/feed.xml"><span class="octicon octicon-rss" style="color:orange;"></span></a></li>
+            </ul>
+        </div>
+    </footer>
+    <!-- / footer -->
+    <script src="/assets/vendor/s.js/dist/js/share.min.js"></script>
+    <script src="/assets/js/geopattern.js"></script>
+    <script src="/assets/js/prism.js"></script>
+    <link rel="stylesheet" href="/assets/css/globals/prism.css">
+    <script>
+      jQuery(document).ready(function($) {
+        // geopattern
+        $('.geopattern').each(function(){
+          $(this).geopattern($(this).data('pattern-id'));
+        });
+       // hljs.initHighlightingOnLoad();
+      });
+    </script>
+    
+</body>
+</html>

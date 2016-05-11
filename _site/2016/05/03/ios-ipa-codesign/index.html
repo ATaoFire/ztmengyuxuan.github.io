@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" prefix="og: http://ogp.me/ns#" class="han-init">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>ios打包--ipa包重签(四) &mdash; 刘华健</title>
+    <link rel="stylesheet" href="/assets/vendor/primer-css/css/primer.css">
+    <link rel="stylesheet" href="/assets/vendor/primer-markdown/dist/user-content.min.css">
+    <link rel="stylesheet" href="/assets/vendor/octicons/octicons/octicons.css">
+    <link rel="stylesheet" href="/assets/css/components/collection.css">
+    <link rel="stylesheet" href="/assets/css/components/repo-card.css">
+    <link rel="stylesheet" href="/assets/css/sections/repo-list.css">
+    <link rel="stylesheet" href="/assets/css/sections/mini-repo-list.css">
+    <link rel="stylesheet" href="/assets/css/components/boxed-group.css">
+    <link rel="stylesheet" href="/assets/css/globals/common.css">
+    <link rel="stylesheet" href="/assets/vendor/share.js/dist/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/globals/responsive.css">
+    <link rel="stylesheet" href="/assets/css/posts/index.css">
+    <!-- Latest compiled and minified CSS -->
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="刘华健" href="/feed.xml">
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+    <meta property="og:title" content="ios打包--ipa包重签(四)">
+      
+    <meta name="keywords" content="刘华健, Liu Hua Jian, lhjzzu">
+    <meta name="og:keywords" content="刘华健, Liu Hua Jian, lhjzzu">
+      
+    <meta name="description" content="证书和密匙">
+    <meta name="og:description" content="证书和密匙">
+      
+    
+    
+        
+    
+    <meta property="og:url" content="http://www.lhjzzu.com/2016/05/03/ios-ipa-codesign/">
+    <meta property="og:site_name" content="刘华健">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="zh_CN" />
+    
+    <meta property="article:published_time" content="2016-05-03">
+    
+    <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.js"></script>
+</head>
+<body class="" data-mz="">
+    <header class="site-header">
+        <div class="container">
+            <h1><a href="/" title="刘华健"><span class="octicon octicon-mark-github"></span> 刘华健</a></h1>
+            <nav class="site-header-nav" role="navigation">
+                
+                <a href="/" class=" site-header-nav-item" target="" title="首页">首页</a>
+                
+                <a href="/categories/" class=" site-header-nav-item" target="" title="分类">分类</a>
+                
+                <a href="/links/" class=" site-header-nav-item" target="" title="链接">链接</a>
+                
+                <a href="/about/" class=" site-header-nav-item" target="" title="关于">关于</a>
+                
+            </nav>
+        </div>
+    </header>
+    <!-- / header -->
+
+    <section class="collection-head small geopattern" data-pattern-id="ios打包--ipa包重签(四">
+<div class="container">
+  <div class="columns">
+    <div class="column three-fourths">
+      <div class="collection-title">
+        <h1 class="collection-header">ios打包--ipa包重签(四)</h1>
+        <div class="collection-info">
+          
+          <span class="meta-info">
+            <span class="octicon octicon-calendar"></span> 2016/05/03
+          </span>
+          
+          
+          <span class="meta-info">
+            <span class="octicon octicon-file-directory"></span>
+            <a href="/categories/#IOS" title="IOS">IOS</a>
+          </span>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- / .banner -->
+<section class="container content">
+<div class="columns">
+  <div class="column three-fourths" >
+    <article class="article-content markdown-body">
+    <h2 id="section">证书和密匙</h2>
+
+<h3 id="section-1">证书信息</h3>
+
+<p>代码签名的核心是一个证书，一个公钥和一个私钥<br />
+<img src="http://7xqijx.com1.z0.glb.clouddn.com/cer.png" alt="" /></p>
+
+<p><img src="http://7xqijx.com1.z0.glb.clouddn.com/cer_detail.png" alt="" /></p>
+
+<p>可以用<code class="highlighter-rouge">$ security find-identity -v -p codesigning </code>来获取证书信息</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>1) 697CC3476B6AEC059E4F12DCD5CD28C48441E4CD "iPhone Developer: zhida wu (8MR2HY4EQA)"
+2) 1C6D6C437FB47E188EE5D77105D0D993ADA93E16 "iPhone Distribution: Hangzhou Riguan Apparel Co.,ltd (V9LX9F46VG)"
+3) 8323CA449B35E26865DD08D619DE7EE221349C64 "iPhone Developer: david.wu@davebella.com (48KD969HKA)"
+4) 7494432634E5176DF5DAFF1360AAAD4B871747AB "iPhone Distribution: Hangzhou Ouer Technology Co., Ltd"
+ 4 valid identities found
+</code></pre>
+</div>
+
+<p>注意:</p>
+
+<ul>
+  <li>一个证书是一个公钥加上许多附加信息组成</li>
+  <li>这些附加信息都是被某个认证机构（Certificate Authority 简称 CA）进行签名认证过的</li>
+  <li>认证的目的是认证这个证书中的信息是准确无误的</li>
+  <li>认证的签名有固定的有效期，这就意味着当前系统时间需要被正确设置</li>
+  <li>如果我们把系统时间设置的较早或者较后，那么证书会变成失效状态(亲测)</li>
+</ul>
+
+<h2 id="codesign">签名工具codesign</h2>
+
+<h3 id="codesign-">codesign 的路径</h3>
+
+<p><code class="highlighter-rouge">$ xcrun --find codesign</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>/usr/bin/codesign
+</code></pre>
+</div>
+
+<h3 id="codesign--1">codesign 简单介绍</h3>
+
+<ul>
+  <li>签名工具，用来创建和修改代码签名</li>
+  <li>由<a href="http://www.lhjzzu.com/2016/04/29/ios-xcodebuild/#section">ios打包–xcodebuild以及xcrun(二)</a>中的<code class="highlighter-rouge">$ xcodebuild -sdk iphoneos9.3</code>，可知在ProcessProductPackaging之后，会用CodeSign来对Test.app进行代码签名</li>
+</ul>
+
+<h3 id="codesign--2">codesign 命令</h3>
+
+<p>为一个没有被签过名的.app文件签名</p>
+
+<p><code class="highlighter-rouge">$ codesign -s 'iPhone Developer: zhida wu (8MR2HY4EQA)' Test.app</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Test.app: is already signed
+</code></pre>
+</div>
+
+<p>如果app文件已经被签名过了,通过<code class="highlighter-rouge">-f</code>强制覆盖原来的签名</p>
+
+<p><code class="highlighter-rouge">$ codesign -f -s 'iPhone Developer: zhida wu (8MR2HY4EQA)' Test.app</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Test.app: replacing existing signature
+</code></pre>
+</div>
+
+<p>查看.app的相关信息</p>
+
+<p><code class="highlighter-rouge">$ codesign -vv -d Test.app</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Executable=/Users/chiyou/Library/Developer/Xcode/DerivedData/Test-   fmbqgffmjssiqmbnzkproqvtcqpm/Build/Products/Debug-iphoneos/Test.app/Test
+Identifier=com.ouer.www.Test
+Format=app bundle with Mach-O universal (armv7 arm64)
+CodeDirectory v=20200 size=657 flags=0x0(none) hashes=14+4 location=embedded
+Signature size=4717
+Authority=iPhone Developer: zhida wu (8MR2HY4EQA)
+Authority=Apple Worldwide Developer Relations Certification Authority
+Authority=Apple Root CA
+Signed Time=2016年5月3日 下午11:03:58
+Info.plist entries=27
+TeamIdentifier=V9LX9F46VG
+Sealed Resources version=2 rules=12 files=7
+Internal requirements count=1 size=176
+</code></pre>
+</div>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">iPhone Developer: zhida wu (8MR2HY4EQA)</code>由<code class="highlighter-rouge">Apple Worldwide Developer Relations Certification Authority</code>授权，<code class="highlighter-rouge">Apple Worldwide Developer Relations Certification Authority</code>由<code class="highlighter-rouge">Apple Root CA</code>授权，所以<code class="highlighter-rouge">Apple Root CA</code>是根证书</p>
+  </li>
+  <li><code class="highlighter-rouge">Format=app bundle with Mach-O universal (armv7 arm64)</code>表明Test.app是一个包含armv7，arm64的二进制文件</li>
+  <li><code class="highlighter-rouge">Identifier</code>即是bundle identifier</li>
+  <li><code class="highlighter-rouge">TeamIdentifier</code>标示工作组，一个开发者(账号)有唯一的一个工作组.（即无论是打包证书还是push证书，工作组都一样）</li>
+</ul>
+
+<p>验证签名后的.app文件</p>
+
+<p><code class="highlighter-rouge">$ codesign --verify Test.app</code></p>
+
+<ul>
+  <li>没有任何输出信息，代表没有问题</li>
+</ul>
+
+<p>如果修改.app文件，就会破坏我们的签名的完整性</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ echo 'lol' &gt;&gt; Test.app/Test
+$ codesign --verify Test.app
+Test.app: main executable failed strict validation  
+</code></pre>
+</div>
+
+<h2 id="section-2">程序包和其他资源文件</h2>
+
+<ul>
+  <li>程序包中的所有文件都会被签名，所有的签名都放在<code class="highlighter-rouge">_CodeSignatue/CodeResources</code>中.</li>
+  <li>在 CodeResources 文件中会有4个不同区域，其中的 rules 和 files 是为老版本准备的，而 files2 和 rules2是为新的第二版的代码签名准备的</li>
+  <li>更详细的信息请参考<a href="http://objccn.io/issue-17-2/">代码签名探析</a></li>
+</ul>
+
+<h2 id="entitlements--provisioning">授权机制 (Entitlements) 和配置文件 (Provisioning)</h2>
+
+<h3 id="section-3">授权机制</h3>
+
+<p>Xcode 会自动生成一个entitlements文件(plist格式),文件格式如下</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="cp">&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;</span>
+<span class="nt">&lt;plist</span> <span class="na">version=</span><span class="s">"1.0"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;dict&gt;</span>
+	<span class="nt">&lt;key&gt;</span>application-identifier<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;string&gt;</span>7T2277EURS.com.ouer.test<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;key&gt;</span>com.apple.developer.team-identifier<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;string&gt;</span>7T2277EURS<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;key&gt;</span>get-task-allow<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;false/&gt;</span>
+    <span class="nt">&lt;key&gt;</span>keychain-access-groups<span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;array&gt;</span>
+	    <span class="nt">&lt;string&gt;</span>7T2277EURS.com.ouer.test<span class="nt">&lt;/string&gt;</span>
+    <span class="nt">&lt;/array&gt;</span>
+<span class="nt">&lt;/dict&gt;</span>
+<span class="nt">&lt;/plist&gt;</span>
+</code></pre>
+</div>
+
+<p>授权机制决定了哪些系统资源在什么情况下允许被一个应用使用</p>
+
+<p>查看签名信息中具体包含了什么授权信息（从ipa包中解压得到Test.app）</p>
+
+<p><code class="highlighter-rouge">$ codesign -d --entitlements - Test.app</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Executable=/Users/chiyou/Desktop/xxxx/Test 2016-05-04 00-11-33/Payload/Test.app/Test
+??qq?&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/    PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+	&lt;key&gt;application-identifier&lt;/key&gt;
+	&lt;string&gt;V9LX9F46VG.com.ouer.www.Test&lt;/string&gt;
+	&lt;key&gt;com.apple.developer.team-identifier&lt;/key&gt;
+	&lt;string&gt;V9LX9F46VG&lt;/string&gt;
+    &lt;key&gt;get-task-allow&lt;/key&gt;
+    &lt;false/&gt;
+    &lt;key&gt;keychain-access-groups&lt;/key&gt;
+    &lt;array&gt;
+    	&lt;string&gt;V9LX9F46VG.com.ouer.www.Test&lt;/string&gt;
+    &lt;/array&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre>
+</div>
+
+<h3 id="section-4">配置文件</h3>
+
+<ul>
+  <li>XCode中配置文件都可以在<code class="highlighter-rouge">~/Library/MobileDevice/Provisioning Profiles</code>找到。</li>
+  <li>它并不是一个 plist 文件，它是一个根据密码讯息语法 (Cryptographic Message Syntax) 加密文件</li>
+  <li>通过<code class="highlighter-rouge">security cms -D -i example.mobileprovision</code>，查看.mobileprovision文件内部信息</li>
+</ul>
+
+<h2 id="ipa">重签名ipa</h2>
+
+<h3 id="section-5">准备:</h3>
+
+<ul>
+  <li>一个已经签名的ipa包（例如 DV.ipa）</li>
+  <li>企业发布证书，以及distribution的.mobileprovision文件，命名为embedded</li>
+  <li>embedded.mobileprovision的bundle identify可以自定(例如com.ouer.test)</li>
+  <li>
+    <p>创建一个entitlements.plist文件,内容如下</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>  &lt;dict&gt;
+     	&lt;key&gt;application-identifier&lt;/key&gt;
+ 	    &lt;string&gt;7T2277EURS.com.ouer.test&lt;/string&gt;
+      &lt;key&gt;com.apple.developer.team-identifier&lt;/key&gt;
+ 	    &lt;string&gt;7T2277EURS&lt;/string&gt;
+      &lt;key&gt;get-task-allow&lt;/key&gt;
+      &lt;false/&gt;
+      &lt;key&gt;keychain-access-groups&lt;/key&gt;
+      &lt;array&gt;
+      &lt;string&gt;7T2277EURS.com.ouer.test&lt;/string&gt;
+      &lt;/array&gt;
+  &lt;/dict&gt;
+</code></pre>
+    </div>
+  </li>
+</ul>
+
+<p>其中<code class="highlighter-rouge">7T2277EURS</code>为<code class="highlighter-rouge">team-identifier</code>，<code class="highlighter-rouge">com.ouer.test</code>为<code class="highlighter-rouge">bundle identify</code></p>
+
+<h3 id="section-6">整个签名过程如下</h3>
+
+<h4 id="codesign-1">方法一:用codesign命令行</h4>
+<p>1 解压DV.ipa</p>
+
+<p><code class="highlighter-rouge">$ unzip DV.ipa</code></p>
+
+<p>2 替换证书配置文件（文件名必须为embedded，不得自定义,embedded.mobileprovision与Payload文件夹同级）</p>
+
+<p><code class="highlighter-rouge">$ cp embedded.mobileprovision Payload/DV.app</code></p>
+
+<p>3 重签名（entitlements.plist与Payload同级）</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ codesign -f -s "iPhone Distribution: Hangzhou Ouer Technology Co., Ltd" --entitlements entitlements.plist Payload/DV.app
+</code></pre>
+</div>
+
+<p>4 打包</p>
+
+<p><code class="highlighter-rouge">$ zip -r DV_Resign.ipa Payload</code></p>
+
+<p>注意:</p>
+
+<ul>
+  <li>步骤3执行之前，可以执行<code class="highlighter-rouge">$ open Payload/DV.app/info.plist</code>,然后修改<code class="highlighter-rouge">Bundle identifier</code>,然后执行继续执行步骤3，这种情况下由于<code class="highlighter-rouge">Bundle identifier</code>不同，所以我们的设备可以安多个app。</li>
+  <li>修改<code class="highlighter-rouge">Bundle identifier</code>有些弊端是不能进行微博登录，并且不能收到推送等等。</li>
+</ul>
+
+<h4 id="iresign">方法二:使用工具iReSign</h4>
+
+<p><img src="http://7xqijx.com1.z0.glb.clouddn.com/iResign.png" alt="" /></p>
+
+<p>1 下载<a href="https://github.com/maciekish/iReSign">iReSign</a>工具</p>
+
+<p>2 选择<code class="highlighter-rouge">.ipa</code>,<code class="highlighter-rouge">embedded.mobileprovision</code>,<code class="highlighter-rouge">entitlements.plist</code>文件</p>
+
+<p>3 需要修改<code class="highlighter-rouge">Bundle identifier</code>为<code class="highlighter-rouge">embedded.mobileprovision</code>的<code class="highlighter-rouge">Bundle identifier</code>，否则不能通过。</p>
+
+<p>4 点击重新签名</p>
+
+<p>注意:</p>
+
+<ul>
+  <li>修改<code class="highlighter-rouge">Bundle identifier</code>有些弊端是不能进行微博登录，并且不能收到推送等等。</li>
+</ul>
+
+<h4 id="autoresign">方法三:自动化脚本(autoResign)</h4>
+
+<p>1 这是我写的脚本<a href="https://github.com/lhjzzu/autoResign">autoResign</a>,你可以下载直接使用</p>
+
+<p>2 用法 <code class="highlighter-rouge">$ python autoResign.py -f DV</code>,如果成功会生成一个<code class="highlighter-rouge">DV_Resign.ipa</code>文件</p>
+
+<p>3 如果第二次执行该命令，会出现 <code class="highlighter-rouge">Archive:  DV.ipa
+replace Payload/DV.app/_CodeSignature/CodeResources? [y]es, [n]o, [A]ll, [N]one, [r]ename: </code>,直接输入A，然后enter即可。</p>
+
+<h2 id="section-7">补充:</h2>
+
+<h3 id="section-8">设置别名–彻底解放</h3>
+
+<p>我们可以把我们的某些命令，设置一个简单的别名，那么在我们执行的时候，只需输入别名即可</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>1 cd ~
+2 vi .bash_profile
+3 点击i,进入输入模式，
+  输入:alias resign='python autoResign.py -f'
+  点击esc，shift+:,wq 退出
+4 source .bash_profile
+5 进入对应的文件夹，在终端中resign DV即可。
+</code></pre>
+</div>
+
+<h2 id="section-9">参考</h2>
+<ul>
+  <li><a href="http://objccn.io/issue-17-2/">代码签名探析</a></li>
+  <li><a href="http://www.olinone.com/?p=198">iOS证书及ipa包重签名探究</a></li>
+  <li><a href="https://gist.github.com/0xc010d/1365444">ReCodeSign</a></li>
+</ul>
+
+
+    </article>
+    <div class="share">
+      <div class="share-component"></div>
+    </div>
+    <div class="comment">
+      
+  
+      
+      <!-- Duoshuo Comment BEGIN -->
+      <!-- 多说评论框 BEGIN -->
+      <div class="ds-thread" data-thread-key="/2016/05/03/ios-ipa-codesign/" data-title="ios打包--ipa包重签(四)" data-url="http://www.lhjzzu.com/2016/05/03/ios-ipa-codesign/"></div>
+      <!-- 多说评论框 END -->
+      <!-- 多说公共JS代码 BEGIN (一个网页只需插入一次) -->
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"abc19911991"};
+        (function() {
+          var ds = document.createElement('script');
+          ds.type = 'text/javascript';ds.async = true;
+          ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+          ds.charset = 'UTF-8';
+          (document.getElementsByTagName('head')[0]
+           || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+      <!-- 多说公共JS代码 END -->
+      <!-- Duoshuo Comment END -->
+      
+    
+
+
+    </div>
+  </div>
+  <div class="column one-fourth">
+    
+<h3>Search</h3>
+<form action="get" id="site_search">
+    <input type="text" id="search_box" placeholder="Search">
+    <button class="btn btn-default" type="submit"><span class="octicon octicon-search"></span></button>
+</form>
+
+<ul id="search_results"></ul>
+
+<link rel="stylesheet" type="text/css" href="/assets/css/modules/sidebar-search.css">
+<script src="/assets/js/lunr.min.js"></script>
+<script src="/assets/js/search.js"></script>
+
+
+    
+<h3>Post Directory</h3>
+<div id="post-directory-module" class="mobile-hidden">
+  <section class="post-directory">
+  <!-- Links that trigger the jumping -->
+  <!-- Added by javascript below -->
+  <dl></dl>
+  </section>
+</div>
+
+<script src="/assets/js/jquery.toc.js"></script>
+
+  </div>
+</div>
+</section>
+<!-- /section.content -->
+
+    <footer class="container">
+        <div class="site-footer" role="contentinfo">
+            <div class="copyright left mobile-block">
+                    © 2015
+                    <span title="Liu Hua Jian">Liu Hua Jian</span>
+                    <a href="javascript:window.scrollTo(0,0)" class="right mobile-visible">TOP</a>
+            </div>
+
+            <ul class="site-footer-links right mobile-hidden">
+                <li>
+                    <a href="javascript:window.scrollTo(0,0)" >TOP</a>
+                </li>
+            </ul>
+            <a href="https://github.com/lhjzzu/lhjzzu.github.io" target="_blank" aria-label="view source code">
+                <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+            </a>
+            <ul class="site-footer-links mobile-hidden">
+                
+                <li>
+                    <a href="/" title="首页" target="">首页</a>
+                </li>
+                
+                <li>
+                    <a href="/categories/" title="分类" target="">分类</a>
+                </li>
+                
+                <li>
+                    <a href="/links/" title="链接" target="">链接</a>
+                </li>
+                
+                <li>
+                    <a href="/about/" title="关于" target="">关于</a>
+                </li>
+                
+                <li><a href="/feed.xml"><span class="octicon octicon-rss" style="color:orange;"></span></a></li>
+            </ul>
+        </div>
+    </footer>
+    <!-- / footer -->
+    <script src="/assets/vendor/s.js/dist/js/share.min.js"></script>
+    <script src="/assets/js/geopattern.js"></script>
+    <script src="/assets/js/prism.js"></script>
+    <link rel="stylesheet" href="/assets/css/globals/prism.css">
+    <script>
+      jQuery(document).ready(function($) {
+        // geopattern
+        $('.geopattern').each(function(){
+          $(this).geopattern($(this).data('pattern-id'));
+        });
+       // hljs.initHighlightingOnLoad();
+      });
+    </script>
+    
+</body>
+</html>

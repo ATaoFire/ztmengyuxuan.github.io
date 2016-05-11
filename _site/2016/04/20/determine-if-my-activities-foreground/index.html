@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" prefix="og: http://ogp.me/ns#" class="han-init">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>判断前台 Activity 是否属于本进程 &mdash; 刘华健</title>
+    <link rel="stylesheet" href="/assets/vendor/primer-css/css/primer.css">
+    <link rel="stylesheet" href="/assets/vendor/primer-markdown/dist/user-content.min.css">
+    <link rel="stylesheet" href="/assets/vendor/octicons/octicons/octicons.css">
+    <link rel="stylesheet" href="/assets/css/components/collection.css">
+    <link rel="stylesheet" href="/assets/css/components/repo-card.css">
+    <link rel="stylesheet" href="/assets/css/sections/repo-list.css">
+    <link rel="stylesheet" href="/assets/css/sections/mini-repo-list.css">
+    <link rel="stylesheet" href="/assets/css/components/boxed-group.css">
+    <link rel="stylesheet" href="/assets/css/globals/common.css">
+    <link rel="stylesheet" href="/assets/vendor/share.js/dist/css/share.min.css">
+    <link rel="stylesheet" href="/assets/css/globals/responsive.css">
+    <link rel="stylesheet" href="/assets/css/posts/index.css">
+    <!-- Latest compiled and minified CSS -->
+    
+
+    
+    <link rel="alternate" type="application/atom+xml" title="刘华健" href="/feed.xml">
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+    <meta property="og:title" content="判断前台 Activity 是否属于本进程">
+      
+    <meta name="keywords" content="Android, Activity, Foreground">
+    <meta name="og:keywords" content="Android, Activity, Foreground">
+      
+    <meta name="description" content="本文记录的是一种判断当前激活的 Activity 是否属于本进程的方法。">
+    <meta name="og:description" content="本文记录的是一种判断当前激活的 Activity 是否属于本进程的方法。">
+      
+    
+    
+        
+    
+    <meta property="og:url" content="http://www.lhjzzu.com/2016/04/20/determine-if-my-activities-foreground/">
+    <meta property="og:site_name" content="刘华健">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="zh_CN" />
+    
+    <meta property="article:published_time" content="2016-04-20">
+    
+    <script src="/assets/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/js/jquery-ui.js"></script>
+</head>
+<body class="" data-mz="">
+    <header class="site-header">
+        <div class="container">
+            <h1><a href="/" title="刘华健"><span class="octicon octicon-mark-github"></span> 刘华健</a></h1>
+            <nav class="site-header-nav" role="navigation">
+                
+                <a href="/" class=" site-header-nav-item" target="" title="首页">首页</a>
+                
+                <a href="/categories/" class=" site-header-nav-item" target="" title="分类">分类</a>
+                
+                <a href="/links/" class=" site-header-nav-item" target="" title="链接">链接</a>
+                
+                <a href="/about/" class=" site-header-nav-item" target="" title="关于">关于</a>
+                
+            </nav>
+        </div>
+    </header>
+    <!-- / header -->
+
+    <section class="collection-head small geopattern" data-pattern-id="判断前台 Activity 是">
+<div class="container">
+  <div class="columns">
+    <div class="column three-fourths">
+      <div class="collection-title">
+        <h1 class="collection-header">判断前台 Activity 是否属于本进程</h1>
+        <div class="collection-info">
+          
+          <span class="meta-info">
+            <span class="octicon octicon-calendar"></span> 2016/04/20
+          </span>
+          
+          
+          <span class="meta-info">
+            <span class="octicon octicon-file-directory"></span>
+            <a href="/categories/#Android" title="Android">Android</a>
+          </span>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- / .banner -->
+<section class="container content">
+<div class="columns">
+  <div class="column three-fourths" >
+    <article class="article-content markdown-body">
+    <p>本文记录的是一种判断当前激活的 Activity 是否属于本进程的方法。</p>
+
+<p><strong>约定：文中表述说一个 Activity 处于激活状态是指它是屏幕上当前展示的 Activity，且没有被 Dialog 覆盖。</strong></p>
+
+<h2 id="section">原理</h2>
+
+<p>Activity 的生命周期由 Android 系统维护，所以使用一个 Activity 的生命周期方法 <code class="highlighter-rouge">onResume</code> 与 <code class="highlighter-rouge">onPause</code> 来记录它的激活状态是可靠的。</p>
+
+<p>同理，因为前台 Activity 只有一个，所以判断前台 Activity 是否属于本进程只需要判断本进程是否有 Activity 处于激活状态即可。</p>
+
+<h2 id="section-1">实现</h2>
+
+<p>顺着这个思路，直接想到的方案就是去给代码里所有的 Activity 实现一个共同基类，然后在基类里的 <code class="highlighter-rouge">onResume</code> 和 <code class="highlighter-rouge">onPause</code> 方法去更新一个全局计数器了。</p>
+
+<p>这固然可行，但遇到有些不能继承共同基类的情况，比如继承自 ListActivity 和 ExpandableListActivity 等 Activity 的子类的，就得重复去在具体 Activity 里的对应方法里添加代码了，一旦有一个 Activity 忘了添加，这个机制就失效了，所以并不优雅。</p>
+
+<p>幸好 Android 在 API Level 14 的时候新加入了 <code class="highlighter-rouge">android.app.Application.ActivityLifecycleCallbacks</code> 接口，它会在 Activity 生命周期事件发生时产生回调：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ActivityLifecycleCallbacks</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="n">onActivityCreated</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">,</span> <span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">);</span>
+    <span class="kt">void</span> <span class="n">onActivityStarted</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">);</span>
+    <span class="kt">void</span> <span class="n">onActivityResumed</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">);</span>
+    <span class="kt">void</span> <span class="n">onActivityPaused</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">);</span>
+    <span class="kt">void</span> <span class="n">onActivityStopped</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">);</span>
+    <span class="kt">void</span> <span class="n">onActivitySaveInstanceState</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">,</span> <span class="n">Bundle</span> <span class="n">outState</span><span class="o">);</span>
+    <span class="kt">void</span> <span class="n">onActivityDestroyed</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>这真是救星。</p>
+
+<p>那么优雅的实现方案：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyApplication</span> <span class="kd">extends</span> <span class="n">Application</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="n">hasActivityActivate</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">onCreate</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">();</span>
+        <span class="n">registerActivityLifecycleCallbacks</span><span class="o">(</span><span class="k">new</span> <span class="n">ActivityLifecycleCallbacks</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="n">onActivityCreated</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">,</span> <span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="o">}</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="n">onActivityStarted</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="o">}</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="n">onActivityResumed</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">hasActivityActivate</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="n">onActivityPaused</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">hasActivityActivate</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="n">onActivityStopped</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="o">}</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="n">onActivitySaveInstanceState</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">,</span> <span class="n">Bundle</span> <span class="n">outState</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="o">}</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="n">onActivityDestroyed</span><span class="o">(</span><span class="n">Activity</span> <span class="n">activity</span><span class="o">)</span> <span class="o">{</span>
+
+            <span class="o">}</span>
+        <span class="o">});</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="n">hasActivityActivate</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">hasActivityActivate</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>然后在需要的时候调用 <code class="highlighter-rouge">MyApplication.hasActivityActivate()</code> 就行了。</p>
+
+<p>当然别忘了在 AndroidManifest.xml 里声明指定你的 Application 类名：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>...
+<span class="nt">&lt;application</span>
+    <span class="na">android:name=</span><span class="s">".MyApplication"</span>
+    <span class="err">....</span>
+</code></pre>
+</div>
+
+<h2 id="section-2">后话</h2>
+
+<p>本文记录的只是判断当前进程是否有 Activity 处于激活状态的方法，判断当前应用、其它应用的前后台情况有多种方法，它们的优缺点、适用场景在以下 GitHub 仓库有详细列举，有需求的同学可以参考：</p>
+
+<p><a href="https://github.com/wenmingvs/AndroidProcess">https://github.com/wenmingvs/AndroidProcess</a></p>
+
+<h2 id="section-3">参考</h2>
+
+<ul>
+  <li><a href="https://github.com/wenmingvs/AndroidProcess">wenmingvs/AndroidProcess</a></li>
+  <li><a href="http://stackoverflow.com/questions/3667022/checking-if-an-android-application-is-running-in-the-background/5862048#5862048">Checking if an Android application is running in the background</a></li>
+</ul>
+
+    </article>
+    <div class="share">
+      <div class="share-component"></div>
+    </div>
+    <div class="comment">
+      
+  
+      
+      <!-- Duoshuo Comment BEGIN -->
+      <!-- 多说评论框 BEGIN -->
+      <div class="ds-thread" data-thread-key="/2016/04/20/determine-if-my-activities-foreground/" data-title="判断前台 Activity 是否属于本进程" data-url="http://www.lhjzzu.com/2016/04/20/determine-if-my-activities-foreground/"></div>
+      <!-- 多说评论框 END -->
+      <!-- 多说公共JS代码 BEGIN (一个网页只需插入一次) -->
+      <script type="text/javascript">
+      var duoshuoQuery = {short_name:"abc19911991"};
+        (function() {
+          var ds = document.createElement('script');
+          ds.type = 'text/javascript';ds.async = true;
+          ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+          ds.charset = 'UTF-8';
+          (document.getElementsByTagName('head')[0]
+           || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+      <!-- 多说公共JS代码 END -->
+      <!-- Duoshuo Comment END -->
+      
+    
+
+
+    </div>
+  </div>
+  <div class="column one-fourth">
+    
+<h3>Search</h3>
+<form action="get" id="site_search">
+    <input type="text" id="search_box" placeholder="Search">
+    <button class="btn btn-default" type="submit"><span class="octicon octicon-search"></span></button>
+</form>
+
+<ul id="search_results"></ul>
+
+<link rel="stylesheet" type="text/css" href="/assets/css/modules/sidebar-search.css">
+<script src="/assets/js/lunr.min.js"></script>
+<script src="/assets/js/search.js"></script>
+
+
+    
+<h3>Post Directory</h3>
+<div id="post-directory-module" class="mobile-hidden">
+  <section class="post-directory">
+  <!-- Links that trigger the jumping -->
+  <!-- Added by javascript below -->
+  <dl></dl>
+  </section>
+</div>
+
+<script src="/assets/js/jquery.toc.js"></script>
+
+  </div>
+</div>
+</section>
+<!-- /section.content -->
+
+    <footer class="container">
+        <div class="site-footer" role="contentinfo">
+            <div class="copyright left mobile-block">
+                    © 2015
+                    <span title="Liu Hua Jian">Liu Hua Jian</span>
+                    <a href="javascript:window.scrollTo(0,0)" class="right mobile-visible">TOP</a>
+            </div>
+
+            <ul class="site-footer-links right mobile-hidden">
+                <li>
+                    <a href="javascript:window.scrollTo(0,0)" >TOP</a>
+                </li>
+            </ul>
+            <a href="https://github.com/lhjzzu/lhjzzu.github.io" target="_blank" aria-label="view source code">
+                <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
+            </a>
+            <ul class="site-footer-links mobile-hidden">
+                
+                <li>
+                    <a href="/" title="首页" target="">首页</a>
+                </li>
+                
+                <li>
+                    <a href="/categories/" title="分类" target="">分类</a>
+                </li>
+                
+                <li>
+                    <a href="/links/" title="链接" target="">链接</a>
+                </li>
+                
+                <li>
+                    <a href="/about/" title="关于" target="">关于</a>
+                </li>
+                
+                <li><a href="/feed.xml"><span class="octicon octicon-rss" style="color:orange;"></span></a></li>
+            </ul>
+        </div>
+    </footer>
+    <!-- / footer -->
+    <script src="/assets/vendor/s.js/dist/js/share.min.js"></script>
+    <script src="/assets/js/geopattern.js"></script>
+    <script src="/assets/js/prism.js"></script>
+    <link rel="stylesheet" href="/assets/css/globals/prism.css">
+    <script>
+      jQuery(document).ready(function($) {
+        // geopattern
+        $('.geopattern').each(function(){
+          $(this).geopattern($(this).data('pattern-id'));
+        });
+       // hljs.initHighlightingOnLoad();
+      });
+    </script>
+    
+</body>
+</html>
