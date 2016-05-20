@@ -16,7 +16,7 @@ source_code: https://github.com/ztmengyuxuan/ztmengyuxuan.github.io
 # ---------------- #
 #      Author      #
 # ---------------- #
-author: Liu Hua Jian
+author: Zhang Tao
 organization: ouer, Inc.
 organization_url: https://www.kkkd.com
 location: HangZhou, China
@@ -97,5 +97,5 @@ disqus_username: duoshuo
 skill_software_keywords: [Objective-C]
 skill_mobile_app_keywords: [ios]
 #skill_windows_keywords: [Win32 SDK, DuiLib, WTL, COM, WinDbg]
-popular_repos: ['lhjzzu.github.io']
-contribute_repos: ['sparanoid/chinese-copywriting-guidelines', 'waylife/RentCrawer']
+popular_repos: ['ztmengyuxuan.github.io']
+contribute_repos: ['AFNetworking/AFNetworking']
