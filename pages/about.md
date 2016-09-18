@@ -1,16 +1,11 @@
 ---
 layout: page
 title: About
-description: 打码改变世界
-keywords: Zhuang Ma, 马壮
+description: 编码提高效率
+keywords: Tao Zhang, 张涛
 comments: true
 menu: 关于
-permalink: /about/
----
 
-我是马壮，码而生，码而立。
-
-仰慕「优雅编码的艺术」。
 
 ## 坚信
 
@@ -19,12 +14,8 @@ permalink: /about/
 
 ## 联系
 
-* GitHub：[@mzlogin](https://github.com/mzlogin)
-* LinkedIn：[@mazhuang](https://www.linkedin.com/in/mazhuang)
-* 博客：[{{ site.title }}]({{ site.url }})
-* 微博: [@mzlogin](http://weibo.com/mzlogin)
-* 知乎: [@mzlogin](http://www.zhihu.com/people/mzlogin)
-* 豆瓣: [@壮哥不胖](http://www.douban.com/people/freedim)
+* GitHub：[@ztmengyuxuan](https://ztmengyuxuan.github.io)
+
 
 ## Skill Keywords
 
