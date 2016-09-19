@@ -12,9 +12,9 @@ UIKit Dynamics是iOS7以后的新增的类，可以很好地改善用户体验�
 常用的类有：UIAttachmentBehavior,UICollisionBehavior,UIDynamicItemBehavior,UIGravityBehavior,UIPushBehavior,UISnapBehavior这六类。
 
 
-##实现UIKit Dynamics
+## 实现UIKit Dynamics
 
-###重力的实现
+### 重力的实现
 
 ```
 frogImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 300, 20, 20)];
@@ -30,7 +30,7 @@ frogImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 300, 20, 20)];
  ```
  注意：动态图必须是参考试图的子试图，否则力学动画生成器将不会有任何效果
  
-###碰撞
+### 碰撞
 
 碰撞顾名思义是当一个物体，在运动过程中，受到障碍物的阻挡与接触，才可以发生。frogImageView和dragonImageView对象是一开始设置好的。
 
