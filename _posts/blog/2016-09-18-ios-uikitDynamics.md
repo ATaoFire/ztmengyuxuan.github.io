@@ -28,9 +28,10 @@ frogImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 300, 20, 20)];
     //设置重力方向
     [gravityBehavior setAngle:0 magnitude:0.1];
     [animator addBehavior:gravityBehavior];
- ```
+```
+
+注意：动态图必须是参考试图的子试图，否则力学动画生成器将不会有任何效果
  
- 注意：动态图必须是参考试图的子试图，否则力学动画生成器将不会有任何效果
  
 ### 碰撞
 
