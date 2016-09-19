@@ -25,7 +25,7 @@ frogImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 300, 20, 20)];
     animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
     //重力
     UIGravityBehavior * gravityBehavior = [[UIGravityBehavior alloc] initWithItems:@[frogImageView]];
-    //设置重力方向
+    //改变方向
     [gravityBehavior setAngle:0 magnitude:0.1];
     [animator addBehavior:gravityBehavior];
 ```
