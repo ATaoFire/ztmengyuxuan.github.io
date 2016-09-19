@@ -56,10 +56,13 @@ frogImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 300, 20, 20)];
     [animator addBehavior:gravityBehavior];
     [animator addBehavior:collisionBehavior];
     ```
+
 ### 连接
+
 连接（attachment）指定了两个物体之间的动态连接，让其中一个物体的行为和移动受制于另一个物体的移动。在默认情况下，UIAttachmentBehavior将物体的中心指定为连接点，但可以将任何点指定为连接点。
 
 本次的实在碰撞的基础上实现
+
 
 ```
  animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
@@ -93,8 +96,12 @@ UIPanGestureRecognizer *recognizer = [[UIPanGestureRecognizer alloc] initWithTar
     }
 ```
 在运动期间，碰撞边界依然是有效的，并且影响连接行为的。我们还可以修改连接的长度属性，用来调整两个物体的距离，连接点并非必须是中心，而且可以动态的修改。为此可以用setAnchorPoint设置。
+
+
 ### 弹簧效果
+
 弹簧效果是对连接行为的扩展，修改UIAttachmentBehavior的其他属性，例如振动频率和阻尼。下面的代码是在UIAttachmentBehavior对象后设置了三个属性。
+
 
 ```
 	//设置振动频率
