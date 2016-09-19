@@ -35,6 +35,7 @@ frogImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 300, 20, 20)];
  
 ### 碰撞
 
+
 碰撞顾名思义是当一个物体，在运动过程中，受到障碍物的阻挡与接触，才可以发生。frogImageView和dragonImageView对象是一开始设置好的。
 
     ```animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.view];
@@ -58,6 +59,7 @@ frogImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 300, 20, 20)];
     ```
 
 ### 连接
+
 
 连接（attachment）指定了两个物体之间的动态连接，让其中一个物体的行为和移动受制于另一个物体的移动。在默认情况下，UIAttachmentBehavior将物体的中心指定为连接点，但可以将任何点指定为连接点。
 
